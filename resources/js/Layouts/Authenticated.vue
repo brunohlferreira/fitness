@@ -46,6 +46,9 @@ toggleTheme();
                                 </template>
 
                                 <template #content>
+                                    <BreezeDropdownLink :href="route('backoffice.dashboard')">
+                                        Backoffice
+                                    </BreezeDropdownLink>
                                     <BreezeDropdownLink @click.prevent="toggleTheme" as="button">
                                         {{ darkMode ? 'Apply Light Theme' : 'Apply Dark Theme' }}
                                     </BreezeDropdownLink>

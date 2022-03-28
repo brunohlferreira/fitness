@@ -1,7 +1,7 @@
 require('./bootstrap');
 
 import { createApp, h } from 'vue';
-import { createInertiaApp } from '@inertiajs/inertia-vue3';
+import { createInertiaApp, Head, Link } from '@inertiajs/inertia-vue3';
 import { InertiaProgress } from '@inertiajs/progress';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faChartLine, faCalendarDays, faDumbbell, faPersonRunning } from '@fortawesome/free-solid-svg-icons';
@@ -18,6 +18,8 @@ createInertiaApp({
         return createApp({ render: () => h(app, props) })
             .use(plugin)
             .component('font-awesome-icon', FontAwesomeIcon)
+            .component('Head', Head)
+            .component('Link', Link)
             .mixin({ methods: { route } })
             .mount(el);
     },
