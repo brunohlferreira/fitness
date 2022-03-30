@@ -9,6 +9,10 @@ const models = [
         name: "Body Parts",
         route: "backoffice.bodyParts.index",
     },
+    {
+        name: "Equipments",
+        route: "backoffice.equipments.index",
+    },
 ];
 </script>
 

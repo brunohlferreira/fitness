@@ -10,7 +10,7 @@ defineProps({
         <span class="text-sm text-gray-700 dark:text-gray-400">
             <span v-if="meta.last_page == 1">
                 Showing all
-                <span class="font-semibold">{{ meta.total }}</span> Entries
+                <span class="font-semibold">{{ meta.total }}</span> entries
             </span>
             <span v-else>
                 Showing
@@ -19,7 +19,7 @@ defineProps({
                 <span class="font-semibold">{{ meta.to }}</span>
                 of
                 <span class="font-semibold">{{ meta.total }}</span>
-                Entries
+                entries
             </span>
         </span>
 

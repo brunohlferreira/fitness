@@ -5,6 +5,8 @@ defineProps({
         type: Boolean,
         default: false,
     },
+    editUrl: String,
+    deleteFunction: Function,
 });
 </script>
 
@@ -28,12 +30,12 @@ defineProps({
                     </td>
                     <td v-if="actions" class="px-6 py-4 text-right">
                         <Link
-                            :href="'/backoffice/body-parts/' + row.id + '/edit'"
+                            :href="editUrl + '/' + row.id + '/edit'"
                             class="inline-block mx-2"
                             ><FontAwesomeIcon icon="pencil"></FontAwesomeIcon
                         ></Link>
                         <Link
-                            @click.prevent="deleteRecord(row.id)"
+                            @click.prevent="deleteFunction(row.id)"
                             class="inline-block mx-2 mr-0"
                             ><FontAwesomeIcon icon="trash-can"></FontAwesomeIcon
                         ></Link>

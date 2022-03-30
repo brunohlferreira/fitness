@@ -6,10 +6,6 @@ import NavLink from "@/Components/NavLink.vue";
 
 const showingNavigationDropdown = ref(false);
 
-/*console.log('sadsadsa');
-const foo = inject('foo');
-console.log(foo);*/
-
 const toggleTheme = function () {
     darkMode.value = !darkMode.value;
     if (darkMode.value) {
@@ -59,7 +55,17 @@ const navPages = [
 </script>
 
 <template>
-    <div class="flex flex-col h-screen overflow-hidden bg-gray-100 dark:bg-zinc-900 text-gray-700 dark:text-neutral-200">
+    <div
+        class="
+            flex flex-col
+            h-screen
+            overflow-hidden
+            bg-gray-100
+            dark:bg-zinc-900
+            text-gray-700
+            dark:text-neutral-200
+        "
+    >
         <header class="w-full bg-white shadow dark:bg-zinc-800">
             <div class="max-w-7xl mx-auto px-4 sm:px-6">
                 <div class="flex justify-between h-16">
