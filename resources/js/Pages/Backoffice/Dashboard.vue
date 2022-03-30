@@ -1,15 +1,29 @@
 <script setup>
-import AuthenticatedLayout from '@/Layouts/Authenticated.vue';
+import AuthenticatedLayout from "@/Layouts/Authenticated.vue";
+import ContentTitle from "@/Components/ContentTitle.vue";
+import ContentBox from "@/Components/ContentBox.vue";
+import Table from "@/Components/Table.vue";
+
+const models = [
+    {
+        name: "Body Parts",
+        route: "backoffice.bodyParts.index",
+    },
+];
 </script>
 
 <template>
     <Head title="Backoffice Dashboard" />
 
     <AuthenticatedLayout>
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 p-4">
-            <h2 class="dark:text-neutral-200">Models</h2>
+        <ContentBox>
+            <template #title>
+                <ContentTitle>Models</ContentTitle>
+            </template>
 
-            <Link :href="route('backoffice.bodyParts')" class="dark:text-blue-500">Body Parts</Link>
-        </div>
+            <template #content>
+                <Table :rows="models" />
+            </template>
+        </ContentBox>
     </AuthenticatedLayout>
 </template>

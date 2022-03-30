@@ -16,6 +16,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
     })->name('dashboard');
 
     Route::get('/backoffice/dashboard', function () {return Inertia::render('Backoffice/Dashboard');})->name('backoffice.dashboard');
-    //Route::get('/backoffice/body-parts', function () {return Inertia::render('Backoffice/BodyParts', ['bodyParts' => [BodyPartController::class, 'index'],]);})->name('backoffice.bodyParts');
-    Route::get('/backoffice/body-parts', [BodyPartController::class, 'index'])->name('backoffice.bodyParts');
+    Route::get('/backoffice/body-parts', [BodyPartController::class, 'index'])->name('backoffice.bodyParts.index');
+    Route::get('/backoffice/body-parts/create', [BodyPartController::class, 'create'])->name('backoffice.bodyParts.create');
+    Route::post('/backoffice/body-parts', [BodyPartController::class, 'store']);
+    Route::get('/backoffice/body-parts/{bodyPart}/edit', [BodyPartController::class, 'edit']);
+    Route::put('/backoffice/body-parts/{bodyPart}', [BodyPartController::class, 'update']);
+    Route::delete('/backoffice/body-parts/{bodyPart}', [BodyPartController::class, 'destroy']);
 });

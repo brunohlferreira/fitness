@@ -1,23 +1,26 @@
 <script setup>
-import BreezeAuthenticatedLayout from '@/Layouts/Authenticated.vue';
-import { Head } from '@inertiajs/inertia-vue3';
-import { Link } from '@inertiajs/inertia-vue3';
+import AuthenticatedLayout from "@/Layouts/Authenticated.vue";
+import ContentTitle from "@/Components/ContentTitle.vue";
+import ContentBox from "@/Components/ContentBox.vue";
+import Button from "@/Components/Button.vue";
 </script>
 
 <template>
     <Head title="Dashboard" />
 
-    <BreezeAuthenticatedLayout>
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 p-2">
-            <h2 class="px-2 dark:text-neutral-200">Wods done</h2>
+    <AuthenticatedLayout>
+        <ContentBox>
+            <template #title>
+                <ContentTitle>Wods done</ContentTitle>
+            </template>
 
-            <div class="mt-2 bg-white overflow-hidden shadow-sm sm:rounded-lg dark:bg-zinc-800">
-                <div class="p-4 bg-white border-b border-gray-200 dark:bg-zinc-800 dark:text-neutral-200 dark:border-0">
-                    You didn't register any workouts yet.
-                </div>
-            </div>
+            <template #content>
+                You didn't register any workouts yet.
+            </template>
+        </ContentBox>
 
-            <Link href="/">Create a new wod</Link>
+        <div class="flex justify-center mt-6">
+            <Button href="/" class="block">Register Workout</Button>
         </div>
-    </BreezeAuthenticatedLayout>
+    </AuthenticatedLayout>
 </template>

@@ -24,7 +24,7 @@ class BodyPartRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => ['required']
+            'name' => ['required', 'min:3']
         ];
     }
 }

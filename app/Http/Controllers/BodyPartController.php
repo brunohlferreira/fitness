@@ -16,7 +16,7 @@ class BodyPartController extends Controller
      */
     public function index()
     {
-        return Inertia::render('Backoffice/BodyParts', ['bodyParts' => BodyPartResource::collection(BodyPart::all())]);
+        return Inertia::render('Backoffice/BodyParts/Index', ['bodyParts' => BodyPartResource::collection(BodyPart::paginate(15))]);
     }
 
     /**
@@ -26,7 +26,7 @@ class BodyPartController extends Controller
      */
     public function create()
     {
-        //
+        return Inertia::render('Backoffice/BodyParts/Create');
     }
 
     /**
@@ -37,9 +37,9 @@ class BodyPartController extends Controller
      */
     public function store(BodyPartRequest $request)
     {
-        $bodyPart = BodyPart::create($request->validated());
+        BodyPart::create($request->validated());
 
-        return new BodyPartResource($bodyPart);
+        return redirect()->route('backoffice.bodyParts.index');
     }
 
     /**
@@ -61,7 +61,7 @@ class BodyPartController extends Controller
      */
     public function edit(BodyPart $bodyPart)
     {
-        //
+        return Inertia::render('Backoffice/BodyParts/Edit', ['bodyPart' => new BodyPartResource($bodyPart)]);
     }
 
     /**
@@ -75,7 +75,7 @@ class BodyPartController extends Controller
     {
         $bodyPart->update($request->validated());
 
-        return new BodyPartResource($bodyPart);
+        return redirect()->route('backoffice.bodyParts.index');
     }
 
     /**
