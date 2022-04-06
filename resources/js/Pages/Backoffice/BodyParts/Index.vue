@@ -10,7 +10,7 @@ defineProps({
     bodyParts: Object,
 });
 
-const deleteRecord = function (id) {
+const deleteEntry = function (id) {
     if (
         !window.confirm(
             "You are about to permanently delete this entry. Do you want to proceed?"
@@ -48,7 +48,7 @@ const deleteRecord = function (id) {
                     :rows="bodyParts.data"
                     :actions="true"
                     :editUrl="'/backoffice/body-parts'"
-                    :deleteFunction="deleteRecord"
+                    :deleteFunction="deleteEntry"
                 />
             </template>
         </ContentBox>

@@ -13,6 +13,14 @@ const models = [
         name: "Equipments",
         route: "backoffice.equipments.index",
     },
+    {
+        name: "Workout Presets",
+        route: "backoffice.workoutPresets.index",
+    },
+    {
+        name: "Workout Types",
+        route: "backoffice.workoutTypes.index",
+    },
 ];
 </script>
 

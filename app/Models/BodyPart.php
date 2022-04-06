@@ -12,4 +12,9 @@ class BodyPart extends Model
     protected $table = 'body_parts';
 
     protected $fillable = ['name'];
+
+    public function exercises()
+    {
+        return $this->belongsToMany(Exercise::class);
+    }
 }

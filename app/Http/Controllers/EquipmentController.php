@@ -16,7 +16,7 @@ class EquipmentController extends Controller
      */
     public function index()
     {
-        return Inertia::render('Backoffice/Equipments/Index', ['equipments' => EquipmentResource::collection(Equipment::paginate(15))]);
+        return Inertia::render('Backoffice/Equipments/Index', ['equipments' => EquipmentResource::collection(Equipment::select('id', 'name')->paginate(15))]);
     }
 
     /**
@@ -61,7 +61,7 @@ class EquipmentController extends Controller
      */
     public function edit(Equipment $equipment)
     {
-        return Inertia::render('Backoffice/Equipments/Edit', ['equipment' => new EquipmentResource($equipment)]);
+        return Inertia::render('Backoffice/Equipments/Edit', ['equipment' => new EquipmentResource($equipment->only('id', 'name'))]);
     }
 
     /**

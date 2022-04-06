@@ -7,7 +7,7 @@ import Table from "@/Components/Table.vue";
 import Pagination from "@/Components/Pagination.vue";
 
 defineProps({
-    equipments: Object,
+    workoutTypes: Object,
 });
 
 const deleteEntry = function (id) {
@@ -19,42 +19,40 @@ const deleteEntry = function (id) {
         return;
     }
 
-    axios.delete("/backoffice/equipments/" + id).then((response) => {
+    axios.delete("/backoffice/workout-types/" + id).then((response) => {
         Inertia.reload();
     });
 };
 </script>
 
 <template>
-    <Head title="Backoffice Equipments" />
+    <Head title="Backoffice Workout Types" />
 
     <AuthenticatedLayout>
         <ContentBox>
             <template #title>
-                <ContentTitle>Equipments</ContentTitle>
+                <ContentTitle>Workout Types</ContentTitle>
             </template>
 
             <template #actions>
-                <Link
-                    :href="route('backoffice.equipments.create')"
-                    class="block"
+                <Link :href="route('backoffice.workoutTypes.create')" class="block"
                     ><FontAwesomeIcon icon="plus"></FontAwesomeIcon
                 ></Link>
             </template>
 
             <template #content>
-                <p v-if="!equipments.data.length">No content was found.</p>
+                <p v-if="!workoutTypes.data.length">No content was found.</p>
 
                 <Table
                     v-else
-                    :rows="equipments.data"
+                    :rows="workoutTypes.data"
                     :actions="true"
-                    :editUrl="'/backoffice/equipments'"
+                    :editUrl="'/backoffice/workout-types'"
                     :deleteFunction="deleteEntry"
                 />
             </template>
         </ContentBox>
 
-        <Pagination :links="equipments.links" :meta="equipments.meta" />
+        <Pagination :links="workoutTypes.links" :meta="workoutTypes.meta" />
     </AuthenticatedLayout>
 </template>

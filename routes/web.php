@@ -2,6 +2,9 @@
 
 use App\Http\Controllers\BodyPartController;
 use App\Http\Controllers\EquipmentController;
+use App\Http\Controllers\ExerciseController;
+use App\Http\Controllers\WorkoutPresetController;
+use App\Http\Controllers\WorkoutTypeController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -12,9 +15,8 @@ Route::get('/', function () {
 });
 
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('/dashboard', function () {
-        return Inertia::render('Dashboard');
-    })->name('dashboard');
+    Route::get('/dashboard', function () {return Inertia::render('Dashboard');})->name('dashboard');
+    Route::get('/exercises', [ExerciseController::class, 'index'])->name('exercises');
 
     Route::get('/backoffice/dashboard', function () {return Inertia::render('Backoffice/Dashboard');})->name('backoffice.dashboard');
 
@@ -31,4 +33,19 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/backoffice/equipments/{equipment}/edit', [EquipmentController::class, 'edit']);
     Route::put('/backoffice/equipments/{equipment}', [EquipmentController::class, 'update']);
     Route::delete('/backoffice/equipments/{equipment}', [EquipmentController::class, 'destroy']);
+
+    Route::get('/backoffice/workout-presets', [WorkoutPresetController::class, 'index'])->name('backoffice.workoutPresets.index');
+    Route::get('/backoffice/workout-presets/create', [WorkoutPresetController::class, 'create'])->name('backoffice.workoutPresets.create');
+    Route::post('/backoffice/workout-presets', [WorkoutPresetController::class, 'store']);
+    Route::get('/backoffice/workout-presets/{workoutPreset}/show', [WorkoutPresetController::class, 'show']);
+    Route::get('/backoffice/workout-presets/{workoutPreset}/edit', [WorkoutPresetController::class, 'edit']);
+    Route::put('/backoffice/workout-presets/{workoutPreset}', [WorkoutPresetController::class, 'update']);
+    Route::delete('/backoffice/workout-presets/{workoutPreset}', [WorkoutPresetController::class, 'destroy']);
+
+    Route::get('/backoffice/workout-types', [WorkoutTypeController::class, 'index'])->name('backoffice.workoutTypes.index');
+    Route::get('/backoffice/workout-types/create', [WorkoutTypeController::class, 'create'])->name('backoffice.workoutTypes.create');
+    Route::post('/backoffice/workout-types', [WorkoutTypeController::class, 'store']);
+    Route::get('/backoffice/workout-types/{workoutType}/edit', [WorkoutTypeController::class, 'edit']);
+    Route::put('/backoffice/workout-types/{workoutType}', [WorkoutTypeController::class, 'update']);
+    Route::delete('/backoffice/workout-types/{workoutType}', [WorkoutTypeController::class, 'destroy']);
 });
