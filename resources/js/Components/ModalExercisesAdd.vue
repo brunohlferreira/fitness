@@ -13,8 +13,20 @@ const props = defineProps({
     },
 });
 
+const emit = defineEmits(["add-exercise", "close"]);
+
 const search = ref("");
 const exercises = ref([]);
+
+const addExercise = function (event, id, name) {
+    event.target.disabled = "disabled";
+    event.target.childNodes[0].nodeValue = "Added";
+    setInterval(() => {
+        event.target.disabled = "";
+        event.target.childNodes[0].nodeValue = "Add";
+    }, 1000);
+    emit("add-exercise", id, name, "");
+};
 
 watch(
     search,
@@ -39,8 +51,7 @@ watch(
             z-50
             w-full
             md:inset-0
-            h-modal
-            h-full
+            h-modal h-full
             bg-zinc-500/50
         "
     >
@@ -115,13 +126,15 @@ watch(
                                 <li
                                     v-for="(exercise, index) in exercises"
                                     :key="index"
+                                    class="my-1"
                                 >
                                     <div class="flex justify-between">
                                         <div>{{ exercise.name }}</div>
                                         <div>
                                             <button
                                                 @click.prevent="
-                                                    $emit(
+                                                    addExercise(
+                                                        $event,
                                                         'add-exercise',
                                                         exercise.id,
                                                         exercise.name,

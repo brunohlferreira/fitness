@@ -36670,12 +36670,25 @@ __webpack_require__.r(__webpack_exports__);
       required: true
     }
   },
+  emits: ["add-exercise", "close"],
   setup: function setup(__props, _ref) {
-    var expose = _ref.expose;
+    var expose = _ref.expose,
+        emit = _ref.emit;
     expose();
     var props = __props;
     var search = (0,vue__WEBPACK_IMPORTED_MODULE_0__.ref)("");
     var exercises = (0,vue__WEBPACK_IMPORTED_MODULE_0__.ref)([]);
+
+    var addExercise = function addExercise(event, id, name) {
+      event.target.disabled = "disabled";
+      event.target.childNodes[0].nodeValue = "Added";
+      setInterval(function () {
+        event.target.disabled = "";
+        event.target.childNodes[0].nodeValue = "Add";
+      }, 1000);
+      emit("add-exercise", id, name, "");
+    };
+
     (0,vue__WEBPACK_IMPORTED_MODULE_0__.watch)(search, lodash_debounce__WEBPACK_IMPORTED_MODULE_2___default()(function (value) {
       axios.get("/exercises?modalSearch=".concat(value)).then(function (response) {
         exercises.value = response.data;
@@ -36683,8 +36696,10 @@ __webpack_require__.r(__webpack_exports__);
     }, 300));
     var __returned__ = {
       props: props,
+      emit: emit,
       search: search,
       exercises: exercises,
+      addExercise: addExercise,
       ref: vue__WEBPACK_IMPORTED_MODULE_0__.ref,
       watch: vue__WEBPACK_IMPORTED_MODULE_0__.watch,
       Inertia: _inertiajs_inertia__WEBPACK_IMPORTED_MODULE_1__.Inertia,
@@ -38833,12 +38848,13 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   /* PROPS */
   , ["modelValue"])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("ul", null, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($setup.exercises, function (exercise, index) {
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("li", {
-      key: index
+      key: index,
+      "class": "my-1"
     }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_11, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(exercise.name), 1
     /* TEXT */
     ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
       onClick: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)(function ($event) {
-        return _ctx.$emit('add-exercise', exercise.id, exercise.name, '');
+        return $setup.addExercise($event, 'add-exercise', exercise.id, exercise.name, '');
       }, ["prevent"])
     }, " Add ", 8
     /* PROPS */
