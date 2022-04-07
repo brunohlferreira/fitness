@@ -35,7 +35,7 @@ defineProps({
                         >
                         <Link
                             v-else-if="viewUrl.length"
-                            :href="viewUrl + '/' + row.id + '/show'"
+                            :href="viewUrl + '/' + row.id"
                             class="row:text-blue-500"
                             >{{ row.name }}</Link
                         >

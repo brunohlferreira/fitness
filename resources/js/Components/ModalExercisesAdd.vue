@@ -135,7 +135,6 @@ watch(
                                                 @click.prevent="
                                                     addExercise(
                                                         $event,
-                                                        'add-exercise',
                                                         exercise.id,
                                                         exercise.name,
                                                         ''

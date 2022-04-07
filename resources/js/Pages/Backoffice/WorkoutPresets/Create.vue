@@ -323,12 +323,12 @@ let submit = () => {
                             Create
                         </Button>
                     </div>
+
                     <ModalExercisesAdd
                         :open="isOpen"
                         @close="isOpen = !isOpen"
                         @add-exercise="addExercise"
                     >
-                        <p>Model Content</p>
                     </ModalExercisesAdd>
                 </form>
             </template>

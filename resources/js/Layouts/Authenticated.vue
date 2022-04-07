@@ -31,19 +31,19 @@ const navPages = [
         title: "Dashboard",
         component: "Dashboard",
         href: "/dashboard",
-        icon: "chart-line",
+        icon: "chart-line", //calendar-days
     },
     {
-        title: "Calendar",
-        component: "Calendar",
-        href: "/calendar",
-        icon: "calendar-days",
-    },
-    {
-        title: "Wods List",
-        component: "Wods",
-        href: "/wods",
+        title: "Workouts",
+        component: "Workouts",
+        href: "/workouts",
         icon: "dumbbell",
+    },
+    {
+        title: "Presets",
+        component: "Presets",
+        href: "/workout-presets",
+        icon: "shoe-prints",
     },
     {
         title: "Exercises",

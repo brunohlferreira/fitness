@@ -1,7 +1,5 @@
 <script setup>
-import { ref, watch } from "vue";
-import { Inertia } from "@inertiajs/inertia";
-import debounce from "lodash/debounce";
+import { ref } from "vue";
 import { useForm } from "@inertiajs/inertia-vue3";
 import AuthenticatedLayout from "@/Layouts/Authenticated.vue";
 import ContentTitle from "@/Components/ContentTitle.vue";
@@ -11,6 +9,7 @@ import Input from "@/Components/Input.vue";
 import Select from "@/Components/Select.vue";
 import Textarea from "@/Components/Textarea.vue";
 import Button from "@/Components/Button.vue";
+import ModalExercisesAdd from "@/Components/ModalExercisesAdd.vue";
 import ValidationErrors from "@/Components/ValidationErrors.vue";
 
 const props = defineProps({
@@ -25,6 +24,7 @@ const props = defineProps({
     can: Object,
 });*/
 
+const isOpen = ref(false);
 const exercises = ref(props.workoutExercises);
 
 const addExercise = function (id, name, note, sets) {
@@ -61,22 +61,6 @@ let submit = () => {
         exercises: exercises.value,
     })).put("/backoffice/workout-presets/" + props.workoutPreset.data.id);
 };
-
-const search = ref('');
-
-watch(
-    search,
-    debounce(function (value) {
-        Inertia.get(
-            "/exercises",
-            { search: value },
-            {
-                preserveState: true,
-                replace: true,
-            }
-        );
-    }, 300)
-);
 </script>
 
 <template>
@@ -257,7 +241,8 @@ watch(
                                                 type="text"
                                                 v-model="
                                                     exercises[exerciseIndex]
-                                                        .sets[setIndex].repetitions
+                                                        .sets[setIndex]
+                                                        .repetitions
                                                 "
                                                 class="
                                                     block
@@ -347,6 +332,13 @@ watch(
                             Edit
                         </Button>
                     </div>
+
+                    <ModalExercisesAdd
+                        :open="isOpen"
+                        @close="isOpen = !isOpen"
+                        @add-exercise="addExercise"
+                    >
+                    </ModalExercisesAdd>
                 </form>
             </template>
         </ContentBox>

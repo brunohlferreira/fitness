@@ -25,6 +25,7 @@ class WorkoutTypeRequest extends FormRequest
     {
         return [
             'name' => ['required', 'min:3'],
+            'description' => ['string', 'nullable'],
         ];
     }
 }

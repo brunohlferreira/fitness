@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('exercises', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->text('description');
+            $table->text('description')->nullable();
             $table->unsignedTinyInteger('bilateral');
             $table->foreignId('created_by')->constrained('users');
             $table->unsignedBigInteger('updated_by')->nullable();

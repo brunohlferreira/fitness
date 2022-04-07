@@ -16,6 +16,8 @@ Route::get('/', function () {
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', function () {return Inertia::render('Dashboard');})->name('dashboard');
+    Route::get('/workout-presets', [WorkoutPresetController::class, 'index'])->name('workouts.presets');
+    Route::get('/workout-presets/{workoutPreset}', [WorkoutPresetController::class, 'show'])->name('workouts.presets.show');
     Route::get('/exercises', [ExerciseController::class, 'index'])->name('exercises');
 
     Route::get('/backoffice/dashboard', function () {return Inertia::render('Backoffice/Dashboard');})->name('backoffice.dashboard');
@@ -37,7 +39,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/backoffice/workout-presets', [WorkoutPresetController::class, 'index'])->name('backoffice.workoutPresets.index');
     Route::get('/backoffice/workout-presets/create', [WorkoutPresetController::class, 'create'])->name('backoffice.workoutPresets.create');
     Route::post('/backoffice/workout-presets', [WorkoutPresetController::class, 'store']);
-    Route::get('/backoffice/workout-presets/{workoutPreset}/show', [WorkoutPresetController::class, 'show']);
     Route::get('/backoffice/workout-presets/{workoutPreset}/edit', [WorkoutPresetController::class, 'edit']);
     Route::put('/backoffice/workout-presets/{workoutPreset}', [WorkoutPresetController::class, 'update']);
     Route::delete('/backoffice/workout-presets/{workoutPreset}', [WorkoutPresetController::class, 'destroy']);

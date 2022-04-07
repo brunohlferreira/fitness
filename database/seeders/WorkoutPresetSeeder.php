@@ -14,7 +14,7 @@ class WorkoutPresetSeeder extends Seeder
      */
     public function run()
     {
-        WorkoutPreset::create(['name' => 'Murph', 'description' => null, 'level' => 3, 'time_cap' => 0, 'workout_type_id' => 3, 'created_by' => 1, 'updated_by' => null]);
+        WorkoutPreset::create(['name' => 'Murph', 'description' => 'The workout consists of a mile run, followed by 100 pull-ups, 200 push-ups, 300 air squats, and ends with another mile run. These exercises can be performed in any order without any rules on repetitions. The recommended routine to use is 10 pull-ups, 20 push-ups and 30 air squats between the runs.', 'level' => 3, 'time_cap' => 0, 'workout_type_id' => 3, 'created_by' => 1, 'updated_by' => null]);
         WorkoutPreset::create(['name' => 'Half Murph', 'description' => null, 'level' => 2, 'time_cap' => 0, 'workout_type_id' => 3, 'created_by' => 1, 'updated_by' => null]);
         WorkoutPreset::create(['name' => 'Burpees and Squats', 'description' => null, 'level' => 1, 'time_cap' => 0, 'workout_type_id' => 3, 'created_by' => 1, 'updated_by' => null]);
         WorkoutPreset::create(['name' => 'Cindy', 'description' => null, 'level' => 2, 'time_cap' => 20, 'workout_type_id' => 2, 'created_by' => 1, 'updated_by' => null]);

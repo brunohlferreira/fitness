@@ -16,7 +16,7 @@ class WorkoutTypeController extends Controller
      */
     public function index()
     {
-        return Inertia::render('Backoffice/WorkoutTypes/Index', ['workoutTypes' => WorkoutTypeResource::collection(WorkoutType::select('id', 'name')->paginate(15))]);
+        return Inertia::render('Backoffice/WorkoutTypes/Index', ['workoutTypes' => WorkoutTypeResource::collection(WorkoutType::select('id', 'name', 'description')->paginate(15))]);
     }
 
     /**
@@ -61,7 +61,7 @@ class WorkoutTypeController extends Controller
      */
     public function edit(WorkoutType $workoutType)
     {
-        return Inertia::render('Backoffice/WorkoutTypes/Edit', ['workoutType' => new WorkoutTypeResource($workoutType->only('id', 'name'))]);
+        return Inertia::render('Backoffice/WorkoutTypes/Edit', ['workoutType' => new WorkoutTypeResource($workoutType->only('id', 'name', 'description'))]);
     }
 
     /**

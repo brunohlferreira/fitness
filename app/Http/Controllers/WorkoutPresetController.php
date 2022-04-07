@@ -11,6 +11,7 @@ use App\Models\ExerciseWorkoutPresetSet;
 use App\Models\WorkoutPreset;
 use App\Models\WorkoutType;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 use Inertia\Inertia;
 
 class WorkoutPresetController extends Controller
@@ -22,7 +23,13 @@ class WorkoutPresetController extends Controller
      */
     public function index()
     {
-        return Inertia::render('Backoffice/WorkoutPresets/Index', ['workoutPresets' => WorkoutPresetResource::collection(WorkoutPreset::select('id', 'name')->paginate(15))]);
+        if (!Str::contains(request()->path(), 'backoffice')) {
+            $component = 'WorkoutPresets/Index';
+        } else {
+            $component = 'Backoffice/WorkoutPresets/Index';
+        }
+
+        return Inertia::render($component, ['workoutPresets' => WorkoutPresetResource::collection(WorkoutPreset::select('id', 'name')->paginate(15))]);
     }
 
     /**
@@ -43,6 +50,9 @@ class WorkoutPresetController extends Controller
      */
     public function store(WorkoutPresetRequest $request)
     {
+        $workoutPreset = WorkoutPreset::create($request->validated());
+
+        $exercises = [];
         foreach ($request->input('exercises') as $exerciseKey => $exercise) {
             $exercises[$exercise['id']] = [
                 'position' => $exerciseKey,
@@ -50,8 +60,9 @@ class WorkoutPresetController extends Controller
             ];
             $exercisesSets[$exercise['id']] = $exercise['sets'];
         }
-        $workoutPreset = WorkoutPreset::create($request->validated());
-        $workoutPreset->exercises()->sync($exercises);
+        if (count($exercises)) {
+            $workoutPreset->exercises()->sync($exercises);
+        }
 
         foreach ($workoutPreset->exercises as $exercise) {
             if (!count($exercisesSets[$exercise->id])) {
@@ -85,25 +96,18 @@ class WorkoutPresetController extends Controller
      */
     public function show(WorkoutPreset $workoutPreset)
     {
-        /*$workoutPreset->load('type', 'exercises');
-    $workoutPreset->exercises = ExerciseResource::collection($workoutPreset->exercises->map(function ($exercise) {
-    $exercise->position = $exercise->pivot->position;
-    $exercise->note = $exercise->pivot->note;
-    $exercise->repetitions = $exercise->pivot->repetitions;
-    $exercise->weight = $exercise->pivot->weight;
-    $exercise->distance = $exercise->pivot->distance;
-    $exercise->calories = $exercise->pivot->calories;
-    $exercise->minutes = $exercise->pivot->minutes;
-    return $exercise->only('name', 'position', 'note', 'repetitions', 'weight', 'distance', 'calories', 'minutes');
-    }));
-    $workoutPreset->workout_type_name = $workoutPreset->type->name;
+        $workoutPreset->exercises = ExerciseResource::collection($workoutPreset->exercises)->map(function ($exercise) {
+            return array_merge($exercise->only('id', 'name'), ['note' => $exercise->pivot->note], ['sets' => ExerciseWorkoutPreset::find($exercise->pivot->id)->sets->toArray()]);
+        });
+        $workoutPreset->workout_type_name = $workoutPreset->type->name;
+        $workoutPreset->workout_type_description = $workoutPreset->type->description;
 
-    return Inertia::render(
-    'Backoffice/WorkoutPresets/Show',
-    [
-    'workoutPreset' => new WorkoutTypeResource($workoutPreset->only('id', 'name', 'description', 'level', 'time_cap', 'workout_type_id', 'workout_type_name', 'exercises')),
-    ]
-    );*/
+        return Inertia::render(
+            'WorkoutPresets/Show',
+            [
+                'workoutPreset' => new WorkoutTypeResource($workoutPreset->only('id', 'name', 'description', 'level', 'time_cap', 'workout_type_name', 'workout_type_description', 'exercises')),
+            ]
+        );
     }
 
     /**
@@ -137,6 +141,7 @@ class WorkoutPresetController extends Controller
     {
         $workoutPreset->update($request->validated());
 
+        $exercises = [];
         foreach ($request->input('exercises') as $exerciseKey => $exercise) {
             $exercises[$exercise['id']] = [
                 'position' => $exerciseKey,
@@ -144,7 +149,9 @@ class WorkoutPresetController extends Controller
             ];
             $exercisesSets[$exercise['id']] = $exercise['sets'];
         }
-        $workoutPreset->exercises()->sync($exercises);
+        if (count($exercises)) {
+            $workoutPreset->exercises()->sync($exercises);
+        }
 
         foreach ($workoutPreset->exercises as $exercise) {
             if (!count($exercisesSets[$exercise->id])) {
