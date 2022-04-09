@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\ExerciseRequest;
 use App\Http\Resources\ExerciseResource;
 use App\Models\Exercise;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class ExerciseController extends Controller
 {
@@ -17,9 +17,9 @@ class ExerciseController extends Controller
     public function index(Request $request)
     {
         if ($request->input('modalSearch')) {
-            return Exercise::where('name', 'like', '%' . $request->input('modalSearch') . '%' )->select('id', 'name')->get();
+            return Exercise::where('name', 'like', '%' . $request->input('modalSearch') . '%')->select('id', 'name')->get();
         }
-        return Inertia::render('Backoffice/Exercises/Index', ['exercises' => ExerciseResource::collection(Exercise::select('id', 'name')->paginate(15))]);
+        return Inertia::render('Exercises/Index', ['exercises' => ExerciseResource::collection(Exercise::select('id', 'name')->paginate(15))]);
     }
 
     /**
