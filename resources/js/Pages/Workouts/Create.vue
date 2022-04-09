@@ -12,20 +12,12 @@ import Button from "@/Components/Button.vue";
 import ModalExercisesAdd from "@/Components/ModalExercisesAdd.vue";
 import ValidationErrors from "@/Components/ValidationErrors.vue";
 
-const props = defineProps({
-    workoutPreset: Object,
-    workoutExercises: Object,
+defineProps({
     workoutTypes: Object,
 });
 
-/*let props = defineProps({
-    users: Object,
-    filters: Object,
-    can: Object,
-});*/
-
 const isOpen = ref(false);
-const exercises = ref(props.workoutExercises);
+const exercises = ref([]);
 
 const addExercise = function (id, name, note, sets) {
     if (note === undefined) note = "";
@@ -48,28 +40,29 @@ const addSet = function (index) {
 };
 
 const form = useForm({
-    name: props.workoutPreset.data.name,
-    workout_type_id: props.workoutPreset.data.workout_type_id,
-    level: props.workoutPreset.data.level,
-    time_cap: props.workoutPreset.data.time_cap,
-    description: props.workoutPreset.data.description,
+    name: "",
+    date: new Date().toLocaleDateString("en-CA"),
+    workout_type_id: "1",
+    level: "1",
+    time_cap: "0",
+    description: "",
 });
 
 let submit = () => {
     form.transform((data) => ({
         ...data,
         exercises: exercises.value,
-    })).put("/backoffice/workout-presets/" + props.workoutPreset.data.id);
+    })).post("/workouts");
 };
 </script>
 
 <template>
-    <Head title="Edit Workout Presets" />
+    <Head title="Create Workout" />
 
     <AuthenticatedLayout>
         <ContentBox>
             <template #title>
-                <ContentTitle>Edit Workout Presets</ContentTitle>
+                <ContentTitle>Create Workout</ContentTitle>
             </template>
 
             <template #content>
@@ -77,15 +70,30 @@ let submit = () => {
 
                 <form @submit.prevent="submit" autocomplete="off">
                     <div class="mb-6">
-                        <Label for="name" value="Name" />
-                        <Input
-                            id="name"
-                            type="text"
-                            class="mt-1 block w-full"
-                            v-model="form.name"
-                            required
-                            autofocus
-                        />
+                        <div class="grid grid-cols-6 gap-6">
+                            <div class="col-span-6 sm:col-span-4">
+                                <Label for="name" value="Name" />
+                                <Input
+                                    id="name"
+                                    type="text"
+                                    class="mt-1 block w-full"
+                                    v-model="form.name"
+                                    required
+                                    autofocus
+                                />
+                            </div>
+
+                            <div class="col-span-6 sm:col-span-2">
+                                <Label for="date" value="Date" />
+                                <Input
+                                    id="date"
+                                    type="text"
+                                    class="mt-1 block w-full"
+                                    v-model="form.date"
+                                    required
+                                />
+                            </div>
+                        </div>
                     </div>
 
                     <div class="mb-6">
@@ -138,7 +146,6 @@ let submit = () => {
                                     type="text"
                                     class="mt-1 block w-full"
                                     v-model="form.time_cap"
-                                    required
                                 />
                             </div>
                         </div>
@@ -331,7 +338,7 @@ let submit = () => {
                             :class="{ 'opacity-25': form.processing }"
                             :disabled="form.processing"
                         >
-                            Edit
+                            Create
                         </Button>
                     </div>
 

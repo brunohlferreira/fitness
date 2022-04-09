@@ -39,7 +39,7 @@ class WorkoutPresetController extends Controller
      */
     public function create()
     {
-        return Inertia::render('Backoffice/WorkoutPresets/Create', ['workoutTypes' => WorkoutTypeResource::collection(WorkoutType::select('id', 'name')->get())]);
+        return Inertia::render('Backoffice/WorkoutPresets/Create', ['workoutTypes' => WorkoutTypeResource::collection(WorkoutType::select('id', 'name', 'description')->get())]);
     }
 
     /**
@@ -125,7 +125,7 @@ class WorkoutPresetController extends Controller
                 'workoutExercises' => ExerciseResource::collection($workoutPreset->exercises)->map(function ($exercise) {
                     return array_merge($exercise->only('id', 'name'), ['note' => $exercise->pivot->note], ['sets' => ExerciseWorkoutPreset::find($exercise->pivot->id)->sets->toArray()]);
                 }),
-                'workoutTypes' => WorkoutTypeResource::collection(WorkoutType::select('id', 'name')->get()),
+                'workoutTypes' => WorkoutTypeResource::collection(WorkoutType::select('id', 'name', 'description')->get()),
             ]
         );
     }
@@ -197,32 +197,5 @@ class WorkoutPresetController extends Controller
         $workoutPreset->delete();
 
         return response()->noContent();
-    }
-
-    /**
-     * Show the form for adding a new exercise.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function addExercise(WorkoutPreset $workoutPreset)
-    {
-        return Inertia::render('Backoffice/WorkoutPresets/Exercises/Add', ['workoutPreset' => new WorkoutPresetResource($workoutPreset->only('id'))]);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\WorkoutPreset  $workoutPreset
-     * @return \Illuminate\Http\Response
-     */
-    public function editExercise(WorkoutPreset $workoutPreset)
-    {
-        return Inertia::render(
-            'Backoffice/WorkoutPresets/Edit',
-            [
-                'workoutPreset' => new WorkoutPresetResource($workoutPreset->only('id', 'name', 'description', 'level', 'time_cap', 'workout_type_id')),
-                'workoutTypes' => WorkoutTypeResource::collection(WorkoutType::select('id', 'name')->get()),
-            ]
-        );
     }
 }

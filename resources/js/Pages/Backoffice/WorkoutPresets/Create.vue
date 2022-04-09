@@ -41,9 +41,9 @@ const addSet = function (index) {
 
 const form = useForm({
     name: "",
-    workout_type_id: "",
-    level: "",
-    time_cap: "",
+    workout_type_id: "1",
+    level: "1",
+    time_cap: "0",
     description: "",
 });
 
@@ -96,7 +96,9 @@ let submit = () => {
                                         :key="index"
                                         :value="workoutType.id"
                                     >
-                                        {{ workoutType.name }}
+                                        {{ workoutType.name }} ({{
+                                            workoutType.description
+                                        }})
                                     </option>
                                 </Select>
                             </div>

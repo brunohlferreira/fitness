@@ -13,9 +13,9 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('exercise_workout_preset_sets', function (Blueprint $table) {
+        Schema::create('exercise_workout_sets', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('exercise_workout_preset_id')->constrained('exercise_workout_preset')->onDelete('cascade');
+            $table->foreignId('exercise_workout_id')->constrained('exercise_workout')->onDelete('cascade');
             $table->unsignedTinyInteger('position');
             $table->unsignedSmallInteger('repetitions')->nullable();
             $table->unsignedDecimal('weight')->nullable();
@@ -33,6 +33,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('exercise_workout_preset_sets');
+        Schema::dropIfExists('exercise_workout_sets');
     }
 };
