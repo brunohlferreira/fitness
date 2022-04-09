@@ -144,12 +144,10 @@ class WorkoutController extends Controller
             ];
             $exercisesSets[$exercise['id']] = $exercise['sets'];
         }
-        if (count($exercises)) {
-            $workout->exercises()->sync($exercises);
-        }
 
         foreach ($workout->exercises as $exercise) {
-            if (!count($exercisesSets[$exercise->id])) {
+            if (!isset($exercisesSets[$exercise->id]) || !count($exercisesSets[$exercise->id])) {
+                ExerciseWorkout::find($exercise->pivot->id)->sets->map->delete();
                 continue;
             }
 
@@ -161,8 +159,9 @@ class WorkoutController extends Controller
 
                     continue;
                 }
+
                 if (!isset($set['id'])) {
-                    $set['id'] = 0;
+                    $set['id'] = null;
                 }
 
                 $set['exercise_workout_id'] = $exercise->pivot->id;
@@ -172,6 +171,10 @@ class WorkoutController extends Controller
                     $set
                 );
             }
+        }
+
+        if (count($exercises)) {
+            $workout->exercises()->sync($exercises);
         }
 
         return redirect()->route('workouts.index');
