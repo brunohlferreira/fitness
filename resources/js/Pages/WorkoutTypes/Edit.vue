@@ -5,31 +5,37 @@ import ContentTitle from "@/Components/ContentTitle.vue";
 import ContentBox from "@/Components/ContentBox.vue";
 import Label from "@/Components/Label.vue";
 import Input from "@/Components/Input.vue";
+import Textarea from "@/Components/Textarea.vue";
 import Button from "@/Components/Button.vue";
 import ValidationErrors from "@/Components/ValidationErrors.vue";
 
+let props = defineProps({
+    workoutType: Object,
+});
+
 let form = useForm({
-    name: "",
+    name: props.workoutType.data.name,
+    description: props.workoutType.data.description,
 });
 
 let submit = () => {
-    form.post("/backoffice/equipments");
+    form.put("/workout-types/" + props.workoutType.data.id);
 };
 </script>
 
 <template>
-    <Head title="Create Equipment" />
+    <Head title="Edit Workout Types" />
 
     <AuthenticatedLayout>
         <ContentBox>
             <template #title>
-                <ContentTitle>Create Equipment</ContentTitle>
+                <ContentTitle>Edit Workout Types</ContentTitle>
             </template>
 
             <template #content>
                 <ValidationErrors class="mb-4" />
 
-                <form @submit.prevent="submit">
+                <form @submit.prevent="submit" autocomplete="off">
                     <div class="mb-6">
                         <Label for="name" value="Name" />
                         <Input
@@ -39,7 +45,15 @@ let submit = () => {
                             v-model="form.name"
                             required
                             autofocus
-                            autocomplete="name"
+                        />
+                    </div>
+
+                    <div class="mb-6">
+                        <Label for="description" value="Description" />
+                        <Textarea
+                            id="description"
+                            class="mt-1 block w-full"
+                            v-model="form.description"
                         />
                     </div>
 
@@ -50,7 +64,7 @@ let submit = () => {
                             :class="{ 'opacity-25': form.processing }"
                             :disabled="form.processing"
                         >
-                            Create
+                            Edit
                         </Button>
                     </div>
                 </form>

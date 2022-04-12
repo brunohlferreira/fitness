@@ -1,7 +1,11 @@
 <script setup>
 defineProps({
     rows: Array,
-    actions: {
+    canUpdate: {
+        type: Boolean,
+        default: false,
+    },
+    canDelete: {
         type: Boolean,
         default: false,
     },
@@ -41,14 +45,15 @@ defineProps({
                         >
                         <span v-else>{{ row.name }}</span>
                     </td>
-                    <td v-if="actions" class="pr-6 py-4 text-right">
+                    <td v-if="canUpdate || canDelete" class="pr-6 py-4 text-right">
                         <Link
-                            v-if="editUrl.length"
+                            v-if="canUpdate && editUrl.length"
                             :href="editUrl + '/' + row.id + '/edit'"
                             class="inline-block ml-4"
                             ><FontAwesomeIcon icon="pencil"></FontAwesomeIcon
                         ></Link>
                         <Link
+                            v-if="canDelete"
                             @click.prevent="deleteFunction(row.id)"
                             class="inline-block ml-4"
                             ><FontAwesomeIcon icon="trash-can"></FontAwesomeIcon

@@ -9,31 +9,31 @@ import Button from "@/Components/Button.vue";
 import ValidationErrors from "@/Components/ValidationErrors.vue";
 
 let props = defineProps({
-    equipment: Object,
+    bodyPart: Object,
 });
 
 let form = useForm({
-    name: props.equipment.data.name,
+    name: props.bodyPart.data.name,
 });
 
 let submit = () => {
-    form.put("/backoffice/equipments/" + props.equipment.data.id);
+    form.put("/body-parts/" + props.bodyPart.data.id);
 };
 </script>
 
 <template>
-    <Head title="Edit Equipment" />
+    <Head title="Edit Body Part" />
 
     <AuthenticatedLayout>
         <ContentBox>
             <template #title>
-                <ContentTitle>Edit Equipment</ContentTitle>
+                <ContentTitle>Edit Body Part</ContentTitle>
             </template>
 
             <template #content>
                 <ValidationErrors class="mb-4" />
 
-                <form @submit.prevent="submit">
+                <form @submit.prevent="submit" autocomplete="off">
                     <div class="mb-6">
                         <Label for="name" value="Name" />
                         <Input
@@ -43,7 +43,6 @@ let submit = () => {
                             v-model="form.name"
                             required
                             autofocus
-                            autocomplete="name"
                         />
                     </div>
 

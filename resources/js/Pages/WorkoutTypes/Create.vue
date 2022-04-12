@@ -15,7 +15,7 @@ let form = useForm({
 });
 
 let submit = () => {
-    form.post("/backoffice/workout-types");
+    form.post("/workout-types");
 };
 </script>
 

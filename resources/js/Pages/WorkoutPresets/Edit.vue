@@ -12,12 +12,14 @@ import Button from "@/Components/Button.vue";
 import ModalExercisesAdd from "@/Components/ModalExercisesAdd.vue";
 import ValidationErrors from "@/Components/ValidationErrors.vue";
 
-defineProps({
+const props = defineProps({
+    workoutPreset: Object,
+    workoutExercises: Object,
     workoutTypes: Object,
 });
 
 const isOpen = ref(false);
-const exercises = ref([]);
+const exercises = ref(props.workoutExercises);
 
 const addExercise = function (id, name, note, sets) {
     if (note === undefined) note = "";
@@ -40,28 +42,28 @@ const addSet = function (index) {
 };
 
 const form = useForm({
-    name: "",
-    workout_type_id: "1",
-    level: "1",
-    time_cap: "0",
-    description: "",
+    name: props.workoutPreset.data.name,
+    workout_type_id: props.workoutPreset.data.workout_type_id,
+    level: props.workoutPreset.data.level,
+    time_cap: props.workoutPreset.data.time_cap,
+    description: props.workoutPreset.data.description,
 });
 
 let submit = () => {
     form.transform((data) => ({
         ...data,
         exercises: exercises.value,
-    })).post("/backoffice/workout-presets");
+    })).put("/workout-presets/" + props.workoutPreset.data.id);
 };
 </script>
 
 <template>
-    <Head title="Create Workout Presets" />
+    <Head title="Edit Workout Presets" />
 
     <AuthenticatedLayout>
         <ContentBox>
             <template #title>
-                <ContentTitle>Create Workout Presets</ContentTitle>
+                <ContentTitle>Edit Workout Presets</ContentTitle>
             </template>
 
             <template #content>
@@ -130,6 +132,7 @@ let submit = () => {
                                     type="text"
                                     class="mt-1 block w-full"
                                     v-model="form.time_cap"
+                                    required
                                 />
                             </div>
                         </div>
@@ -322,7 +325,7 @@ let submit = () => {
                             :class="{ 'opacity-25': form.processing }"
                             :disabled="form.processing"
                         >
-                            Create
+                            Edit
                         </Button>
                     </div>
 

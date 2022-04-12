@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\EquipmentRequest;
 use App\Http\Resources\EquipmentResource;
 use App\Models\Equipment;
+use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
 
 class EquipmentController extends Controller
@@ -16,7 +17,11 @@ class EquipmentController extends Controller
      */
     public function index()
     {
-        return Inertia::render('Backoffice/Equipments/Index', ['equipments' => EquipmentResource::collection(Equipment::select('id', 'name')->paginate(15))]);
+        if (!Gate::allows('Equipment')) {
+            abort(403);
+        }
+
+        return Inertia::render('Equipments/Index', ['equipments' => EquipmentResource::collection(Equipment::select('id', 'name')->paginate(15))]);
     }
 
     /**
@@ -26,7 +31,11 @@ class EquipmentController extends Controller
      */
     public function create()
     {
-        return Inertia::render('Backoffice/Equipments/Create');
+        if (!Gate::allows('Equipment')) {
+            abort(403);
+        }
+
+        return Inertia::render('Equipments/Create');
     }
 
     /**
@@ -37,9 +46,13 @@ class EquipmentController extends Controller
      */
     public function store(EquipmentRequest $request)
     {
+        if (!Gate::allows('Equipment')) {
+            abort(403);
+        }
+
         Equipment::create($request->validated());
 
-        return redirect()->route('backoffice.equipments.index');
+        return redirect()->route('equipments.index');
     }
 
     /**
@@ -50,6 +63,10 @@ class EquipmentController extends Controller
      */
     public function show(Equipment $equipment)
     {
+        if (!Gate::allows('Equipment')) {
+            abort(403);
+        }
+
         return new EquipmentResource($equipment);
     }
 
@@ -61,7 +78,11 @@ class EquipmentController extends Controller
      */
     public function edit(Equipment $equipment)
     {
-        return Inertia::render('Backoffice/Equipments/Edit', ['equipment' => new EquipmentResource($equipment->only('id', 'name'))]);
+        if (!Gate::allows('Equipment')) {
+            abort(403);
+        }
+
+        return Inertia::render('Equipments/Edit', ['equipment' => new EquipmentResource($equipment->only('id', 'name'))]);
     }
 
     /**
@@ -73,9 +94,13 @@ class EquipmentController extends Controller
      */
     public function update(EquipmentRequest $request, Equipment $equipment)
     {
+        if (!Gate::allows('Equipment')) {
+            abort(403);
+        }
+
         $equipment->update($request->validated());
 
-        return redirect()->route('backoffice.equipments.index');
+        return redirect()->route('equipments.index');
     }
 
     /**
@@ -86,6 +111,10 @@ class EquipmentController extends Controller
      */
     public function destroy(Equipment $equipment)
     {
+        if (!Gate::allows('Equipment')) {
+            abort(403);
+        }
+
         $equipment->delete();
 
         return response()->noContent();

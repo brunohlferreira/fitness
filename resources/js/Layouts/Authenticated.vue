@@ -41,7 +41,7 @@ const navPages = [
     },
     {
         title: "Presets",
-        component: "Presets",
+        component: "WorkoutPresets",
         href: "/workout-presets",
         icon: "shoe-prints",
     },
@@ -119,10 +119,11 @@ const navPages = [
                                 </template>
 
                                 <template #content>
-                                    <DropdownLink
-                                        :href="route('backoffice.dashboard')"
+                                    <DropdownLink v-for="(item, index) in $page.props.nav" :key="index"
+                                        :href="route(item.route)"
+                                        :active="$page.component.startsWith(item.component)"
                                     >
-                                        Backoffice
+                                        {{ item.name }}
                                     </DropdownLink>
                                     <DropdownLink
                                         @click.prevent="toggleTheme"
@@ -171,7 +172,7 @@ const navPages = [
                     v-for="(navPage, index) in navPages"
                     :key="index"
                     :href="navPage.href"
-                    :active="$page.component == navPage.component"
+                    :active="$page.component.startsWith(navPage.component)"
                 >
                     <FontAwesomeIcon
                         :icon="navPage.icon"

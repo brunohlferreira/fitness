@@ -19,14 +19,14 @@ const deleteEntry = function (id) {
         return;
     }
 
-    axios.delete("/backoffice/workout-types/" + id).then((response) => {
+    axios.delete("/workout-types/" + id).then((response) => {
         Inertia.reload();
     });
 };
 </script>
 
 <template>
-    <Head title="Backoffice Workout Types" />
+    <Head title="Workout Types" />
 
     <AuthenticatedLayout>
         <ContentBox>
@@ -35,7 +35,7 @@ const deleteEntry = function (id) {
             </template>
 
             <template #actions>
-                <Link :href="route('backoffice.workoutTypes.create')" class="block"
+                <Link :href="route('workoutTypes.create')" class="block"
                     ><FontAwesomeIcon icon="plus"></FontAwesomeIcon
                 ></Link>
             </template>
@@ -47,7 +47,7 @@ const deleteEntry = function (id) {
                     v-else
                     :rows="workoutTypes.data"
                     :actions="true"
-                    :editUrl="'/backoffice/workout-types'"
+                    :editUrl="'/workout-types'"
                     :deleteFunction="deleteEntry"
                 />
             </template>

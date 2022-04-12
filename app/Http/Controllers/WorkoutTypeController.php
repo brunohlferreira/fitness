@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\WorkoutTypeRequest;
 use App\Http\Resources\WorkoutTypeResource;
 use App\Models\WorkoutType;
+use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
 
 class WorkoutTypeController extends Controller
@@ -16,7 +17,11 @@ class WorkoutTypeController extends Controller
      */
     public function index()
     {
-        return Inertia::render('Backoffice/WorkoutTypes/Index', ['workoutTypes' => WorkoutTypeResource::collection(WorkoutType::select('id', 'name', 'description')->paginate(15))]);
+        if (!Gate::allows('WorkoutType')) {
+            abort(403);
+        }
+
+        return Inertia::render('WorkoutTypes/Index', ['workoutTypes' => WorkoutTypeResource::collection(WorkoutType::select('id', 'name', 'description')->paginate(15))]);
     }
 
     /**
@@ -26,7 +31,11 @@ class WorkoutTypeController extends Controller
      */
     public function create()
     {
-        return Inertia::render('Backoffice/WorkoutTypes/Create');
+        if (!Gate::allows('WorkoutType')) {
+            abort(403);
+        }
+
+        return Inertia::render('WorkoutTypes/Create');
     }
 
     /**
@@ -37,9 +46,13 @@ class WorkoutTypeController extends Controller
      */
     public function store(WorkoutTypeRequest $request)
     {
+        if (!Gate::allows('WorkoutType')) {
+            abort(403);
+        }
+
         WorkoutType::create($request->validated());
 
-        return redirect()->route('backoffice.workoutTypes.index');
+        return redirect()->route('workoutTypes.index');
     }
 
     /**
@@ -50,6 +63,10 @@ class WorkoutTypeController extends Controller
      */
     public function show(WorkoutType $workoutType)
     {
+        if (!Gate::allows('WorkoutType')) {
+            abort(403);
+        }
+
         return new WorkoutTypeResource($workoutType);
     }
 
@@ -61,7 +78,11 @@ class WorkoutTypeController extends Controller
      */
     public function edit(WorkoutType $workoutType)
     {
-        return Inertia::render('Backoffice/WorkoutTypes/Edit', ['workoutType' => new WorkoutTypeResource($workoutType->only('id', 'name', 'description'))]);
+        if (!Gate::allows('WorkoutType')) {
+            abort(403);
+        }
+
+        return Inertia::render('WorkoutTypes/Edit', ['workoutType' => new WorkoutTypeResource($workoutType->only('id', 'name', 'description'))]);
     }
 
     /**
@@ -73,9 +94,13 @@ class WorkoutTypeController extends Controller
      */
     public function update(WorkoutTypeRequest $request, WorkoutType $workoutType)
     {
+        if (!Gate::allows('WorkoutType')) {
+            abort(403);
+        }
+
         $workoutType->update($request->validated());
 
-        return redirect()->route('backoffice.workoutTypes.index');
+        return redirect()->route('workoutTypes.index');
     }
 
     /**
@@ -86,6 +111,10 @@ class WorkoutTypeController extends Controller
      */
     public function destroy(WorkoutType $workoutType)
     {
+        if (!Gate::allows('WorkoutType')) {
+            abort(403);
+        }
+
         $workoutType->delete();
 
         return response()->noContent();

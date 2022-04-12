@@ -12,20 +12,12 @@ import Button from "@/Components/Button.vue";
 import ModalExercisesAdd from "@/Components/ModalExercisesAdd.vue";
 import ValidationErrors from "@/Components/ValidationErrors.vue";
 
-const props = defineProps({
-    workoutPreset: Object,
-    workoutExercises: Object,
+defineProps({
     workoutTypes: Object,
 });
 
-/*let props = defineProps({
-    users: Object,
-    filters: Object,
-    can: Object,
-});*/
-
 const isOpen = ref(false);
-const exercises = ref(props.workoutExercises);
+const exercises = ref([]);
 
 const addExercise = function (id, name, note, sets) {
     if (note === undefined) note = "";
@@ -48,28 +40,28 @@ const addSet = function (index) {
 };
 
 const form = useForm({
-    name: props.workoutPreset.data.name,
-    workout_type_id: props.workoutPreset.data.workout_type_id,
-    level: props.workoutPreset.data.level,
-    time_cap: props.workoutPreset.data.time_cap,
-    description: props.workoutPreset.data.description,
+    name: "",
+    workout_type_id: "1",
+    level: "1",
+    time_cap: "0",
+    description: "",
 });
 
 let submit = () => {
     form.transform((data) => ({
         ...data,
         exercises: exercises.value,
-    })).put("/backoffice/workout-presets/" + props.workoutPreset.data.id);
+    })).post("/workout-presets");
 };
 </script>
 
 <template>
-    <Head title="Edit Workout Presets" />
+    <Head title="Create Workout Presets" />
 
     <AuthenticatedLayout>
         <ContentBox>
             <template #title>
-                <ContentTitle>Edit Workout Presets</ContentTitle>
+                <ContentTitle>Create Workout Presets</ContentTitle>
             </template>
 
             <template #content>
@@ -138,7 +130,6 @@ let submit = () => {
                                     type="text"
                                     class="mt-1 block w-full"
                                     v-model="form.time_cap"
-                                    required
                                 />
                             </div>
                         </div>
@@ -331,7 +322,7 @@ let submit = () => {
                             :class="{ 'opacity-25': form.processing }"
                             :disabled="form.processing"
                         >
-                            Edit
+                            Create
                         </Button>
                     </div>
 

@@ -11,6 +11,7 @@ use App\Models\ExerciseWorkoutPresetSet;
 use App\Models\WorkoutPreset;
 use App\Models\WorkoutType;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
 
@@ -29,7 +30,14 @@ class WorkoutPresetController extends Controller
             $component = 'Backoffice/WorkoutPresets/Index';
         }
 
-        return Inertia::render($component, ['workoutPresets' => WorkoutPresetResource::collection(WorkoutPreset::select('id', 'name')->paginate(15))]);
+        return Inertia::render($component, [
+            'workoutPresets' => WorkoutPresetResource::collection(WorkoutPreset::select('id', 'name')->paginate(15)),
+            'can' => [
+                'create' => Gate::allows('WorkoutPreset'),
+                'update' => Gate::allows('WorkoutPreset'),
+                'delete' => Gate::allows('WorkoutPreset'),
+            ],
+        ]);
     }
 
     /**
@@ -39,7 +47,11 @@ class WorkoutPresetController extends Controller
      */
     public function create()
     {
-        return Inertia::render('Backoffice/WorkoutPresets/Create', ['workoutTypes' => WorkoutTypeResource::collection(WorkoutType::select('id', 'name', 'description')->get())]);
+        if (!Gate::allows('WorkoutPreset')) {
+            abort(403);
+        }
+
+        return Inertia::render('WorkoutPresets/Create', ['workoutTypes' => WorkoutTypeResource::collection(WorkoutType::select('id', 'name', 'description')->get())]);
     }
 
     /**
@@ -50,6 +62,10 @@ class WorkoutPresetController extends Controller
      */
     public function store(WorkoutPresetRequest $request)
     {
+        if (!Gate::allows('WorkoutPreset')) {
+            abort(403);
+        }
+
         $workoutPreset = WorkoutPreset::create($request->validated());
 
         $exercises = [];
@@ -85,7 +101,7 @@ class WorkoutPresetController extends Controller
             }
         }
 
-        return redirect()->route('backoffice.workoutPresets.index');
+        return redirect()->route('workoutPresets.index');
     }
 
     /**
@@ -118,8 +134,12 @@ class WorkoutPresetController extends Controller
      */
     public function edit(WorkoutPreset $workoutPreset)
     {
+        if (!Gate::allows('WorkoutPreset')) {
+            abort(403);
+        }
+
         return Inertia::render(
-            'Backoffice/WorkoutPresets/Edit',
+            'WorkoutPresets/Edit',
             [
                 'workoutPreset' => new WorkoutPresetResource($workoutPreset->only('id', 'name', 'description', 'level', 'time_cap', 'workout_type_id')),
                 'workoutExercises' => ExerciseResource::collection($workoutPreset->exercises)->map(function ($exercise) {
@@ -139,6 +159,10 @@ class WorkoutPresetController extends Controller
      */
     public function update(WorkoutPresetRequest $request, WorkoutPreset $workoutPreset)
     {
+        if (!Gate::allows('WorkoutPreset')) {
+            abort(403);
+        }
+
         $workoutPreset->update($request->validated());
 
         $exercises = [];
@@ -182,7 +206,7 @@ class WorkoutPresetController extends Controller
             $workoutPreset->exercises()->sync($exercises);
         }
 
-        return redirect()->route('backoffice.workoutPresets.index');
+        return redirect()->route('workoutPresets.index');
     }
 
     /**
@@ -193,6 +217,10 @@ class WorkoutPresetController extends Controller
      */
     public function destroy(WorkoutPreset $workoutPreset)
     {
+        if (!Gate::allows('WorkoutPreset')) {
+            abort(403);
+        }
+
         foreach ($workoutPreset->exercises as $exercise) {
             ExerciseWorkoutPreset::find($exercise->pivot->id)->sets->map->delete();
         };

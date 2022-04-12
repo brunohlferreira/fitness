@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\BodyPartRequest;
 use App\Http\Resources\BodyPartResource;
 use App\Models\BodyPart;
+use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
 
 class BodyPartController extends Controller
@@ -16,7 +17,11 @@ class BodyPartController extends Controller
      */
     public function index()
     {
-        return Inertia::render('Backoffice/BodyParts/Index', ['bodyParts' => BodyPartResource::collection(BodyPart::select('id', 'name')->paginate(15))]);
+        if (!Gate::allows('BodyPart')) {
+            abort(403);
+        }
+
+        return Inertia::render('BodyParts/Index', ['bodyParts' => BodyPartResource::collection(BodyPart::select('id', 'name')->paginate(15))]);
     }
 
     /**
@@ -26,7 +31,11 @@ class BodyPartController extends Controller
      */
     public function create()
     {
-        return Inertia::render('Backoffice/BodyParts/Create');
+        if (!Gate::allows('BodyPart')) {
+            abort(403);
+        }
+
+        return Inertia::render('BodyParts/Create');
     }
 
     /**
@@ -37,9 +46,13 @@ class BodyPartController extends Controller
      */
     public function store(BodyPartRequest $request)
     {
+        if (!Gate::allows('BodyPart')) {
+            abort(403);
+        }
+
         BodyPart::create($request->validated());
 
-        return redirect()->route('backoffice.bodyParts.index');
+        return redirect()->route('bodyParts.index');
     }
 
     /**
@@ -50,6 +63,10 @@ class BodyPartController extends Controller
      */
     public function show(BodyPart $bodyPart)
     {
+        if (!Gate::allows('BodyPart')) {
+            abort(403);
+        }
+
         return new BodyPartResource($bodyPart);
     }
 
@@ -61,7 +78,11 @@ class BodyPartController extends Controller
      */
     public function edit(BodyPart $bodyPart)
     {
-        return Inertia::render('Backoffice/BodyParts/Edit', ['bodyPart' => new BodyPartResource($bodyPart->only('id', 'name'))]);
+        if (!Gate::allows('BodyPart')) {
+            abort(403);
+        }
+
+        return Inertia::render('BodyParts/Edit', ['bodyPart' => new BodyPartResource($bodyPart->only('id', 'name'))]);
     }
 
     /**
@@ -73,9 +94,13 @@ class BodyPartController extends Controller
      */
     public function update(BodyPartRequest $request, BodyPart $bodyPart)
     {
+        if (!Gate::allows('BodyPart')) {
+            abort(403);
+        }
+
         $bodyPart->update($request->validated());
 
-        return redirect()->route('backoffice.bodyParts.index');
+        return redirect()->route('bodyParts.index');
     }
 
     /**
@@ -86,6 +111,10 @@ class BodyPartController extends Controller
      */
     public function destroy(BodyPart $bodyPart)
     {
+        if (!Gate::allows('BodyPart')) {
+            abort(403);
+        }
+
         $bodyPart->delete();
 
         return response()->noContent();

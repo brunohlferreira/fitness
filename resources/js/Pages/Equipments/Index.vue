@@ -19,14 +19,14 @@ const deleteEntry = function (id) {
         return;
     }
 
-    axios.delete("/backoffice/equipments/" + id).then((response) => {
+    axios.delete("/equipments/" + id).then((response) => {
         Inertia.reload();
     });
 };
 </script>
 
 <template>
-    <Head title="Backoffice Equipments" />
+    <Head title="Equipments" />
 
     <AuthenticatedLayout>
         <ContentBox>
@@ -36,7 +36,7 @@ const deleteEntry = function (id) {
 
             <template #actions>
                 <Link
-                    :href="route('backoffice.equipments.create')"
+                    :href="route('equipments.create')"
                     class="block"
                     ><FontAwesomeIcon icon="plus"></FontAwesomeIcon
                 ></Link>
@@ -49,7 +49,7 @@ const deleteEntry = function (id) {
                     v-else
                     :rows="equipments.data"
                     :actions="true"
-                    :editUrl="'/backoffice/equipments'"
+                    :editUrl="'/equipments'"
                     :deleteFunction="deleteEntry"
                 />
             </template>

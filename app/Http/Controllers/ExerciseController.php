@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Resources\ExerciseResource;
 use App\Models\Exercise;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
 
 class ExerciseController extends Controller
@@ -19,7 +20,14 @@ class ExerciseController extends Controller
         if ($request->input('modalSearch')) {
             return Exercise::where('name', 'like', '%' . $request->input('modalSearch') . '%')->select('id', 'name')->get();
         }
-        return Inertia::render('Exercises/Index', ['exercises' => ExerciseResource::collection(Exercise::select('id', 'name')->paginate(15))]);
+        return Inertia::render('Exercises/Index', [
+            'exercises' => ExerciseResource::collection(Exercise::select('id', 'name')->paginate(15)),
+            'can' => [
+                'create' => false,
+                'update' => false,
+                'delete' => false,
+            ],
+        ]);
     }
 
     /**
@@ -29,7 +37,9 @@ class ExerciseController extends Controller
      */
     public function create()
     {
-        //
+        if (!Gate::allows('Exercise')) {
+            abort(403);
+        }
     }
 
     /**
@@ -40,7 +50,9 @@ class ExerciseController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        if (!Gate::allows('Exercise')) {
+            abort(403);
+        }
     }
 
     /**
@@ -62,7 +74,9 @@ class ExerciseController extends Controller
      */
     public function edit(Exercise $exercise)
     {
-        //
+        if (!Gate::allows('Exercise')) {
+            abort(403);
+        }
     }
 
     /**
@@ -74,7 +88,9 @@ class ExerciseController extends Controller
      */
     public function update(Request $request, Exercise $exercise)
     {
-        //
+        if (!Gate::allows('Exercise')) {
+            abort(403);
+        }
     }
 
     /**
@@ -85,6 +101,8 @@ class ExerciseController extends Controller
      */
     public function destroy(Exercise $exercise)
     {
-        //
+        if (!Gate::allows('Exercise')) {
+            abort(403);
+        }
     }
 }
