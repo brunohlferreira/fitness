@@ -35,7 +35,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::put('/equipments/{equipment}', [EquipmentController::class, 'update']);
     Route::delete('/equipments/{equipment}', [EquipmentController::class, 'destroy']);
 
-    Route::get('/exercises', [ExerciseController::class, 'index'])->name('exercises');
+    Route::get('/exercises', [ExerciseController::class, 'index'])->name('exercises.index');
+    Route::get('/exercises/create', [ExerciseController::class, 'create'])->name('exercises.create');
+    Route::get('/exercises/{exercise}/edit', [ExerciseController::class, 'edit']);
+    Route::get('/exercises/{exercise}', [ExerciseController::class, 'show']);
+    Route::post('/exercises', [ExerciseController::class, 'store']);
+    Route::put('/exercises/{exercise}', [ExerciseController::class, 'update']);
+    Route::delete('/exercises/{exercise}', [ExerciseController::class, 'destroy']);
 
     Route::get('/workout-types', [WorkoutTypeController::class, 'index'])->name('workoutTypes.index');
     Route::get('/workout-types/create', [WorkoutTypeController::class, 'create'])->name('workoutTypes.create');
@@ -55,6 +61,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/workout-presets', [WorkoutPresetController::class, 'index'])->name('workoutPresets.index');
     Route::get('/workout-presets/create', [WorkoutPresetController::class, 'create'])->name('workoutPresets.create');
     Route::get('/workout-presets/{workoutPreset}/edit', [WorkoutPresetController::class, 'edit']);
+    Route::get('/workout-presets/{workoutPreset}', [WorkoutPresetController::class, 'show']);
     Route::post('/workout-presets', [WorkoutPresetController::class, 'store']);
     Route::put('/workout-presets/{workoutPreset}', [WorkoutPresetController::class, 'update']);
     Route::delete('/workout-presets/{workoutPreset}', [WorkoutPresetController::class, 'destroy']);

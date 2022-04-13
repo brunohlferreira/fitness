@@ -1,3 +1,13 @@
+<script setup>
+const props = defineProps({
+    content: {
+        type: Boolean,
+        default: true,
+    },
+});
+</script>
+
+
 <template>
     <div>
         <div class="flex justify-between px-2 dark:text-neutral-200">
@@ -6,6 +16,7 @@
         </div>
 
         <div
+            v-if="content"
             class="
                 mt-2
                 p-4

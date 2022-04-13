@@ -51,6 +51,7 @@ const deleteEntry = function (id) {
                     :rows="exercises.data"
                     :canUpdate="can.update"
                     :canDelete="can.delete"
+                    :viewUrl="'/exercises'"
                     :editUrl="'/exercises'"
                     :deleteFunction="deleteEntry"
                 />
