@@ -13,6 +13,10 @@ class ExerciseWorkoutPreset extends Pivot
 
     protected $fillable = ['exercise_id', 'workout_preset_id', 'position', 'note'];
 
+    public $incrementing = true;
+
+    public $timestamps = false;
+
     public function workout()
     {
         return $this->belongsTo(WorkoutPreset::class, 'workout_preset_id');

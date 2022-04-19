@@ -21,7 +21,14 @@ class EquipmentController extends Controller
             abort(403);
         }
 
-        return Inertia::render('Equipments/Index', ['equipments' => EquipmentResource::collection(Equipment::select('id', 'name')->paginate(15))]);
+        return Inertia::render('Equipments/Index', [
+            'equipments' => EquipmentResource::collection(Equipment::select('id', 'name')->paginate(15)),
+            'can' => [
+                'create' => Gate::allows('Equipment'),
+                'update' => Gate::allows('Equipment'),
+                'delete' => Gate::allows('Equipment'),
+            ],
+        ]);
     }
 
     /**

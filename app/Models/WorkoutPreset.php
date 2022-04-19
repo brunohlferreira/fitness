@@ -16,11 +16,17 @@ class WorkoutPreset extends Model
     {
         parent::boot();
         static::creating(function ($model) {
-            if (is_null(Auth::user())) return;
+            if (is_null(Auth::user())) {
+                return;
+            }
+
             $model->created_by = Auth::user()->id;
         });
         static::updating(function ($model) {
-            if (is_null(Auth::user())) return;
+            if (is_null(Auth::user())) {
+                return;
+            }
+
             $model->updated_by = Auth::user()->id;
         });
     }
@@ -32,7 +38,7 @@ class WorkoutPreset extends Model
 
     public function exercises()
     {
-        return $this->belongsToMany(Exercise::class)->withPivot('id', 'note')->withTimestamps()->orderBy('position');
+        return $this->belongsToMany(Exercise::class)->withPivot('id', 'note')->orderBy('position');
     }
 
     public function createdBy()

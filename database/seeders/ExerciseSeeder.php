@@ -38,8 +38,6 @@ class ExerciseSeeder extends Seeder
                     'body_part_id' => $bodyPart->id,
                     'exercise_id' => $exercise->id,
                     'impact' => rand(1, 2),
-                    'created_at' => \Carbon\Carbon::now(),
-                    'updated_at' => \Carbon\Carbon::now(),
                 ]);
             });
 

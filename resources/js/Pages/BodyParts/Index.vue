@@ -8,6 +8,7 @@ import Pagination from "@/Components/Pagination.vue";
 
 defineProps({
     bodyParts: Object,
+    can: Object,
 });
 
 const deleteEntry = function (id) {
@@ -19,8 +20,8 @@ const deleteEntry = function (id) {
         return;
     }
 
-    axios.delete("/body-parts/" + id).then((response) => {
-        Inertia.reload();
+    axios.delete(`/body-parts/${id}`).then((response) => {
+        Inertia.visit("/body-parts");
     });
 };
 </script>
@@ -34,7 +35,7 @@ const deleteEntry = function (id) {
                 <ContentTitle>Body Parts</ContentTitle>
             </template>
 
-            <template #actions>
+            <template #actions v-if="can.create">
                 <Link :href="route('bodyParts.create')" class="block"
                     ><FontAwesomeIcon icon="plus"></FontAwesomeIcon
                 ></Link>
@@ -46,7 +47,8 @@ const deleteEntry = function (id) {
                 <Table
                     v-else
                     :rows="bodyParts.data"
-                    :actions="true"
+                    :canUpdate="can.update"
+                    :canDelete="can.delete"
                     :editUrl="'/body-parts'"
                     :deleteFunction="deleteEntry"
                 />

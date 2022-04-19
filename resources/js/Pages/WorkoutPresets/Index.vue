@@ -20,8 +20,8 @@ const deleteEntry = function (id) {
         return;
     }
 
-    axios.delete("/workout-presets/" + id).then((response) => {
-        Inertia.reload();
+    axios.delete(`/workout-presets/${id}`).then((response) => {
+        Inertia.visit("/workout-presets");
     });
 };
 </script>
@@ -36,9 +36,7 @@ const deleteEntry = function (id) {
             </template>
 
             <template #actions v-if="can.create">
-                <Link
-                    :href="route('workoutPresets.create')"
-                    class="block"
+                <Link :href="route('workoutPresets.create')" class="block"
                     ><FontAwesomeIcon icon="plus"></FontAwesomeIcon
                 ></Link>
             </template>

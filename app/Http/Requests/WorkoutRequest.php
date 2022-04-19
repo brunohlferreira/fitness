@@ -31,7 +31,7 @@ class WorkoutRequest extends FormRequest
             'time_cap' => ['required', 'integer', 'min:0', 'max:255'],
             'score' => ['nullable'],
             'workout_type_id' => ['required', 'integer', 'min:0'],
-            'workout_id' => ['nullable', 'integer', 'min:0'],
+            'workout_preset_id' => ['nullable', 'integer', 'min:0'],
         ];
     }
 }

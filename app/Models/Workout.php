@@ -11,7 +11,7 @@ class Workout extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'description', 'date', 'level', 'time_cap', 'score', 'workout_type_id', 'workout_id', 'created_by'];
+    protected $fillable = ['name', 'description', 'date', 'level', 'time_cap', 'score', 'workout_type_id', 'workout_preset_id', 'created_by'];
 
     public static function boot()
     {
@@ -32,7 +32,7 @@ class Workout extends Model
 
     public function exercises()
     {
-        return $this->belongsToMany(Exercise::class)->withPivot('id', 'note')->withTimestamps()->orderBy('position');
+        return $this->belongsToMany(Exercise::class)->withPivot('id', 'note')->orderBy('position');
     }
 
     public function createdBy()

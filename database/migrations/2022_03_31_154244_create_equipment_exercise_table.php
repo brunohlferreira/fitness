@@ -17,7 +17,6 @@ return new class extends Migration
             $table->id();
             $table->foreignId('equipment_id')->constrained();
             $table->foreignId('exercise_id')->constrained();
-            $table->timestamps();
         });
     }
 

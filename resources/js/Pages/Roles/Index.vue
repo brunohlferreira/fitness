@@ -25,7 +25,6 @@ defineProps({
                 <Table
                     v-else
                     :rows="roles.data"
-                    :actions="true"
                     :deleteAction="false"
                     :editUrl="'/roles'"
                 />

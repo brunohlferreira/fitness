@@ -6,10 +6,13 @@ use App\Http\Requests\ExerciseRequest;
 use App\Http\Resources\BodyPartResource;
 use App\Http\Resources\EquipmentResource;
 use App\Http\Resources\ExerciseResource;
+use App\Http\Resources\WorkoutResource;
 use App\Models\BodyPart;
 use App\Models\Equipment;
 use App\Models\Exercise;
+use App\Models\Workout;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
 
@@ -25,12 +28,13 @@ class ExerciseController extends Controller
         if ($request->input('modalSearch')) {
             return Exercise::where('name', 'like', '%' . $request->input('modalSearch') . '%')->select('id', 'name')->get();
         }
+
         return Inertia::render('Exercises/Index', [
             'exercises' => ExerciseResource::collection(Exercise::select('id', 'name')->paginate(15)),
             'can' => [
-                'create' => Gate::allows('WorkoutPreset'),
-                'update' => Gate::allows('WorkoutPreset'),
-                'delete' => Gate::allows('WorkoutPreset'),
+                'create' => Gate::allows('Exercise'),
+                'update' => Gate::allows('Exercise'),
+                'delete' => Gate::allows('Exercise'),
             ],
         ]);
     }
@@ -95,11 +99,6 @@ class ExerciseController extends Controller
      */
     public function show(Exercise $exercise)
     {
-        /*$workoutPreset->exercises = ExerciseResource::collection($workoutPreset->exercises)->map(function ($exercise) {
-            return array_merge($exercise->only('id', 'name'), ['note' => $exercise->pivot->note], ['sets' => ExerciseWorkoutPreset::find($exercise->pivot->id)->sets->toArray()]);
-        });
-        $workoutPreset->workout_type_name = $workoutPreset->type->name;
-        $workoutPreset->workout_type_description = $workoutPreset->type->description;*/
         $exercise->bodyParts = EquipmentResource::collection($exercise->bodyParts)->map(function ($bodyPart) {
             return array_merge($bodyPart->only('id', 'name'), ['impact' => $bodyPart->pivot->impact]);
         });
@@ -111,6 +110,22 @@ class ExerciseController extends Controller
             'Exercises/Show',
             [
                 'exercise' => new ExerciseResource($exercise->only('id', 'name', 'description', 'bilateral', 'bodyParts', 'equipments')),
+                'attempts' => WorkoutResource::collection(
+                    Workout::select('workouts.id', 'workouts.name', 'workouts.date')
+                        ->join('exercise_workout', function ($join) use ($exercise) {
+                            $join->on('workouts.id', '=', 'exercise_workout.workout_id')
+                                ->where('exercise_workout.exercise_id', '=', $exercise->id);
+                        })
+                        ->where('workouts.created_by', '=', Auth::user()->id)
+                        ->groupBy('workouts.id')
+                        ->groupByRaw('DATE(workouts.date)')
+                        ->orderBy('date', 'desc')
+                        ->limit(5)
+                        ->get()
+                ),
+                'can' => [
+                    'update' => Gate::allows('Exercise'),
+                ],
             ]
         );
     }

@@ -33,12 +33,12 @@ class Exercise extends Model
 
     public function bodyParts()
     {
-        return $this->belongsToMany(BodyPart::class)->withTimestamps();
+        return $this->belongsToMany(BodyPart::class);
     }
 
     public function equipments()
     {
-        return $this->belongsToMany(Equipment::class)->withTimestamps();
+        return $this->belongsToMany(Equipment::class);
     }
 
     public function createdBy()

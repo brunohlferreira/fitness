@@ -18,7 +18,6 @@ return new class extends Migration
             $table->foreignId('body_part_id')->constrained();
             $table->foreignId('exercise_id')->constrained();
             $table->unsignedTinyInteger('impact');
-            $table->timestamps();
         });
     }
 

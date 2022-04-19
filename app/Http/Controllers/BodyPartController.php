@@ -21,7 +21,14 @@ class BodyPartController extends Controller
             abort(403);
         }
 
-        return Inertia::render('BodyParts/Index', ['bodyParts' => BodyPartResource::collection(BodyPart::select('id', 'name')->paginate(15))]);
+        return Inertia::render('BodyParts/Index', [
+            'bodyParts' => BodyPartResource::collection(BodyPart::select('id', 'name')->paginate(15)),
+            'can' => [
+                'create' => Gate::allows('BodyPart'),
+                'update' => Gate::allows('BodyPart'),
+                'delete' => Gate::allows('BodyPart'),
+            ],
+        ]);
     }
 
     /**

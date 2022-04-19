@@ -8,6 +8,7 @@ use App\Http\Resources\WorkoutResource;
 use App\Http\Resources\WorkoutTypeResource;
 use App\Models\ExerciseWorkout;
 use App\Models\ExerciseWorkoutSet;
+use App\Models\User;
 use App\Models\Workout;
 use App\Models\WorkoutType;
 use Illuminate\Http\Request;
@@ -18,13 +19,25 @@ use Inertia\Inertia;
 class WorkoutController extends Controller
 {
     /**
+     * Create the controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->authorizeResource(Workout::class, 'workout');
+    }
+
+    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
     public function index()
     {
-        return Inertia::render('Workouts/Index', ['workouts' => WorkoutResource::collection(Workout::where('created_by', Auth::user()->id)->select('id', 'name')->paginate(15))]);
+        return Inertia::render('Workouts/Index', [
+            'workouts' => WorkoutResource::collection(Workout::where('created_by', Auth::user()->id)->select('id', 'name', 'date')->orderBy('date', 'desc')->paginate(15)),
+        ]);
     }
 
     /**
@@ -34,7 +47,9 @@ class WorkoutController extends Controller
      */
     public function create()
     {
-        return Inertia::render('Workouts/Create', ['workoutTypes' => WorkoutTypeResource::collection(WorkoutType::select('id', 'name', 'description')->get())]);
+        return Inertia::render('Workouts/Create', [
+            'workoutTypes' => WorkoutTypeResource::collection(WorkoutType::select('id', 'name', 'description')->get()),
+        ]);
     }
 
     /**
@@ -92,7 +107,11 @@ class WorkoutController extends Controller
     public function show(Workout $workout)
     {
         $workout->exercises = ExerciseResource::collection($workout->exercises)->map(function ($exercise) {
-            return array_merge($exercise->only('id', 'name'), ['note' => $exercise->pivot->note], ['sets' => ExerciseWorkout::find($exercise->pivot->id)->sets->toArray()]);
+            return array_merge(
+                $exercise->only('id', 'name'),
+                ['note' => $exercise->pivot->note],
+                ['sets' => ExerciseWorkout::find($exercise->pivot->id)->sets->toArray()],
+            );
         });
         $workout->workout_type_name = $workout->type->name;
         $workout->workout_type_description = $workout->type->description;
@@ -195,5 +214,50 @@ class WorkoutController extends Controller
         $workout->delete();
 
         return response()->noContent();
+    }
+
+    /**
+     * Copy the specified resource to a new Workout and assign it to the user.
+     *
+     * @param  \App\Models\Workout  $workout
+     * @return \Illuminate\Http\Response
+     */
+    public function repeat(Workout $workout)
+    {
+        $this->authorize('view', $workout);
+
+        $newWorkout = Workout::create([
+            'name' => $workout->name,
+            'description' => $workout->description,
+            'date' => date('Y-m-d'),
+            'level' => $workout->level,
+            'time_cap' => $workout->time_cap,
+            'workout_type_id' => $workout->workout_type_id,
+            'workout_preset_id' => $workout->workout_preset_id,
+            'created_by' => Auth::user()->id,
+        ]);
+
+        foreach ($workout->exercises as $exerciseKey => $exercise) {
+            $exerciseWorkout = ExerciseWorkout::create([
+                'exercise_id' => $exercise->id,
+                'workout_id' => $newWorkout->id,
+                'position' => $exerciseKey,
+                'note' => $exercise->note,
+            ]);
+
+            foreach (ExerciseWorkout::find($exercise->pivot->id)->sets as $setKey => $set) {
+                ExerciseWorkoutSet::create([
+                    'exercise_workout_id' => $exerciseWorkout->id,
+                    'position' => $setKey,
+                    'repetitions' => $set->repetitions,
+                    'weight' => $set->weight,
+                    'distance' => $set->distance,
+                    'calories' => $set->calories,
+                    'minutes' => $set->minutes,
+                ]);
+            }
+        }
+
+        return response($newWorkout->id);
     }
 }

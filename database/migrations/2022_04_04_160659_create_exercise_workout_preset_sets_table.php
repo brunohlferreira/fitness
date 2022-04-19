@@ -22,7 +22,7 @@ return new class extends Migration
             $table->unsignedSmallInteger('distance')->nullable();
             $table->unsignedSmallInteger('calories')->nullable();
             $table->unsignedSmallInteger('minutes')->nullable();
-            $table->timestamps();
+            //$table->timestamps();
         });
     }
 

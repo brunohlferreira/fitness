@@ -6,8 +6,39 @@ import ContentBox from "@/Components/ContentBox.vue";
 import Table from "@/Components/Table.vue";
 import Pagination from "@/Components/Pagination.vue";
 
-defineProps({
+const props = defineProps({
     workouts: Object,
+});
+
+const deleteEntry = function (id) {
+    if (
+        !window.confirm(
+            "You are about to permanently delete this entry. Do you want to proceed?"
+        )
+    ) {
+        return;
+    }
+
+    axios.delete(`/workouts/${id}`).then((response) => {
+        Inertia.visit("/workouts");
+    });
+};
+
+const rows = [];
+props.workouts.data.forEach((workout) => {
+    let name = workout.name;
+    if (name.length) name = ` - ${name}`;
+    let date = new Date(workout.date);
+    rows.push({
+        id: workout.id,
+        name:
+            date.toLocaleString("en-US", {
+                weekday: "long",
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+            }) + name,
+    });
 });
 </script>
 
@@ -21,9 +52,7 @@ defineProps({
             </template>
 
             <template #actions>
-                <Link
-                    :href="route('workouts.create')"
-                    class="block"
+                <Link :href="route('workouts.create')" class="block"
                     ><FontAwesomeIcon icon="plus"></FontAwesomeIcon
                 ></Link>
             </template>
@@ -33,10 +62,12 @@ defineProps({
 
                 <Table
                     v-else
-                    :actions="true"
-                    :rows="workouts.data"
+                    :rows="rows"
+                    :canUpdate="true"
+                    :canDelete="true"
                     :viewUrl="'/workouts'"
                     :editUrl="'/workouts'"
+                    :deleteFunction="deleteEntry"
                 />
             </template>
         </ContentBox>

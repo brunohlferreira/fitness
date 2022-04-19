@@ -19,7 +19,6 @@ return new class extends Migration
             $table->foreignId('workout_preset_id')->constrained('workout_presets');
             $table->unsignedTinyInteger('position');
             $table->text('note')->nullable();
-            $table->timestamps();
         });
     }
 

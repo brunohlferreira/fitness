@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\ExerciseWorkoutSet;
 use App\Models\Workout;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\Pivot;
@@ -11,6 +12,10 @@ class ExerciseWorkout extends Pivot
     use HasFactory;
 
     protected $fillable = ['exercise_id', 'workout_id', 'position', 'note'];
+
+    public $incrementing = true;
+
+    public $timestamps = false;
 
     public function workout()
     {
