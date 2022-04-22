@@ -3,6 +3,10 @@ import AuthenticatedLayout from "@/Layouts/Authenticated.vue";
 import ContentTitle from "@/Components/ContentTitle.vue";
 import ContentBox from "@/Components/ContentBox.vue";
 import Button from "@/Components/Button.vue";
+
+defineProps({
+    workouts: Object,
+});
 </script>
 
 <template>
@@ -15,12 +19,13 @@ import Button from "@/Components/Button.vue";
             </template>
 
             <template #content>
-                You didn't register any workouts yet.
+                <span v-if="!workouts.lifetime.total">You didn't register any workouts yet.</span>
+                <span v-else>You have registered {{ workouts.lifetime.total }} workouts so far. Keep going!</span>
             </template>
         </ContentBox>
 
         <div class="flex justify-center mt-6">
-            <Button href="/" class="block">Register Workout</Button>
+            <Button href="/workouts/create" class="block">Start Workout</Button>
         </div>
     </AuthenticatedLayout>
 </template>

@@ -26,18 +26,15 @@ const deleteEntry = function (id) {
 
 const rows = [];
 props.workouts.data.forEach((workout) => {
-    let name = workout.name;
-    if (name.length) name = ` - ${name}`;
-    let date = new Date(workout.date);
     rows.push({
         id: workout.id,
-        name:
-            date.toLocaleString("en-US", {
-                weekday: "long",
-                year: "numeric",
-                month: "long",
-                day: "numeric",
-            }) + name,
+        name: new Date(workout.date).toLocaleString("en-US", {
+            weekday: "long",
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+        }),
+        info: workout.name,
     });
 });
 </script>

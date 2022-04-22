@@ -119,7 +119,7 @@ class WorkoutController extends Controller
         return Inertia::render(
             'Workouts/Show',
             [
-                'workout' => new WorkoutTypeResource($workout->only('id', 'name', 'description', 'date', 'level', 'time_cap', 'workout_type_name', 'workout_type_description', 'exercises')),
+                'workout' => new WorkoutTypeResource($workout->only('id', 'name', 'description', 'date', 'level', 'time_cap', 'score', 'workout_type_name', 'workout_type_description', 'exercises')),
             ]
         );
     }

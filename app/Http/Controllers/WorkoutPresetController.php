@@ -29,13 +29,7 @@ class WorkoutPresetController extends Controller
      */
     public function index()
     {
-        if (!Str::contains(request()->path(), 'backoffice')) {
-            $component = 'WorkoutPresets/Index';
-        } else {
-            $component = 'Backoffice/WorkoutPresets/Index';
-        }
-
-        return Inertia::render($component, [
+        return Inertia::render('WorkoutPresets/Index', [
             'workoutPresets' => WorkoutPresetResource::collection(WorkoutPreset::select('id', 'name')->paginate(15)),
             'can' => [
                 'create' => Gate::allows('WorkoutPreset'),

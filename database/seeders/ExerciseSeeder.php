@@ -3,12 +3,10 @@
 namespace Database\Seeders;
 
 use App\Models\BodyPart;
-use App\Models\Exercise;
 use App\Models\Equipment;
+use App\Models\Exercise;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
-use App\Models\ExerciseWorkoutPreset;
-use App\Models\ExerciseWorkoutPresetSet;
 
 class ExerciseSeeder extends Seeder
 {
@@ -45,17 +43,5 @@ class ExerciseSeeder extends Seeder
                 $equipments->random(rand(1, 2))->pluck('id')->toArray()
             );
         });
-
-        ExerciseWorkoutPreset::create(['exercise_id' => 2, 'workout_preset_id' => 1, 'position' => 1]);
-        ExerciseWorkoutPreset::create(['exercise_id' => 3, 'workout_preset_id' => 1, 'position' => 2]);
-        ExerciseWorkoutPreset::create(['exercise_id' => 4, 'workout_preset_id' => 1, 'position' => 3]);
-        ExerciseWorkoutPreset::create(['exercise_id' => 5, 'workout_preset_id' => 1, 'position' => 4]);
-        ExerciseWorkoutPreset::create(['exercise_id' => 2, 'workout_preset_id' => 1, 'position' => 5]);
-
-        ExerciseWorkoutPresetSet::create(['exercise_workout_preset_id' => 1, 'position' => 1, 'repetitions' => 0, 'weight' => 0, 'distance' => 1600, 'calories' => 0, 'minutes' => 0]);
-        ExerciseWorkoutPresetSet::create(['exercise_workout_preset_id' => 2, 'position' => 2, 'repetitions' => 100, 'weight' => 0, 'distance' => 0, 'calories' => 0, 'minutes' => 0]);
-        ExerciseWorkoutPresetSet::create(['exercise_workout_preset_id' => 3, 'position' => 3, 'repetitions' => 200, 'weight' => 0, 'distance' => 0, 'calories' => 0, 'minutes' => 0]);
-        ExerciseWorkoutPresetSet::create(['exercise_workout_preset_id' => 4, 'position' => 4, 'repetitions' => 300, 'weight' => 0, 'distance' => 0, 'calories' => 0, 'minutes' => 0]);
-        ExerciseWorkoutPresetSet::create(['exercise_workout_preset_id' => 5, 'position' => 5, 'repetitions' => 0, 'weight' => 0, 'distance' => 1600, 'calories' => 0, 'minutes' => 0]);
     }
 }

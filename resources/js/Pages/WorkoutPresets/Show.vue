@@ -18,9 +18,6 @@ const repeatWod = function (id) {
         Inertia.visit(`/workouts/${response.data}`);
     });
 };
-
-let columns = 2;
-if (props.workoutPreset.data.time_cap) columns++;
 </script>
 
 <template>
@@ -41,29 +38,28 @@ if (props.workoutPreset.data.time_cap) columns++;
             </template>
 
             <template #content>
-                <div class="flex text-center">
-                    <div :class="columns == 2 ? 'w-1/2' : 'w-1/3'">
-                        <span
-                            v-if="workoutPreset.data.level === 1"
-                            class="text-green-600"
+                <div
+                    class="
+                        grid grid-flow-col
+                        auto-cols-auto
+                        text-center text-green-600
+                    "
+                >
+                    <div>
+                        <span v-if="workoutPreset.data.level === 1"
                             >Beginner</span
                         >
-                        <span
-                            v-else-if="workoutPreset.data.level === 2"
-                            class="text-orange-500"
+                        <span v-else-if="workoutPreset.data.level === 2"
                             >Intermediate</span
                         >
-                        <span
-                            v-else-if="workoutPreset.data.level === 3"
-                            class="text-red-600"
+                        <span v-else-if="workoutPreset.data.level === 3"
                             >Advanced</span
                         >
                         <small class="block uppercase text-xs text-gray-400"
                             >Level</small
                         >
                     </div>
-
-                    <div :class="columns == 2 ? 'w-1/2' : 'w-1/3'">
+                    <div>
                         <span
                             :title="workoutPreset.data.workout_type_description"
                             >{{ workoutPreset.data.workout_type_name }}</span
@@ -72,17 +68,8 @@ if (props.workoutPreset.data.time_cap) columns++;
                             >Type</small
                         >
                     </div>
-
-                    <div
-                        v-if="workoutPreset.data.time_cap > 0"
-                        :class="columns == 2 ? 'w-1/2' : 'w-1/3'"
-                    >
+                    <div v-if="workoutPreset.data.time_cap > 0">
                         {{ workoutPreset.data.time_cap }}
-                        {{
-                            workoutPreset.data.timeCap.indexOf(":") > 1
-                                ? ":00"
-                                : ""
-                        }}
                         min
                         <small class="block uppercase text-xs text-gray-400"
                             >Time Cap</small
@@ -154,7 +141,7 @@ if (props.workoutPreset.data.time_cap) columns++;
                         "
                     >
                         <div>
-                            <Link :href="'/workouts/' + attempt.id">
+                            <Link :href="`/workouts/${attempt.id}`">
                                 {{
                                     new Date(attempt.date).toLocaleString(
                                         "en-US",
@@ -168,7 +155,11 @@ if (props.workoutPreset.data.time_cap) columns++;
                                 }}
                             </Link>
                         </div>
-                        <div>{{ attempt.score }}</div>
+                        <div>
+                            {{ attempt.score }}
+                            <span v-if="workoutPreset.data.workout_type_name == 'AMRAP'"> rounds</span>
+                            <span v-else-if="workoutPreset.data.workout_type_name == 'RFT'"> min</span>
+                        </div>
                     </li>
                 </ul>
             </template>

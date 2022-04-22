@@ -54,7 +54,7 @@ let submit = () => {
     form.transform((data) => ({
         ...data,
         exercises: exercises.value,
-    })).put("/workouts/" + props.workout.data.id);
+    })).put(`/workouts/${props.workout.data.id}`);
 };
 </script>
 

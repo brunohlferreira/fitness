@@ -17,7 +17,7 @@ let form = useForm({
 });
 
 let submit = () => {
-    form.put("/body-parts/" + props.bodyPart.data.id);
+    form.put(`/body-parts/${props.bodyPart.data.id}`);
 };
 </script>
 

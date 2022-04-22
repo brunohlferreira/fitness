@@ -15,8 +15,8 @@ return new class extends Migration
     {
         Schema::create('body_part_exercise', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('body_part_id')->constrained();
-            $table->foreignId('exercise_id')->constrained();
+            $table->foreignId('body_part_id')->constrained('body_parts');
+            $table->foreignId('exercise_id')->constrained('exercises');
             $table->unsignedTinyInteger('impact');
         });
     }

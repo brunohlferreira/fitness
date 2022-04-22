@@ -34,21 +34,22 @@ defineProps({
                         <Link
                             v-if="row.route"
                             :href="route(row.route)"
-                            class="row:text-blue-500"
+                            class="hover:text-blue-500"
                             >{{ row.name }}</Link
                         >
                         <Link
                             v-else-if="viewUrl.length"
-                            :href="viewUrl + '/' + row.id"
-                            class="row:text-blue-500"
+                            :href="`${viewUrl}/${row.id}`"
+                            class="hover:text-blue-500"
                             >{{ row.name }}</Link
                         >
                         <span v-else>{{ row.name }}</span>
+                        <span v-if="row.info" class="block text-xs text-gray-400">{{ row.info }}</span>
                     </td>
                     <td v-if="canUpdate || canDelete" class="pr-6 py-4 text-right">
                         <Link
                             v-if="canUpdate && editUrl.length"
-                            :href="editUrl + '/' + row.id + '/edit'"
+                            :href="`${editUrl}/${row.id}/edit`"
                             class="inline-block ml-4"
                             ><FontAwesomeIcon icon="pencil"></FontAwesomeIcon
                         ></Link>

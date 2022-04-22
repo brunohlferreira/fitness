@@ -108,7 +108,7 @@ const props = defineProps({
                         "
                     >
                         <div>
-                            <Link :href="'/workouts/' + attempt.id">
+                            <Link :href="`/workouts/${attempt.id}`">
                                 {{
                                     new Date(attempt.date).toLocaleString(
                                         "en-US",

@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -20,8 +19,8 @@ class DatabaseSeeder extends Seeder
             BodyPartSeeder::class,
             EquipmentSeeder::class,
             ExerciseSeeder::class,
-            WorkoutPresetSeeder::class,
             WorkoutTypeSeeder::class,
+            WorkoutPresetSeeder::class,
         ]);
     }
 }

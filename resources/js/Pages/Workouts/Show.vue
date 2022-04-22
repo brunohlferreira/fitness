@@ -18,7 +18,7 @@ const repeatWod = function (id) {
 };
 
 let name = props.workout.data.name.length
-    ? " - " + props.workout.data.name
+    ? ` - ${props.workout.data.name}`
     : "";
 let date = new Date(props.workout.data.date);
 name =
@@ -27,18 +27,23 @@ name =
     date.toLocaleString("en-us", { weekday: "long" }) +
     ")" +
     name;
-
-let columns = 2;
-if (props.workout.data.time_cap) columns++;
 </script>
 
 <template>
     <Head title="Show Workout" />
 
     <AuthenticatedLayout>
+        <h2 v-if="workout.data.name.length" class="mt-1 mb-3 text-xl text-center">{{ props.workout.data.name }}</h2>
         <ContentBox>
             <template #title>
-                <ContentTitle>{{ name }}</ContentTitle>
+                <ContentTitle>{{
+                    new Date(workout.data.date).toLocaleString("en-US", {
+                        weekday: "long",
+                        year: "numeric",
+                        month: "long",
+                        day: "numeric",
+                    })
+                }}</ContentTitle>
             </template>
 
             <template #actions>
@@ -48,45 +53,46 @@ if (props.workout.data.time_cap) columns++;
             </template>
 
             <template #content>
-                <div class="flex text-center">
-                    <div :class="columns == 2 ? 'w-1/2' : 'w-1/3'">
-                        <span
-                            v-if="workout.data.level === 1"
-                            class="text-green-600"
-                            >Beginner</span
-                        >
-                        <span
-                            v-else-if="workout.data.level === 2"
-                            class="text-orange-500"
+                <div
+                    class="
+                        grid grid-flow-col
+                        auto-cols-auto
+                        text-center text-green-600
+                    "
+                >
+                    <div>
+                        <span v-if="workout.data.level === 1">Beginner</span>
+                        <span v-else-if="workout.data.level === 2"
                             >Intermediate</span
                         >
-                        <span
-                            v-else-if="workout.data.level === 3"
-                            class="text-red-600"
+                        <span v-else-if="workout.data.level === 3"
                             >Advanced</span
                         >
-                        <small class="block uppercase text-xs text-gray-400"
+                        <small class="block uppercase text-xs text-gray-500 dark:text-gray-400"
                             >Level</small
                         >
                     </div>
-
-                    <div :class="columns == 2 ? 'w-1/2' : 'w-1/3'">
+                    <div>
                         <span :title="workout.data.workout_type_description">{{
                             workout.data.workout_type_name
                         }}</span>
-                        <small class="block uppercase text-xs text-gray-400"
+                        <small class="block uppercase text-xs text-gray-500 dark:text-gray-400"
                             >Type</small
                         >
                     </div>
-
-                    <div
-                        v-if="workout.data.time_cap > 0"
-                        :class="columns == 2 ? 'w-1/2' : 'w-1/3'"
-                    >
+                    <div v-if="workout.data.time_cap > 0">
                         {{ workout.data.time_cap }}
                         min
-                        <small class="block uppercase text-xs text-gray-400"
+                        <small class="block uppercase text-xs text-gray-500 dark:text-gray-400"
                             >Time Cap</small
+                        >
+                    </div>
+                    <div v-if="workout.data.score.length">
+                        {{ workout.data.score }}
+                        <span v-if="workout.data.workout_type_name == 'AMRAP'"> rounds</span>
+                        <span v-else-if="workout.data.workout_type_name == 'RFT'"> min</span>
+                        <small class="block uppercase text-xs text-gray-500 dark:text-gray-400"
+                            >Score</small
                         >
                     </div>
                 </div>
@@ -111,7 +117,7 @@ if (props.workout.data.time_cap) columns++;
                         <Link :href="`/exercises/${exercise.id}`">{{
                             exercise.name
                         }}</Link>
-                        <ul class="text-xs text-gray-400">
+                        <ul class="text-xs text-gray-500 dark:text-gray-400">
                             <li v-for="set in exercise.sets" :key="set.id">
                                 <span v-if="set.repetitions"
                                     >{{ set.repetitions }}x

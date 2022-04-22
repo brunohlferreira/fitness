@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\BodyPartController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EquipmentController;
 use App\Http\Controllers\ExerciseController;
 use App\Http\Controllers\PermissionController;
@@ -10,7 +11,6 @@ use App\Http\Controllers\WorkoutController;
 use App\Http\Controllers\WorkoutPresetController;
 use App\Http\Controllers\WorkoutTypeController;
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
 
 require __DIR__ . '/auth.php';
 
@@ -19,7 +19,7 @@ Route::get('/', function () {
 });
 
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('/dashboard', function () {return Inertia::render('Dashboard');})->name('dashboard');
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
 
     Route::get('/body-parts', [BodyPartController::class, 'index'])->name('bodyParts.index');
     Route::get('/body-parts/create', [BodyPartController::class, 'create'])->name('bodyParts.create');

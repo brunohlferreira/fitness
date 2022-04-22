@@ -53,7 +53,7 @@ let submit = () => {
     form.transform((data) => ({
         ...data,
         exercises: exercises.value,
-    })).put("/workout-presets/" + props.workoutPreset.data.id);
+    })).put(`/workout-presets/${props.workoutPreset.data.id}`);
 };
 </script>
 
