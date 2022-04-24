@@ -118,6 +118,8 @@ class ExerciseController extends Controller
                         })
                         ->where('workouts.created_by', '=', Auth::user()->id)
                         ->groupBy('workouts.id')
+                        ->groupBy('workouts.name')
+                        ->groupBy('workouts.date')
                         ->groupByRaw('DATE(workouts.date)')
                         ->orderBy('date', 'desc')
                         ->limit(5)
