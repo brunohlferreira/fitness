@@ -166,7 +166,11 @@ let submit = () => {
                     <div class="mb-6">
                         <div class="flex justify-between mb-3">
                             <Label for="exercises" value="Exercises" />
-                            <button type="button" @click="isOpen = true">
+                            <button
+                                type="button"
+                                @click="isOpen = true"
+                                class="hover:text-blue-500"
+                            >
                                 <FontAwesomeIcon icon="plus"></FontAwesomeIcon>
                             </button>
                         </div>
@@ -189,7 +193,7 @@ let submit = () => {
                                 <div>
                                     <button
                                         type="button"
-                                        class="px-1"
+                                        class="px-1 hover:text-blue-500"
                                         @click.prevent="addSet(exerciseIndex)"
                                         title="Add set"
                                     >
@@ -199,7 +203,7 @@ let submit = () => {
                                     </button>
                                     <button
                                         type="button"
-                                        class="px-1"
+                                        class="px-1 hover:text-blue-500"
                                         @click.prevent="
                                             removeExercise(exerciseIndex)
                                         "

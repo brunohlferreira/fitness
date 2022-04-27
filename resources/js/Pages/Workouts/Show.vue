@@ -33,7 +33,12 @@ name =
     <Head title="Show Workout" />
 
     <AuthenticatedLayout>
-        <h2 v-if="workout.data.name.length" class="mt-1 mb-3 text-xl text-center">{{ props.workout.data.name }}</h2>
+        <h2
+            v-if="workout.data.name.length"
+            class="mt-1 mb-3 text-xl text-center"
+        >
+            {{ props.workout.data.name }}
+        </h2>
         <ContentBox>
             <template #title>
                 <ContentTitle>{{
@@ -47,7 +52,9 @@ name =
             </template>
 
             <template #actions>
-                <Link :href="`/workouts/${workout.data.id}/edit`" class="block"
+                <Link
+                    :href="`/workouts/${workout.data.id}/edit`"
+                    class="block hover:text-blue-500"
                     ><FontAwesomeIcon icon="pencil"></FontAwesomeIcon
                 ></Link>
             </template>
@@ -68,7 +75,13 @@ name =
                         <span v-else-if="workout.data.level === 3"
                             >Advanced</span
                         >
-                        <small class="block uppercase text-xs text-gray-500 dark:text-gray-400"
+                        <small
+                            class="
+                                block
+                                uppercase
+                                text-xs text-gray-500
+                                dark:text-gray-400
+                            "
                             >Level</small
                         >
                     </div>
@@ -76,22 +89,46 @@ name =
                         <span :title="workout.data.workout_type_description">{{
                             workout.data.workout_type_name
                         }}</span>
-                        <small class="block uppercase text-xs text-gray-500 dark:text-gray-400"
+                        <small
+                            class="
+                                block
+                                uppercase
+                                text-xs text-gray-500
+                                dark:text-gray-400
+                            "
                             >Type</small
                         >
                     </div>
                     <div v-if="workout.data.time_cap > 0">
                         {{ workout.data.time_cap }}
                         min
-                        <small class="block uppercase text-xs text-gray-500 dark:text-gray-400"
+                        <small
+                            class="
+                                block
+                                uppercase
+                                text-xs text-gray-500
+                                dark:text-gray-400
+                            "
                             >Time Cap</small
                         >
                     </div>
                     <div v-if="workout.data.score.length">
                         {{ workout.data.score }}
-                        <span v-if="workout.data.workout_type_name == 'AMRAP'"> rounds</span>
-                        <span v-else-if="workout.data.workout_type_name == 'RFT'"> min</span>
-                        <small class="block uppercase text-xs text-gray-500 dark:text-gray-400"
+                        <span v-if="workout.data.workout_type_name == 'AMRAP'">
+                            rounds</span
+                        >
+                        <span
+                            v-else-if="workout.data.workout_type_name == 'RFT'"
+                        >
+                            min</span
+                        >
+                        <small
+                            class="
+                                block
+                                uppercase
+                                text-xs text-gray-500
+                                dark:text-gray-400
+                            "
                             >Score</small
                         >
                     </div>

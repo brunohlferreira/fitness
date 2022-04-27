@@ -33,7 +33,7 @@ const props = defineProps({
             <template #actions v-if="can.update">
                 <Link
                     :href="`/exercises/${exercise.data.id}/edit`"
-                    class="block"
+                    class="block hover:text-blue-500"
                     ><FontAwesomeIcon icon="pencil"></FontAwesomeIcon
                 ></Link>
             </template>

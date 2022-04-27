@@ -31,11 +31,7 @@ class AuthServiceProvider extends ServiceProvider
                 return null;
             }
 
-            if ($user->hasRole('Super-Admin')) {
-                return true;
-            }
-
-            if ($user->hasRole('Admin') && $ability != 'Role' && $ability != 'Permission') {
+            if ($user->hasRole('Super-Admin') || $user->hasRole('Admin')) {
                 return true;
             }
         });

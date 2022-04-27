@@ -36,7 +36,9 @@ const deleteEntry = function (id) {
             </template>
 
             <template #actions v-if="can.create">
-                <Link :href="route('exercises.create')" class="block"
+                <Link
+                    :href="route('exercises.create')"
+                    class="block hover:text-blue-500"
                     ><FontAwesomeIcon icon="plus"></FontAwesomeIcon
                 ></Link>
             </template>
@@ -49,8 +51,8 @@ const deleteEntry = function (id) {
                     :rows="exercises.data"
                     :canUpdate="can.update"
                     :canDelete="can.delete"
-                    :viewUrl="'/exercises'"
-                    :editUrl="'/exercises'"
+                    viewUrl="/exercises/%d"
+                    editUrl="/exercises/%d/edit"
                     :deleteFunction="deleteEntry"
                 />
             </template>

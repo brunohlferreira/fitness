@@ -69,6 +69,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::delete('/workout-presets/{workoutPreset}', [WorkoutPresetController::class, 'destroy']);
 
     Route::get('/users', [UserController::class, 'index'])->name('users.index');
+    Route::get('/users/create', [UserController::class, 'create'])->name('users.create');
+    Route::get('/users/{user}/edit-role', [UserController::class, 'editRole']);
+    Route::post('/users', [UserController::class, 'store']);
+    Route::put('/users/{user}/role', [UserController::class, 'updateRole']);
+
     Route::get('/roles', [RoleController::class, 'index'])->name('roles.index');
     Route::get('/permissions', [PermissionController::class, 'index'])->name('permissions.index');
 });

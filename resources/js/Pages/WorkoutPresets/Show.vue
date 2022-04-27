@@ -32,7 +32,7 @@ const repeatWod = function (id) {
             <template #actions v-if="can.update">
                 <Link
                     :href="`/workout-presets/${workoutPreset.data.id}/edit`"
-                    class="block"
+                    class="block hover:text-blue-500"
                     ><FontAwesomeIcon icon="pencil"></FontAwesomeIcon
                 ></Link>
             </template>

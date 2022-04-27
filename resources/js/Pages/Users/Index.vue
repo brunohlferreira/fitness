@@ -19,14 +19,22 @@ defineProps({
                 <ContentTitle>Users</ContentTitle>
             </template>
 
+            <template #actions>
+                <Link
+                    :href="route('users.create')"
+                    class="block hover:text-blue-500"
+                    ><FontAwesomeIcon icon="plus"></FontAwesomeIcon
+                ></Link>
+            </template>
+
             <template #content>
                 <p v-if="!users.data.length">No content was found.</p>
 
                 <Table
                     v-else
                     :rows="users.data"
-                    :deleteAction="false"
-                    :editUrl="'/users'"
+                    :canUpdate="true"
+                    editUrl="/users/%d/edit-role"
                 />
             </template>
         </ContentBox>

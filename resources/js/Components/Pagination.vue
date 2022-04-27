@@ -32,8 +32,8 @@ defineProps({
                     text-sm
                     font-medium
                     rounded-l
-                    hover:text-blue-400
-                    dark:border-gray-700 dark:hover:text-blue-400
+                    hover:text-blue-500
+                    dark:border-gray-700
                 "
             >
                 Prev
@@ -47,8 +47,8 @@ defineProps({
                     font-medium
                     rounded-r
                     border-0 border-l border-gray-700
-                    hover:text-blue-400
-                    dark:border-gray-700 dark:hover:text-blue-400
+                    hover:text-blue-500
+                    dark:border-gray-700
                 "
             >
                 Next

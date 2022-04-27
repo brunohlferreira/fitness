@@ -49,7 +49,9 @@ props.workouts.data.forEach((workout) => {
             </template>
 
             <template #actions>
-                <Link :href="route('workouts.create')" class="block"
+                <Link
+                    :href="route('workouts.create')"
+                    class="block hover:text-blue-500"
                     ><FontAwesomeIcon icon="plus"></FontAwesomeIcon
                 ></Link>
             </template>
@@ -62,8 +64,8 @@ props.workouts.data.forEach((workout) => {
                     :rows="rows"
                     :canUpdate="true"
                     :canDelete="true"
-                    :viewUrl="'/workouts'"
-                    :editUrl="'/workouts'"
+                    viewUrl="/workouts/%d"
+                    editUrl="/workouts/%d/edit"
                     :deleteFunction="deleteEntry"
                 />
             </template>

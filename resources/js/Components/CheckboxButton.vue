@@ -17,11 +17,10 @@ defineProps({
             border
             rounded-md
             dark:border-blue-500
-            dark:hover:bg-blue-400
-            dark:active:bg-blue-600
-            dark:focus:border-blue-600
+            hover:bg-blue-500
+            hover:text-white
         "
-        :class="selected ? 'bg-blue-500' : ''"
+        :class="selected ? 'bg-blue-500 text-white' : ''"
         @click.prevent="selected = !selected"
     >
         <slot />

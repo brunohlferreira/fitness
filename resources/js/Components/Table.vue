@@ -39,7 +39,7 @@ defineProps({
                         >
                         <Link
                             v-else-if="viewUrl.length"
-                            :href="`${viewUrl}/${row.id}`"
+                            :href="viewUrl.replace(/%d/, row.id)"
                             class="hover:text-blue-500"
                             >{{ row.name }}</Link
                         >
@@ -49,14 +49,14 @@ defineProps({
                     <td v-if="canUpdate || canDelete" class="pr-6 py-4 text-right">
                         <Link
                             v-if="canUpdate && editUrl.length"
-                            :href="`${editUrl}/${row.id}/edit`"
-                            class="inline-block ml-4"
+                            :href="editUrl.replace(/%d/, row.id)"
+                            class="inline-block ml-4 hover:text-blue-500"
                             ><FontAwesomeIcon icon="pencil"></FontAwesomeIcon
                         ></Link>
                         <Link
                             v-if="canDelete"
                             @click.prevent="deleteFunction(row.id)"
-                            class="inline-block ml-4"
+                            class="inline-block ml-4 hover:text-blue-500"
                             ><FontAwesomeIcon icon="trash-can"></FontAwesomeIcon
                         ></Link>
                     </td>

@@ -36,7 +36,9 @@ const deleteEntry = function (id) {
             </template>
 
             <template #actions v-if="can.create">
-                <Link :href="route('workoutTypes.create')" class="block"
+                <Link
+                    :href="route('workoutTypes.create')"
+                    class="block hover:text-blue-500"
                     ><FontAwesomeIcon icon="plus"></FontAwesomeIcon
                 ></Link>
             </template>
@@ -49,7 +51,7 @@ const deleteEntry = function (id) {
                     :rows="workoutTypes.data"
                     :canUpdate="can.update"
                     :canDelete="can.delete"
-                    :editUrl="'/workout-types'"
+                    editUrl="/workout-types/%d/edit"
                     :deleteFunction="deleteEntry"
                 />
             </template>

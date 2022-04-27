@@ -41,8 +41,12 @@ const form = useForm({
 let submit = () => {
     form.transform((data) => ({
         ...data,
-        bodyParts: bodyParts.value.filter((bodyPart) => {return bodyPart.id > 0;}),
-        equipments: equipments.value.filter((equipment) => {return equipment.selected == 1;}),
+        bodyParts: bodyParts.value.filter((bodyPart) => {
+            return bodyPart.id > 0;
+        }),
+        equipments: equipments.value.filter((equipment) => {
+            return equipment.selected == 1;
+        }),
     })).post("/exercises");
 };
 </script>
@@ -101,11 +105,23 @@ let submit = () => {
                         <div class="flex justify-between">
                             <Label value="Body parts and impact" />
                             <div>
-                                <button type="button" @click="addBodyPart">
-                                    <FontAwesomeIcon icon="plus"></FontAwesomeIcon>
+                                <button
+                                    type="button"
+                                    @click="addBodyPart"
+                                    class="hover:text-blue-500"
+                                >
+                                    <FontAwesomeIcon
+                                        icon="plus"
+                                    ></FontAwesomeIcon>
                                 </button>
-                                <button type="button" @click="removeBodyPart" class="ml-2">
-                                    <FontAwesomeIcon icon="minus"></FontAwesomeIcon>
+                                <button
+                                    type="button"
+                                    @click="removeBodyPart"
+                                    class="ml-2 hover:text-blue-500"
+                                >
+                                    <FontAwesomeIcon
+                                        icon="minus"
+                                    ></FontAwesomeIcon>
                                 </button>
                             </div>
                         </div>

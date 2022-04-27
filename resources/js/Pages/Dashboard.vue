@@ -1,4 +1,5 @@
 <script setup>
+import { Inertia } from "@inertiajs/inertia";
 import AuthenticatedLayout from "@/Layouts/Authenticated.vue";
 import ContentTitle from "@/Components/ContentTitle.vue";
 import ContentBox from "@/Components/ContentBox.vue";
@@ -25,7 +26,7 @@ defineProps({
         </ContentBox>
 
         <div class="flex justify-center mt-6">
-            <Button href="/workouts/create" class="block">Start Workout</Button>
+            <Button @click="Inertia.visit('/workouts/create')" class="block">Start Workout</Button>
         </div>
     </AuthenticatedLayout>
 </template>

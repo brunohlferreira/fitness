@@ -44,22 +44,6 @@ class HandleInertiaRequests extends Middleware
                         'route' => "users.index",
                     ];
             }
-            if ($request->user()->can('Role')) {
-                $nav[] = 
-                    [
-                        'name' => "Roles",
-                        'component' => "Roles",
-                        'route' => "roles.index",
-                    ];
-            }
-            if ($request->user()->can('Permission')) {
-                $nav[] = 
-                    [
-                        'name' => "Permissions",
-                        'component' => "Permissions",
-                        'route' => "permissions.index",
-                    ];
-            }
             if ($request->user()->can('BodyPart')) {
                 $nav[] = 
                     [
