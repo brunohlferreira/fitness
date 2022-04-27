@@ -108,7 +108,10 @@ const props = defineProps({
                         "
                     >
                         <div>
-                            <Link :href="`/workouts/${attempt.id}`">
+                            <Link
+                                :href="`/workouts/${attempt.id}`"
+                                class="hover:text-blue-500"
+                            >
                                 {{
                                     new Date(attempt.date).toLocaleString(
                                         "en-US",

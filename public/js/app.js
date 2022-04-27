@@ -42496,7 +42496,8 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
               key: attempt.id,
               "class": "flex justify-between pb-2 mb-2 border-b dark:border-gray-700"
             }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Link, {
-              href: "/workouts/".concat(attempt.id)
+              href: "/workouts/".concat(attempt.id),
+              "class": "hover:text-blue-500"
             }, {
               "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
                 return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)((0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(new Date(attempt.date).toLocaleString("en-US", {
@@ -43916,7 +43917,8 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
               key: exercise.id,
               "class": "pb-2 mb-2 border-b dark:border-gray-700"
             }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Link, {
-              href: "/exercises/".concat(exercise.id)
+              href: "/exercises/".concat(exercise.id),
+              "class": "hover:text-blue-500"
             }, {
               "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
                 return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)((0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(exercise.name), 1
@@ -43965,7 +43967,8 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
               key: attempt.id,
               "class": "flex justify-between pb-2 mb-2 border-b dark:border-gray-700"
             }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Link, {
-              href: "/workouts/".concat(attempt.id)
+              href: "/workouts/".concat(attempt.id),
+              "class": "hover:text-blue-500"
             }, {
               "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
                 return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)((0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(new Date(attempt.date).toLocaleString("en-US", {
@@ -45412,7 +45415,8 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
               key: exercise.id,
               "class": "pb-2 mb-2 border-b dark:border-gray-700"
             }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Link, {
-              href: "/exercises/".concat(exercise.id)
+              href: "/exercises/".concat(exercise.id),
+              "class": "hover:text-blue-500"
             }, {
               "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
                 return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)((0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(exercise.name), 1

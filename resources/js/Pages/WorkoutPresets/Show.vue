@@ -94,9 +94,11 @@ const repeatWod = function (id) {
                         :key="exercise.id"
                         class="pb-2 mb-2 border-b dark:border-gray-700"
                     >
-                        <Link :href="`/exercises/${exercise.id}`">{{
-                            exercise.name
-                        }}</Link>
+                        <Link
+                            :href="`/exercises/${exercise.id}`"
+                            class="hover:text-blue-500"
+                            >{{ exercise.name }}</Link
+                        >
                         <ul class="text-xs text-gray-400">
                             <li v-for="set in exercise.sets" :key="set.id">
                                 <span v-if="set.repetitions"
@@ -141,7 +143,10 @@ const repeatWod = function (id) {
                         "
                     >
                         <div>
-                            <Link :href="`/workouts/${attempt.id}`">
+                            <Link
+                                :href="`/workouts/${attempt.id}`"
+                                class="hover:text-blue-500"
+                            >
                                 {{
                                     new Date(attempt.date).toLocaleString(
                                         "en-US",
@@ -157,8 +162,22 @@ const repeatWod = function (id) {
                         </div>
                         <div>
                             {{ attempt.score }}
-                            <span v-if="workoutPreset.data.workout_type_name == 'AMRAP'"> rounds</span>
-                            <span v-else-if="workoutPreset.data.workout_type_name == 'RFT'"> min</span>
+                            <span
+                                v-if="
+                                    workoutPreset.data.workout_type_name ==
+                                    'AMRAP'
+                                "
+                            >
+                                rounds</span
+                            >
+                            <span
+                                v-else-if="
+                                    workoutPreset.data.workout_type_name ==
+                                    'RFT'
+                                "
+                            >
+                                min</span
+                            >
                         </div>
                     </li>
                 </ul>
