@@ -20,6 +20,8 @@ class RoleController extends Controller
             abort(403);
         }
 
-        return Inertia::render('Roles/Index', ['roles' => RoleResource::collection(Role::where('id', '>', 1)->select('id', 'name')->paginate(15))]);
+        return Inertia::render('Roles/Index', [
+            'roles' => RoleResource::collection(Role::where('id', '>', 1)->select('id', 'name')->paginate(15)),
+        ]);
     }
 }

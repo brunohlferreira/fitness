@@ -31,7 +31,7 @@ const navPages = [
         title: "Dashboard",
         component: "Dashboard",
         href: "/dashboard",
-        icon: "chart-line", //calendar-days
+        icon: "chart-line",
     },
     {
         title: "Workouts",
@@ -59,7 +59,7 @@ const navPages = [
         class="
             flex flex-col
             h-screen
-            overflow-hidden
+            overflow-hiddenj
             bg-gray-100
             dark:bg-zinc-900
             text-gray-700
@@ -119,9 +119,15 @@ const navPages = [
                                 </template>
 
                                 <template #content>
-                                    <DropdownLink v-for="(item, index) in $page.props.nav" :key="index"
+                                    <DropdownLink
+                                        v-for="(item, index) in $page.props.nav"
+                                        :key="index"
                                         :href="route(item.route)"
-                                        :active="$page.component.startsWith(item.component)"
+                                        :active="
+                                            $page.component.startsWith(
+                                                item.component
+                                            )
+                                        "
                                     >
                                         {{ item.name }}
                                     </DropdownLink>
@@ -150,7 +156,7 @@ const navPages = [
             </div>
         </header>
 
-        <main class="flex-1 overflow-y-scroll">
+        <main class="flex-1 overflow-y-scroll" scroll-region>
             <div class="max-w-7xl mx-auto sm:px-6 p-4">
                 <slot />
             </div>

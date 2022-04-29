@@ -43,7 +43,7 @@ const props = defineProps({
             </template>
         </ContentBox>
 
-        <div class="grid grid-cols-6 gap-6">
+        <div class="grid grid-cols-6 gap-4">
             <div class="col-span-3">
                 <ContentBox class="mt-4">
                     <template #title>
@@ -51,11 +51,16 @@ const props = defineProps({
                     </template>
 
                     <template #content>
-                        <ul>
+                        <ul class="-my-2">
                             <li
                                 v-for="bodyPart in exercise.data.bodyParts"
                                 :key="bodyPart.id"
-                                class="pb-2 mb-2 border-b dark:border-gray-700"
+                                class="
+                                    py-2
+                                    border-t
+                                    first:border-0
+                                    dark:border-gray-700
+                                "
                             >
                                 <span>{{ bodyPart.name }}</span>
                                 <span class="text-xs text-gray-400">{{
@@ -74,11 +79,16 @@ const props = defineProps({
                     </template>
 
                     <template #content>
-                        <ul>
+                        <ul class="-my-2">
                             <li
                                 v-for="equipment in exercise.data.equipments"
                                 :key="equipment.id"
-                                class="pb-2 mb-2 border-b dark:border-gray-700"
+                                class="
+                                    py-2
+                                    border-t
+                                    first:border-0
+                                    dark:border-gray-700
+                                "
                             >
                                 <span>{{ equipment.name }}</span>
                             </li>
@@ -94,16 +104,16 @@ const props = defineProps({
             </template>
 
             <template #content>
-                <ul>
+                <ul class="-my-2">
                     <li
                         v-for="attempt in attempts.data"
                         :key="attempt.id"
                         class="
                             flex
                             justify-between
-                            pb-2
-                            mb-2
-                            border-b
+                            py-2
+                            border-t
+                            first:border-0
                             dark:border-gray-700
                         "
                     >

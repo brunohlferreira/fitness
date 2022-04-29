@@ -63,7 +63,6 @@ defineProps({
                             items-center
                             dark:hover:bg-gray-600 dark:hover:text-white
                         "
-                        data-modal-toggle="large-modal"
                     >
                         <svg
                             class="w-5 h-5"

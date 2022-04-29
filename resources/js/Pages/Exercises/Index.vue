@@ -1,5 +1,4 @@
 <script setup>
-import { Inertia } from "@inertiajs/inertia";
 import AuthenticatedLayout from "@/Layouts/Authenticated.vue";
 import ContentTitle from "@/Components/ContentTitle.vue";
 import ContentBox from "@/Components/ContentBox.vue";
@@ -10,20 +9,6 @@ defineProps({
     exercises: Object,
     can: Object,
 });
-
-const deleteEntry = function (id) {
-    if (
-        !window.confirm(
-            "You are about to permanently delete this entry. Do you want to proceed?"
-        )
-    ) {
-        return;
-    }
-
-    axios.delete(`/exercises/${id}`).then((response) => {
-        Inertia.visit("/exercises");
-    });
-};
 </script>
 
 <template>
@@ -53,7 +38,7 @@ const deleteEntry = function (id) {
                     :canDelete="can.delete"
                     viewUrl="/exercises/%d"
                     editUrl="/exercises/%d/edit"
-                    :deleteFunction="deleteEntry"
+                    deleteUrl="/exercises/%d"
                 />
             </template>
         </ContentBox>

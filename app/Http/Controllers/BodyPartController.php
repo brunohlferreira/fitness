@@ -89,7 +89,9 @@ class BodyPartController extends Controller
             abort(403);
         }
 
-        return Inertia::render('BodyParts/Edit', ['bodyPart' => new BodyPartResource($bodyPart->only('id', 'name'))]);
+        return Inertia::render('BodyParts/Edit', [
+            'bodyPart' => new BodyPartResource($bodyPart->only('id', 'name')),
+        ]);
     }
 
     /**

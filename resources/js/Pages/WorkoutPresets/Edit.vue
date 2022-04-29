@@ -1,6 +1,7 @@
 <script setup>
 import { ref } from "vue";
 import { useForm } from "@inertiajs/inertia-vue3";
+import { VueDraggableNext } from "vue-draggable-next";
 import AuthenticatedLayout from "@/Layouts/Authenticated.vue";
 import ContentTitle from "@/Components/ContentTitle.vue";
 import ContentBox from "@/Components/ContentBox.vue";
@@ -14,12 +15,11 @@ import ValidationErrors from "@/Components/ValidationErrors.vue";
 
 const props = defineProps({
     workoutPreset: Object,
-    workoutExercises: Object,
     workoutTypes: Object,
 });
 
 const isOpen = ref(false);
-const exercises = ref(props.workoutExercises);
+const exercises = ref(props.workoutPreset.data.exercises);
 
 const addExercise = function (id, name, note, sets) {
     if (note === undefined) note = "";
@@ -70,7 +70,7 @@ let submit = () => {
                 <ValidationErrors class="mb-4" />
 
                 <form @submit.prevent="submit" autocomplete="off">
-                    <div class="mb-6">
+                    <div>
                         <Label for="name" value="Name" />
                         <Input
                             id="name"
@@ -82,8 +82,8 @@ let submit = () => {
                         />
                     </div>
 
-                    <div class="mb-6">
-                        <div class="grid grid-cols-6 gap-6">
+                    <div class="mt-4">
+                        <div class="grid grid-cols-6 gap-4">
                             <div class="col-span-6 sm:col-span-3">
                                 <Label for="workout_type_id" value="Type" />
                                 <Select
@@ -120,8 +120,8 @@ let submit = () => {
                         </div>
                     </div>
 
-                    <div class="mb-6">
-                        <div class="grid grid-cols-6 gap-6">
+                    <div class="mt-4">
+                        <div class="grid grid-cols-6 gap-4">
                             <div class="col-span-6 sm:col-span-3">
                                 <Label
                                     for="time_cap"
@@ -138,7 +138,7 @@ let submit = () => {
                         </div>
                     </div>
 
-                    <div class="mb-6">
+                    <div class="mt-4">
                         <Label for="description" value="Description" />
                         <Textarea
                             id="description"
@@ -147,7 +147,7 @@ let submit = () => {
                         />
                     </div>
 
-                    <div class="mb-6">
+                    <div class="mt-4">
                         <div class="flex justify-between mb-3">
                             <Label for="exercises" value="Exercises" />
                             <button
@@ -159,167 +159,173 @@ let submit = () => {
                             </button>
                         </div>
 
-                        <div
-                            v-for="(exercise, exerciseIndex) in exercises"
-                            :key="exerciseIndex"
-                            class="
-                                mb-5
-                                font-medium
-                                text-sm text-gray-700
-                                dark:text-neutral-200
-                            "
+                        <VueDraggableNext
+                            class="dragArea list-group"
+                            :list="exercises"
+                            handle=".handle"
                         >
-                            <div class="flex justify-between">
-                                <h6 class="block">
-                                    <span>{{ exerciseIndex + 1 }}.</span>
-                                    {{ exercise.name }}
-                                </h6>
-                                <div>
-                                    <button
-                                        type="button"
-                                        class="px-1 hover:text-blue-500"
-                                        @click.prevent="addSet(exerciseIndex)"
-                                        title="Add set"
-                                    >
-                                        <FontAwesomeIcon
-                                            icon="plus"
-                                        ></FontAwesomeIcon>
-                                    </button>
-                                    <button
-                                        type="button"
-                                        class="px-1 hover:text-blue-500"
-                                        @click.prevent="
-                                            removeExercise(exerciseIndex)
-                                        "
-                                        title="Remove exercise"
-                                    >
-                                        <FontAwesomeIcon
-                                            icon="trash-can"
-                                        ></FontAwesomeIcon>
-                                    </button>
-                                </div>
-                            </div>
-                            <Input
-                                id="note"
-                                type="text"
-                                v-model="exercises[exerciseIndex].note"
-                                placeholder="Note"
-                                class="my-2 block w-full p-1"
-                            />
-                            <table v-if="exercise.sets.length">
-                                <thead>
-                                    <tr>
-                                        <th scope="col" class="pr-1">Set</th>
-                                        <th scope="col" title="Repetitions">
-                                            Rep
-                                        </th>
-                                        <th scope="col" title="Weight in kg">
-                                            Wt
-                                        </th>
-                                        <th
-                                            scope="col"
-                                            title="Distance in meters"
+                            <div
+                                v-for="(exercise, exerciseIndex) in exercises"
+                                :key="exerciseIndex"
+                                class="
+                                    mb-5
+                                    font-medium
+                                    text-sm text-gray-700
+                                    dark:text-neutral-200
+                                "
+                            >
+                                <div class="flex justify-between">
+                                    <h6 class="cursor-pointer handle">
+                                        <span>{{ exerciseIndex + 1 }}.</span>
+                                        {{ exercise.name }}
+                                    </h6>
+                                    <div>
+                                        <button
+                                            type="button"
+                                            class="mx-1 hover:text-blue-500"
+                                            @click.prevent="addSet(exerciseIndex)"
+                                            title="Add set"
                                         >
-                                            Dist
-                                        </th>
-                                        <th scope="col" title="Calories">
-                                            Cal
-                                        </th>
-                                        <th scope="col" title="Time in minutes">
-                                            Min
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr
-                                        v-for="(set, setIndex) in exercise.sets"
-                                        :key="setIndex"
-                                    >
-                                        <th scope="row">{{ setIndex + 1 }}</th>
-                                        <td>
-                                            <Input
-                                                type="text"
-                                                v-model="
-                                                    exercises[exerciseIndex]
-                                                        .sets[setIndex]
-                                                        .repetitions
-                                                "
-                                                class="
-                                                    block
-                                                    w-full
-                                                    p-1
-                                                    text-center
-                                                "
-                                            />
-                                        </td>
-                                        <td>
-                                            <Input
-                                                type="text"
-                                                v-model="
-                                                    exercises[exerciseIndex]
-                                                        .sets[setIndex].weight
-                                                "
-                                                class="
-                                                    block
-                                                    w-full
-                                                    p-1
-                                                    b-0
-                                                    text-center
-                                                "
-                                            />
-                                        </td>
-                                        <td>
-                                            <Input
-                                                type="text"
-                                                v-model="
-                                                    exercises[exerciseIndex]
-                                                        .sets[setIndex].distance
-                                                "
-                                                class="
-                                                    block
-                                                    w-full
-                                                    p-1
-                                                    b-0
-                                                    text-center
-                                                "
-                                            />
-                                        </td>
-                                        <td>
-                                            <Input
-                                                type="text"
-                                                v-model="
-                                                    exercises[exerciseIndex]
-                                                        .sets[setIndex].calories
-                                                "
-                                                class="
-                                                    block
-                                                    w-full
-                                                    p-1
-                                                    b-0
-                                                    text-center
-                                                "
-                                            />
-                                        </td>
-                                        <td>
-                                            <Input
-                                                type="text"
-                                                v-model="
-                                                    exercises[exerciseIndex]
-                                                        .sets[setIndex].minutes
-                                                "
-                                                class="
-                                                    block
-                                                    w-full
-                                                    p-1
-                                                    b-0
-                                                    text-center
-                                                "
-                                            />
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
+                                            <FontAwesomeIcon
+                                                icon="plus"
+                                            ></FontAwesomeIcon>
+                                        </button>
+                                        <button
+                                            type="button"
+                                            class="ml-1 hover:text-blue-500"
+                                            @click.prevent="
+                                                removeExercise(exerciseIndex)
+                                            "
+                                            title="Remove exercise"
+                                        >
+                                            <FontAwesomeIcon
+                                                icon="trash-can"
+                                            ></FontAwesomeIcon>
+                                        </button>
+                                    </div>
+                                </div>
+                                <Input
+                                    id="note"
+                                    type="text"
+                                    v-model="exercises[exerciseIndex].note"
+                                    placeholder="Note"
+                                    class="my-2 block w-full p-1"
+                                />
+                                <table v-if="exercise.sets.length">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col" class="pr-1">Set</th>
+                                            <th scope="col" title="Repetitions">
+                                                Rep
+                                            </th>
+                                            <th scope="col" title="Weight in kg">
+                                                Wt
+                                            </th>
+                                            <th
+                                                scope="col"
+                                                title="Distance in meters"
+                                            >
+                                                Dist
+                                            </th>
+                                            <th scope="col" title="Calories">
+                                                Cal
+                                            </th>
+                                            <th scope="col" title="Time in minutes">
+                                                Min
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr
+                                            v-for="(set, setIndex) in exercise.sets"
+                                            :key="setIndex"
+                                        >
+                                            <th scope="row">{{ setIndex + 1 }}</th>
+                                            <td>
+                                                <Input
+                                                    type="text"
+                                                    v-model="
+                                                        exercises[exerciseIndex]
+                                                            .sets[setIndex]
+                                                            .repetitions
+                                                    "
+                                                    class="
+                                                        block
+                                                        w-full
+                                                        p-1
+                                                        text-center
+                                                    "
+                                                />
+                                            </td>
+                                            <td>
+                                                <Input
+                                                    type="text"
+                                                    v-model="
+                                                        exercises[exerciseIndex]
+                                                            .sets[setIndex].weight
+                                                    "
+                                                    class="
+                                                        block
+                                                        w-full
+                                                        p-1
+                                                        b-0
+                                                        text-center
+                                                    "
+                                                />
+                                            </td>
+                                            <td>
+                                                <Input
+                                                    type="text"
+                                                    v-model="
+                                                        exercises[exerciseIndex]
+                                                            .sets[setIndex].distance
+                                                    "
+                                                    class="
+                                                        block
+                                                        w-full
+                                                        p-1
+                                                        b-0
+                                                        text-center
+                                                    "
+                                                />
+                                            </td>
+                                            <td>
+                                                <Input
+                                                    type="text"
+                                                    v-model="
+                                                        exercises[exerciseIndex]
+                                                            .sets[setIndex].calories
+                                                    "
+                                                    class="
+                                                        block
+                                                        w-full
+                                                        p-1
+                                                        b-0
+                                                        text-center
+                                                    "
+                                                />
+                                            </td>
+                                            <td>
+                                                <Input
+                                                    type="text"
+                                                    v-model="
+                                                        exercises[exerciseIndex]
+                                                            .sets[setIndex].minutes
+                                                    "
+                                                    class="
+                                                        block
+                                                        w-full
+                                                        p-1
+                                                        b-0
+                                                        text-center
+                                                    "
+                                                />
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </VueDraggableNext>
                     </div>
 
                     <div class="flex items-center justify-end mt-4">

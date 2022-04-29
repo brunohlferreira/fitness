@@ -89,7 +89,9 @@ class EquipmentController extends Controller
             abort(403);
         }
 
-        return Inertia::render('Equipments/Edit', ['equipment' => new EquipmentResource($equipment->only('id', 'name'))]);
+        return Inertia::render('Equipments/Edit', [
+            'equipment' => new EquipmentResource($equipment->only('id', 'name')),
+        ]);
     }
 
     /**

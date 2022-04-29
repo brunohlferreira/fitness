@@ -20,6 +20,8 @@ class PermissionController extends Controller
             abort(403);
         }
 
-        return Inertia::render('Permissions/Index', ['permissions' => PermissionResource::collection(Permission::select('id', 'name')->paginate(15))]);
+        return Inertia::render('Permissions/Index', [
+            'permissions' => PermissionResource::collection(Permission::select('id', 'name')->paginate(15)),
+        ]);
     }
 }

@@ -20,13 +20,20 @@ defineProps({
             </template>
 
             <template #content>
-                <span v-if="!workouts.lifetime.total">You didn't register any workouts yet.</span>
-                <span v-else>You have registered {{ workouts.lifetime.total }} workouts so far. Keep going!</span>
+                <span v-if="!workouts.lifetime.total"
+                    >You didn't register any workouts yet.</span
+                >
+                <span v-else
+                    >You have registered {{ workouts.lifetime.total }} workouts
+                    so far. Keep going!</span
+                >
             </template>
         </ContentBox>
 
         <div class="flex justify-center mt-6">
-            <Button @click="Inertia.visit('/workouts/create')" class="block">Start Workout</Button>
+            <Button @click="Inertia.visit('/workouts/create')" class="block"
+                >Start Workout</Button
+            >
         </div>
     </AuthenticatedLayout>
 </template>

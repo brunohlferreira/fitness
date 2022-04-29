@@ -64,8 +64,8 @@ let submit = () => {
                 <ValidationErrors class="mb-4" />
 
                 <form @submit.prevent="submit" autocomplete="off">
-                    <div class="mb-6">
-                        <div class="grid grid-cols-6 gap-6">
+                    <div>
+                        <div class="grid grid-cols-6 gap-4">
                             <div class="col-span-6 sm:col-span-3">
                                 <Label for="name" value="Name" />
                                 <Input
@@ -92,7 +92,7 @@ let submit = () => {
                         </div>
                     </div>
 
-                    <div class="mb-6">
+                    <div class="mt-4">
                         <Label for="description" value="Description" />
                         <Textarea
                             id="description"
@@ -101,7 +101,7 @@ let submit = () => {
                         />
                     </div>
 
-                    <div class="mb-6">
+                    <div class="mt-4">
                         <div class="flex justify-between">
                             <Label value="Body parts and impact" />
                             <div>
@@ -178,7 +178,7 @@ let submit = () => {
                         </div>
                     </div>
 
-                    <div class="mb-6">
+                    <div class="mt-4">
                         <Label value="Equipments" />
                         <CheckboxButton
                             v-for="(equipment, equipmentIndex) in equipments"

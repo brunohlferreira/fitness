@@ -11,12 +11,6 @@ const props = defineProps({
     workout: Object,
 });
 
-const repeatWod = function (id) {
-    axios.post(`/workouts/${id}/repeat`).then((response) => {
-        Inertia.visit(`/workouts/${response.data}`);
-    });
-};
-
 let name = props.workout.data.name.length
     ? ` - ${props.workout.data.name}`
     : "";
@@ -112,7 +106,7 @@ name =
                             >Time Cap</small
                         >
                     </div>
-                    <div v-if="workout.data.score.length">
+                    <div v-if="workout.data.score && workout.data.score.length">
                         {{ workout.data.score }}
                         <span v-if="workout.data.workout_type_name == 'AMRAP'">
                             rounds</span
@@ -145,11 +139,16 @@ name =
             </template>
 
             <template #content>
-                <ul>
+                <ul class="-my-2">
                     <li
                         v-for="exercise in workout.data.exercises"
                         :key="exercise.id"
-                        class="pb-2 mb-2 border-b dark:border-gray-700"
+                        class="
+                            py-2
+                            border-t
+                            first:border-0
+                            dark:border-gray-700
+                        "
                     >
                         <Link
                             :href="`/exercises/${exercise.id}`"
@@ -157,7 +156,11 @@ name =
                             >{{ exercise.name }}</Link
                         >
                         <ul class="text-xs text-gray-500 dark:text-gray-400">
-                            <li v-for="set in exercise.sets" :key="set.id">
+                            <li
+                                v-for="set in exercise.sets"
+                                :key="set.id"
+                                class="pt-1 first:pt-0"
+                            >
                                 <span v-if="set.repetitions"
                                     >{{ set.repetitions }}x
                                 </span>
@@ -181,7 +184,11 @@ name =
         </ContentBox>
 
         <div class="flex justify-center mt-6">
-            <Button @click="repeatWod(workout.data.id)" class="block"
+            <Button
+                @click="
+                    Inertia.visit(`/workouts/create?workout=${workout.data.id}`)
+                "
+                class="block"
                 >Do it again</Button
             >
         </div>

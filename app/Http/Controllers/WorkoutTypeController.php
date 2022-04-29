@@ -89,7 +89,9 @@ class WorkoutTypeController extends Controller
             abort(403);
         }
 
-        return Inertia::render('WorkoutTypes/Edit', ['workoutType' => new WorkoutTypeResource($workoutType->only('id', 'name', 'description'))]);
+        return Inertia::render('WorkoutTypes/Edit', [
+            'workoutType' => new WorkoutTypeResource($workoutType->only('id', 'name', 'description')),
+        ]);
     }
 
     /**

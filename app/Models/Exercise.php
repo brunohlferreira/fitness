@@ -15,6 +15,7 @@ class Exercise extends Model
     public static function boot()
     {
         parent::boot();
+
         static::creating(function ($model) {
             if (is_null(Auth::user())) {
                 return;
@@ -22,12 +23,18 @@ class Exercise extends Model
 
             $model->created_by = Auth::user()->id;
         });
+
         static::updating(function ($model) {
             if (is_null(Auth::user())) {
                 return;
             }
 
             $model->updated_by = Auth::user()->id;
+        });
+
+        static::deleting(function ($model) {
+            $model->bodyParts()->detach();
+            $model->equipments()->detach();
         });
     }
 

@@ -35,7 +35,7 @@ const submit = () => {
                 <ValidationErrors class="mb-4" />
 
                 <form @submit.prevent="submit" autocomplete="off">
-                    <div class="mb-6">
+                    <div>
                         <Label for="role" value="Role" />
                         <Select
                             id="role"
@@ -47,7 +47,9 @@ const submit = () => {
                                 v-for="role in roles.data"
                                 :key="role.id"
                                 :value="role.id"
-                                class="pb-2 mb-2 border-b dark:border-gray-700">{{ role.name }}</option>
+                            >
+                                {{ role.name }}
+                            </option>
                         </Select>
                     </div>
 

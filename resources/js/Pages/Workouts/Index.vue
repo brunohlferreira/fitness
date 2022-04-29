@@ -1,5 +1,4 @@
 <script setup>
-import { Inertia } from "@inertiajs/inertia";
 import AuthenticatedLayout from "@/Layouts/Authenticated.vue";
 import ContentTitle from "@/Components/ContentTitle.vue";
 import ContentBox from "@/Components/ContentBox.vue";
@@ -9,20 +8,6 @@ import Pagination from "@/Components/Pagination.vue";
 const props = defineProps({
     workouts: Object,
 });
-
-const deleteEntry = function (id) {
-    if (
-        !window.confirm(
-            "You are about to permanently delete this entry. Do you want to proceed?"
-        )
-    ) {
-        return;
-    }
-
-    axios.delete(`/workouts/${id}`).then((response) => {
-        Inertia.visit("/workouts");
-    });
-};
 
 const rows = [];
 props.workouts.data.forEach((workout) => {
@@ -66,7 +51,7 @@ props.workouts.data.forEach((workout) => {
                     :canDelete="true"
                     viewUrl="/workouts/%d"
                     editUrl="/workouts/%d/edit"
-                    :deleteFunction="deleteEntry"
+                    deleteUrl="/workouts/%d"
                 />
             </template>
         </ContentBox>

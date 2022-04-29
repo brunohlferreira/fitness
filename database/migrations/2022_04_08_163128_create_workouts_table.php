@@ -21,7 +21,6 @@ return new class extends Migration
             $table->unsignedTinyInteger('level');
             $table->unsignedTinyInteger('time_cap');
             $table->string('score')->nullable();
-            $table->unsignedTinyInteger('done')->nullable();
             $table->foreignId('workout_type_id')->constrained('workout_types');
             $table->foreignId('workout_preset_id')->nullable()->constrained('workout_presets');
             $table->foreignId('created_by')->constrained('users');

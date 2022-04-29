@@ -40,9 +40,9 @@ onMounted(() => {
 
 <style scoped>
 .dark input:-webkit-autofill,
-.dark input:-webkit-autofill:hover, 
-.dark input:-webkit-autofill:focus, 
-.dark input:-webkit-autofill:active  {
+.dark input:-webkit-autofill:hover,
+.dark input:-webkit-autofill:focus,
+.dark input:-webkit-autofill:active {
     -webkit-box-shadow: 0 0 0 30px #18181b inset !important;
     -webkit-text-fill-color: #e5e5e5 !important;
 }

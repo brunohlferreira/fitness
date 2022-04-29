@@ -10,7 +10,7 @@ const props = defineProps({
 
 <template>
     <div>
-        <div class="flex justify-between px-2 dark:text-neutral-200">
+        <div class="flex justify-between dark:text-neutral-200">
             <slot name="title" />
             <slot name="actions" />
         </div>

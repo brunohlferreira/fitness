@@ -54,7 +54,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/workouts/create', [WorkoutController::class, 'create'])->name('workouts.create');
     Route::get('/workouts/{workout}/edit', [WorkoutController::class, 'edit']);
     Route::get('/workouts/{workout}', [WorkoutController::class, 'show']);
-    Route::post('/workouts/{workout}/repeat', [WorkoutController::class, 'repeat']);
     Route::post('/workouts', [WorkoutController::class, 'store']);
     Route::put('/workouts/{workout}', [WorkoutController::class, 'update']);
     Route::delete('/workouts/{workout}', [WorkoutController::class, 'destroy']);
@@ -63,7 +62,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/workout-presets/create', [WorkoutPresetController::class, 'create'])->name('workoutPresets.create');
     Route::get('/workout-presets/{workoutPreset}/edit', [WorkoutPresetController::class, 'edit']);
     Route::get('/workout-presets/{workoutPreset}', [WorkoutPresetController::class, 'show']);
-    Route::post('/workout-presets/{workoutPreset}/repeat', [WorkoutPresetController::class, 'repeat']);
     Route::post('/workout-presets', [WorkoutPresetController::class, 'store']);
     Route::put('/workout-presets/{workoutPreset}', [WorkoutPresetController::class, 'update']);
     Route::delete('/workout-presets/{workoutPreset}', [WorkoutPresetController::class, 'destroy']);

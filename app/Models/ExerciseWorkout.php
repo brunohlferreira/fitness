@@ -17,6 +17,15 @@ class ExerciseWorkout extends Pivot
 
     public $timestamps = false;
 
+    public static function boot()
+    {
+        parent::boot();
+
+        static::deleting(function ($model) {
+            $model->sets()->delete();
+        });
+    }
+
     public function workout()
     {
         return $this->belongsTo(Workout::class, 'workout_id');

@@ -12,12 +12,6 @@ const props = defineProps({
     attempts: Object,
     can: Object,
 });
-
-const repeatWod = function (id) {
-    axios.post(`/workout-presets/${id}/repeat`).then((response) => {
-        Inertia.visit(`/workouts/${response.data}`);
-    });
-};
 </script>
 
 <template>
@@ -88,19 +82,28 @@ const repeatWod = function (id) {
             </template>
 
             <template #content>
-                <ul>
+                <ul class="-my-2">
                     <li
                         v-for="exercise in workoutPreset.data.exercises"
                         :key="exercise.id"
-                        class="pb-2 mb-2 border-b dark:border-gray-700"
+                        class="
+                            py-2
+                            border-t
+                            first:border-0
+                            dark:border-gray-700
+                        "
                     >
                         <Link
                             :href="`/exercises/${exercise.id}`"
                             class="hover:text-blue-500"
                             >{{ exercise.name }}</Link
                         >
-                        <ul class="text-xs text-gray-400">
-                            <li v-for="set in exercise.sets" :key="set.id">
+                        <ul class="text-xs text-gray-500 dark:text-gray-400">
+                            <li
+                                v-for="set in exercise.sets"
+                                :key="set.id"
+                                class="pt-1 first:pt-0"
+                            >
                                 <span v-if="set.repetitions"
                                     >{{ set.repetitions }}x</span
                                 >
@@ -185,7 +188,14 @@ const repeatWod = function (id) {
         </ContentBox>
 
         <div class="flex justify-center mt-6">
-            <Button @click="repeatWod(workoutPreset.data.id)" class="block">
+            <Button
+                @click="
+                    Inertia.visit(
+                        `/workouts/create?workoutPreset=${workoutPreset.data.id}`
+                    )
+                "
+                class="block"
+            >
                 {{ attempts.data.length ? "Do it again" : "Do it" }}
             </Button>
         </div>

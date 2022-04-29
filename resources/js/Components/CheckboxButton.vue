@@ -17,8 +17,7 @@ defineProps({
             border
             rounded-md
             dark:border-blue-500
-            hover:bg-blue-500
-            hover:text-white
+            hover:bg-blue-500 hover:text-white
         "
         :class="selected ? 'bg-blue-500 text-white' : ''"
         @click.prevent="selected = !selected"

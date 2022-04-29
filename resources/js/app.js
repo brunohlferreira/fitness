@@ -4,10 +4,10 @@ import { createApp, h, provide } from 'vue';
 import { createInertiaApp, Head, Link } from '@inertiajs/inertia-vue3';
 import { InertiaProgress } from '@inertiajs/progress';
 import { library } from '@fortawesome/fontawesome-svg-core';
-import { faChartLine, faCalendarDays, faDumbbell, faShoePrints, faPersonRunning, faPlus, faMinus, faPencil, faTrashCan, faPaste, faClipboard, faListCheck } from '@fortawesome/free-solid-svg-icons';
+import { faChartLine, faDumbbell, faShoePrints, faPersonRunning, faPlus, faMinus, faPencil, faTrashCan, faPaste, faClipboard, faListCheck } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
-library.add(faChartLine, faCalendarDays, faDumbbell, faShoePrints, faPersonRunning, faPlus, faMinus, faPencil, faTrashCan, faPaste, faClipboard, faListCheck);
+library.add(faChartLine, faDumbbell, faShoePrints, faPersonRunning, faPlus, faMinus, faPencil, faTrashCan, faPaste, faClipboard, faListCheck);
 
 const appName = window.document.getElementsByTagName('title')[0]?.innerText || 'Fitness App';
 

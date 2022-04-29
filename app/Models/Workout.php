@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\ExerciseWorkout;
 use App\Models\WorkoutType;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -16,12 +17,19 @@ class Workout extends Model
     public static function boot()
     {
         parent::boot();
+
         static::creating(function ($model) {
             if (is_null(Auth::user())) {
                 return;
             }
 
             $model->created_by = Auth::user()->id;
+        });
+
+        static::deleting(function ($model) {
+            foreach ($model->exercises as $exercise) {
+                ExerciseWorkout::find($exercise->pivot->id)->delete();
+            }
         });
     }
 

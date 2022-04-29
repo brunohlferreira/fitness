@@ -13,6 +13,7 @@ use App\Models\Exercise;
 use App\Models\Workout;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
 
@@ -68,24 +69,33 @@ class ExerciseController extends Controller
             abort(403);
         }
 
-        $exercise = Exercise::create($request->validated());
+        DB::beginTransaction();
+        try {
+            $exercise = Exercise::create($request->validated());
 
-        $bodyParts = [];
-        foreach ($request->input('bodyParts') as $bodyPartKey => $bodyPart) {
-            $bodyParts[$bodyPart['id']] = [
-                'impact' => $bodyPart['impact'],
-            ];
-        }
-        if (count($bodyParts)) {
-            $exercise->bodyParts()->sync($bodyParts);
-        }
+            $bodyParts = [];
+            foreach ($request->input('bodyParts') as $bodyPartKey => $bodyPart) {
+                $bodyParts[$bodyPart['id']] = [
+                    'impact' => $bodyPart['impact'],
+                ];
+            }
+            if (count($bodyParts)) {
+                $exercise->bodyParts()->sync($bodyParts);
+            }
 
-        $equipments = [];
-        foreach ($request->input('equipments') as $equipmentKey => $equipment) {
-            $equipments[] = $equipment['id'];
-        }
-        if (count($equipments)) {
-            $exercise->equipments()->sync($equipments);
+            $equipments = [];
+            foreach ($request->input('equipments') as $equipmentKey => $equipment) {
+                $equipments[] = $equipment['id'];
+            }
+            if (count($equipments)) {
+                $exercise->equipments()->sync($equipments);
+            }
+
+            DB::commit();
+        } catch (Exception $e) {
+            DB::rollback();
+
+            return back()->withErrors('Something went wrong. Please try again.');
         }
 
         return redirect()->route('exercises.index');
@@ -113,10 +123,10 @@ class ExerciseController extends Controller
                 'attempts' => WorkoutResource::collection(
                     Workout::select('workouts.id', 'workouts.name', 'workouts.date')
                         ->join('exercise_workout', function ($join) use ($exercise) {
-                            $join->on('workouts.id', '=', 'exercise_workout.workout_id')
-                                ->where('exercise_workout.exercise_id', '=', $exercise->id);
+                            $join->on('workouts.id', 'exercise_workout.workout_id')
+                                ->where('exercise_workout.exercise_id', $exercise->id);
                         })
-                        ->where('workouts.created_by', '=', Auth::user()->id)
+                        ->where('workouts.created_by', Auth::user()->id)
                         ->groupBy('workouts.id')
                         ->groupBy('workouts.name')
                         ->groupBy('workouts.date')
@@ -149,7 +159,7 @@ class ExerciseController extends Controller
             'bodyParts' => BodyPartResource::collection(
                 BodyPart::select('body_parts.id', 'body_parts.name', 'body_part_exercise.impact')
                     ->leftJoin('body_part_exercise', function ($join) use ($exercise) {
-                        $join->on('body_parts.id', '=', 'body_part_exercise.body_part_id')->where('body_part_exercise.exercise_id', '=', $exercise->id);
+                        $join->on('body_parts.id', 'body_part_exercise.body_part_id')->where('body_part_exercise.exercise_id', $exercise->id);
                     })
                     ->get()
             ),
@@ -157,7 +167,7 @@ class ExerciseController extends Controller
                 Equipment::select('equipments.id', 'equipments.name')
                     ->selectRaw('equipment_exercise.id IS NOT NULL AS selected')
                     ->leftJoin('equipment_exercise', function ($join) use ($exercise) {
-                        $join->on('equipments.id', '=', 'equipment_exercise.equipment_id')->where('equipment_exercise.exercise_id', '=', $exercise->id);
+                        $join->on('equipments.id', 'equipment_exercise.equipment_id')->where('equipment_exercise.exercise_id', $exercise->id);
                     })
                     ->get()
             ),
@@ -177,24 +187,33 @@ class ExerciseController extends Controller
             abort(403);
         }
 
-        $exercise->update($request->validated());
+        DB::beginTransaction();
+        try {
+            $exercise->update($request->validated());
 
-        $bodyParts = [];
-        foreach ($request->input('bodyParts') as $bodyPartKey => $bodyPart) {
-            $bodyParts[$bodyPart['id']] = [
-                'impact' => $bodyPart['impact'],
-            ];
-        }
-        if (count($bodyParts)) {
-            $exercise->bodyParts()->sync($bodyParts);
-        }
+            $bodyParts = [];
+            foreach ($request->input('bodyParts') as $bodyPartKey => $bodyPart) {
+                $bodyParts[$bodyPart['id']] = [
+                    'impact' => $bodyPart['impact'],
+                ];
+            }
+            if (count($bodyParts)) {
+                $exercise->bodyParts()->sync($bodyParts);
+            }
 
-        $equipments = [];
-        foreach ($request->input('equipments') as $equipmentKey => $equipment) {
-            $equipments[] = $equipment['id'];
-        }
-        if (count($equipments)) {
-            $exercise->equipments()->sync($equipments);
+            $equipments = [];
+            foreach ($request->input('equipments') as $equipmentKey => $equipment) {
+                $equipments[] = $equipment['id'];
+            }
+            if (count($equipments)) {
+                $exercise->equipments()->sync($equipments);
+            }
+
+            DB::commit();
+        } catch (Exception $e) {
+            DB::rollback();
+
+            return back()->withErrors('Something went wrong. Please try again.');
         }
 
         return redirect()->route('exercises.index');
@@ -212,9 +231,16 @@ class ExerciseController extends Controller
             abort(403);
         }
 
-        $exercise->bodyParts()->detach();
-        $exercise->equipments()->detach();
-        $exercise->delete();
+        DB::beginTransaction();
+        try {
+            $exercise->delete();
+
+            DB::commit();
+        } catch (Exception $e) {
+            DB::rollback();
+
+            abort(500);
+        }
 
         return response()->noContent();
     }

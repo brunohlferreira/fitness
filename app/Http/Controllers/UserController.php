@@ -30,10 +30,10 @@ class UserController extends Controller
                 User::select('users.id', 'roles.name AS role')
                     ->selectRaw('CONCAT(users.name, " (", users.email, ")") AS name')
                     ->leftJoin('model_has_roles', function ($join) {
-                        $join->on('model_has_roles.model_id', '=', 'users.id')->where('model_has_roles.model_type', '=', "App\\Models\\User");
+                        $join->on('model_has_roles.model_id', 'users.id')->where('model_has_roles.model_type', "App\\Models\\User");
                     })
                     ->leftJoin('roles', function ($join) {
-                        $join->on('model_has_roles.role_id', '=', 'roles.id');
+                        $join->on('model_has_roles.role_id', 'roles.id');
                     })
                     ->where('users.id', '>', 1)
                     ->orderByRaw('roles.id IS NULL')

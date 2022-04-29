@@ -36,7 +36,7 @@ let submit = () => {
                 <ValidationErrors class="mb-4" />
 
                 <form @submit.prevent="submit" autocomplete="off">
-                    <div class="mb-6">
+                    <div>
                         <Label for="name" value="Name" />
                         <Input
                             id="name"
@@ -48,7 +48,7 @@ let submit = () => {
                         />
                     </div>
 
-                    <div class="mb-6">
+                    <div class="mt-4">
                         <Label for="description" value="Description" />
                         <Textarea
                             id="description"

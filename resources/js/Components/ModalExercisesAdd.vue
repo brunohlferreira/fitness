@@ -4,7 +4,6 @@ import { Inertia } from "@inertiajs/inertia";
 import debounce from "lodash/debounce";
 import Label from "@/Components/Label.vue";
 import Input from "@/Components/Input.vue";
-import { Method } from "@inertiajs/inertia";
 
 const props = defineProps({
     open: {
@@ -93,7 +92,6 @@ watch(
                             items-center
                             dark:hover:bg-gray-600 dark:hover:text-white
                         "
-                        data-modal-toggle="large-modal"
                     >
                         <svg
                             class="w-5 h-5"
@@ -111,17 +109,16 @@ watch(
                 </div>
                 <div class="p-6 space-y-6">
                     <form autocomplete="off">
-                        <div class="mb-6">
+                        <div>
                             <Label for="search" value="Name" />
                             <Input
                                 id="search"
                                 v-model="search"
                                 type="text"
                                 class="mt-1 block w-full"
-                                autofocus
                             />
                         </div>
-                        <div>
+                        <div class="mt-2">
                             <ul>
                                 <li
                                     v-for="(exercise, index) in exercises"

@@ -37,7 +37,7 @@ const submit = () => {
 
                 <form @submit.prevent="submit" autocomplete="off">
                     <div>
-                        <div class="grid grid-cols-6 gap-6">
+                        <div class="grid grid-cols-6 gap-4">
                             <div class="col-span-6 sm:col-span-3">
                                 <Label for="name" value="Name" />
                                 <Input
@@ -64,8 +64,8 @@ const submit = () => {
                         </div>
                     </div>
 
-                    <div class="mt-6">
-                        <div class="grid grid-cols-6 gap-6">
+                    <div class="mt-4">
+                        <div class="grid grid-cols-6 gap-4">
                             <div class="col-span-6 sm:col-span-3">
                                 <Label for="password" value="Password" />
                                 <Input
@@ -93,7 +93,7 @@ const submit = () => {
                         </div>
                     </div>
 
-                    <div class="flex items-center justify-end mt-6">
+                    <div class="flex items-center justify-end mt-4">
                         <Button
                             type="submit"
                             class="ml-4"
