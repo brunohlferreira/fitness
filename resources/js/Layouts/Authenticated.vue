@@ -5,8 +5,9 @@ import DropdownLink from "@/Components/DropdownLink.vue";
 import NavLink from "@/Components/NavLink.vue";
 
 const showingNavigationDropdown = ref(false);
+const darkMode = inject("darkMode");
 
-const toggleTheme = function () {
+const toggleTheme = () => {
     darkMode.value = !darkMode.value;
     if (darkMode.value) {
         localStorage.theme = "dark";
@@ -16,15 +17,6 @@ const toggleTheme = function () {
         document.documentElement.classList.remove("dark");
     }
 };
-
-const darkMode = ref(
-    !(
-        localStorage.theme === "dark" ||
-        (!("theme" in localStorage) &&
-            window.matchMedia("(prefers-color-scheme: dark)").matches)
-    )
-);
-toggleTheme();
 
 const navPages = [
     {
@@ -132,7 +124,7 @@ const navPages = [
                                         {{ item.name }}
                                     </DropdownLink>
                                     <DropdownLink
-                                        @click.prevent="toggleTheme"
+                                        @click.prevent="toggleTheme()"
                                         as="button"
                                     >
                                         {{

@@ -13,7 +13,7 @@ const rows = [];
 props.workouts.data.forEach((workout) => {
     rows.push({
         id: workout.id,
-        name: new Date(workout.date).toLocaleString("en-US", {
+        name: new Date(`${workout.date}z`).toLocaleString("en-US", {
             weekday: "long",
             year: "numeric",
             month: "long",

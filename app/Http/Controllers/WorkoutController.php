@@ -2,22 +2,23 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\WorkoutRequest;
-use App\Http\Resources\ExerciseResource;
-use App\Http\Resources\WorkoutResource;
-use App\Http\Resources\WorkoutTypeResource;
-use App\Models\ExerciseWorkout;
-use App\Models\ExerciseWorkoutPreset;
-use App\Models\ExerciseWorkoutSet;
-use App\Models\User;
-use App\Models\Workout;
-use App\Models\WorkoutPreset;
-use App\Models\WorkoutType;
 use Exception;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
+use App\Models\User;
 use Inertia\Inertia;
+use App\Models\Workout;
+use App\Models\WorkoutType;
+use Illuminate\Http\Request;
+use App\Models\WorkoutPreset;
+use App\Models\ExerciseWorkout;
+use App\Models\ExerciseWorkoutSet;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\WorkoutRequest;
+use App\Models\ExerciseWorkoutPreset;
+use App\Http\Resources\WorkoutResource;
+use App\Http\Resources\ExerciseResource;
+use App\Http\Resources\WorkoutTypeResource;
 
 class WorkoutController extends Controller
 {
@@ -107,7 +108,9 @@ class WorkoutController extends Controller
     {
         DB::beginTransaction();
         try {
-            $workout = Workout::create($request->validated());
+            $data = $request->validated();
+            $data['date'] = Carbon::parse($data['date'])->format('Y-m-d H:i:s');
+            $workout = Workout::create($data);
 
             foreach ($request->input('exercises') as $exerciseKey => $exercise) {
                 $exerciseWorkout = ExerciseWorkout::create([
@@ -209,7 +212,9 @@ class WorkoutController extends Controller
     {
         DB::beginTransaction();
         try {
-            $workout->update($request->validated());
+            $data = $request->validated();
+            $data['date'] = Carbon::parse($data['date'])->format('Y-m-d H:i:s');
+            $workout->update($data);
 
             foreach ($workout->exercises as $exercise) {
                 ExerciseWorkout::find($exercise->pivot->id)->delete();

@@ -1,7 +1,9 @@
 <script setup>
-import { ref } from "vue";
+import { ref, inject } from "vue";
 import { useForm } from "@inertiajs/inertia-vue3";
 import { VueDraggableNext } from "vue-draggable-next";
+import Datepicker from "@vuepic/vue-datepicker";
+import "@vuepic/vue-datepicker/dist/main.css";
 import AuthenticatedLayout from "@/Layouts/Authenticated.vue";
 import ContentTitle from "@/Components/ContentTitle.vue";
 import ContentBox from "@/Components/ContentBox.vue";
@@ -18,6 +20,7 @@ const props = defineProps({
     workoutTypes: Object,
 });
 
+const darkMode = inject("darkMode");
 const isOpen = ref(false);
 const exercises = ref(props.workout.data.exercises);
 
@@ -44,14 +47,14 @@ const addSet = function (index) {
 const form = useForm({
     name: props.workout.data.name,
     description: props.workout.data.description,
-    date: new Date(props.workout.data.date).toLocaleDateString("en-CA"),
+    date: new Date(`${props.workout.data.date}z`),
     level: props.workout.data.level,
     time_cap: props.workout.data.time_cap,
     score: props.workout.data.score,
     workout_type_id: props.workout.data.workout_type_id,
 });
 
-let submit = () => {
+const submit = () => {
     form.transform((data) => ({
         ...data,
         exercises: exercises.value,
@@ -88,13 +91,19 @@ let submit = () => {
 
                             <div class="col-span-6 sm:col-span-2">
                                 <Label for="date" value="Date" />
-                                <Input
-                                    id="date"
-                                    type="text"
-                                    class="mt-1 block w-full"
+                                <Datepicker
                                     v-model="form.date"
-                                    required
-                                />
+                                    :dark="darkMode ?? undefined"
+                                    class="mt-1"
+                                    inputClassName="
+                                        !border-gray-300
+                                        !rounded-md
+                                        !shadow-sm
+                                        dark:!bg-zinc-900
+                                        dark:!border-zinc-500
+                                        !py-2
+                                    "
+                                ></Datepicker>
                             </div>
                         </div>
                     </div>

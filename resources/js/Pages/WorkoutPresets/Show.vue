@@ -151,7 +151,7 @@ const props = defineProps({
                                 class="hover:text-blue-500"
                             >
                                 {{
-                                    new Date(attempt.date).toLocaleString(
+                                    new Date(`${attempt.date}z`).toLocaleString(
                                         "en-US",
                                         {
                                             weekday: "long",

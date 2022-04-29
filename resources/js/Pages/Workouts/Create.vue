@@ -1,7 +1,9 @@
 <script setup>
-import { ref } from "vue";
+import { ref, inject } from "vue";
 import { useForm } from "@inertiajs/inertia-vue3";
 import { VueDraggableNext } from "vue-draggable-next";
+import Datepicker from "@vuepic/vue-datepicker";
+import "@vuepic/vue-datepicker/dist/main.css";
 import AuthenticatedLayout from "@/Layouts/Authenticated.vue";
 import ContentTitle from "@/Components/ContentTitle.vue";
 import ContentBox from "@/Components/ContentBox.vue";
@@ -18,6 +20,7 @@ const props = defineProps({
     workoutTypes: Object,
 });
 
+const darkMode = inject("darkMode");
 const isOpen = ref(false);
 const exercises = ref(
     props.workout !== null ? props.workout.data.exercises : []
@@ -46,7 +49,7 @@ const addSet = function (index) {
 const form = useForm({
     name: props.workout !== null ? props.workout.data.name : "",
     description: props.workout !== null ? props.workout.data.description : "",
-    date: new Date().toLocaleDateString("en-CA"),
+    date: new Date(),
     level: props.workout !== null ? props.workout.data.level : "1",
     time_cap: props.workout !== null ? props.workout.data.time_cap : "0",
     score: props.workout !== null ? props.workout.data.score : "",
@@ -56,7 +59,7 @@ const form = useForm({
         props.workout !== null ? props.workout.data.workout_preset_id : null,
 });
 
-let submit = () => {
+const submit = () => {
     form.transform((data) => ({
         ...data,
         exercises: exercises.value,
@@ -90,16 +93,21 @@ let submit = () => {
                                     autofocus
                                 />
                             </div>
-
                             <div class="col-span-6 sm:col-span-2">
                                 <Label for="date" value="Date" />
-                                <Input
-                                    id="date"
-                                    type="text"
-                                    class="mt-1 block w-full"
+                                <Datepicker
                                     v-model="form.date"
-                                    required
-                                />
+                                    :dark="darkMode ?? undefined"
+                                    class="mt-1"
+                                    inputClassName="
+                                        !border-gray-300
+                                        !rounded-md
+                                        !shadow-sm
+                                        dark:!bg-zinc-900
+                                        dark:!border-zinc-500
+                                        !py-2
+                                    "
+                                ></Datepicker>
                             </div>
                         </div>
                     </div>
@@ -214,7 +222,9 @@ let submit = () => {
                                         <button
                                             type="button"
                                             class="mx-1 hover:text-blue-500"
-                                            @click.prevent="addSet(exerciseIndex)"
+                                            @click.prevent="
+                                                addSet(exerciseIndex)
+                                            "
                                             title="Add set"
                                         >
                                             <FontAwesomeIcon
@@ -245,11 +255,16 @@ let submit = () => {
                                 <table v-if="exercise.sets.length">
                                     <thead>
                                         <tr>
-                                            <th scope="col" class="pr-1">Set</th>
+                                            <th scope="col" class="pr-1">
+                                                Set
+                                            </th>
                                             <th scope="col" title="Repetitions">
                                                 Rep
                                             </th>
-                                            <th scope="col" title="Weight in kg">
+                                            <th
+                                                scope="col"
+                                                title="Weight in kg"
+                                            >
                                                 Wt
                                             </th>
                                             <th
@@ -261,17 +276,24 @@ let submit = () => {
                                             <th scope="col" title="Calories">
                                                 Cal
                                             </th>
-                                            <th scope="col" title="Time in minutes">
+                                            <th
+                                                scope="col"
+                                                title="Time in minutes"
+                                            >
                                                 Min
                                             </th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr
-                                            v-for="(set, setIndex) in exercise.sets"
+                                            v-for="(
+                                                set, setIndex
+                                            ) in exercise.sets"
                                             :key="setIndex"
                                         >
-                                            <th scope="row">{{ setIndex + 1 }}</th>
+                                            <th scope="row">
+                                                {{ setIndex + 1 }}
+                                            </th>
                                             <td>
                                                 <Input
                                                     type="text"
@@ -293,7 +315,8 @@ let submit = () => {
                                                     type="text"
                                                     v-model="
                                                         exercises[exerciseIndex]
-                                                            .sets[setIndex].weight
+                                                            .sets[setIndex]
+                                                            .weight
                                                     "
                                                     class="
                                                         block
@@ -309,7 +332,8 @@ let submit = () => {
                                                     type="text"
                                                     v-model="
                                                         exercises[exerciseIndex]
-                                                            .sets[setIndex].distance
+                                                            .sets[setIndex]
+                                                            .distance
                                                     "
                                                     class="
                                                         block
@@ -325,7 +349,8 @@ let submit = () => {
                                                     type="text"
                                                     v-model="
                                                         exercises[exerciseIndex]
-                                                            .sets[setIndex].calories
+                                                            .sets[setIndex]
+                                                            .calories
                                                     "
                                                     class="
                                                         block
@@ -341,7 +366,8 @@ let submit = () => {
                                                     type="text"
                                                     v-model="
                                                         exercises[exerciseIndex]
-                                                            .sets[setIndex].minutes
+                                                            .sets[setIndex]
+                                                            .minutes
                                                     "
                                                     class="
                                                         block

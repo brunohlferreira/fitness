@@ -10,17 +10,6 @@ import Button from "@/Components/Button.vue";
 const props = defineProps({
     workout: Object,
 });
-
-let name = props.workout.data.name.length
-    ? ` - ${props.workout.data.name}`
-    : "";
-let date = new Date(props.workout.data.date);
-name =
-    date.toISOString().split("T")[0] +
-    " (" +
-    date.toLocaleString("en-us", { weekday: "long" }) +
-    ")" +
-    name;
 </script>
 
 <template>
@@ -36,7 +25,7 @@ name =
         <ContentBox>
             <template #title>
                 <ContentTitle>{{
-                    new Date(workout.data.date).toLocaleString("en-US", {
+                    new Date(`${workout.data.date}z`).toLocaleString("en-US", {
                         weekday: "long",
                         year: "numeric",
                         month: "long",
