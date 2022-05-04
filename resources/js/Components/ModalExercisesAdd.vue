@@ -1,11 +1,10 @@
 <script setup>
 import { ref, watch } from "vue";
-import { Inertia } from "@inertiajs/inertia";
 import debounce from "lodash/debounce";
 import Label from "@/Components/Label.vue";
 import Input from "@/Components/Input.vue";
 
-const props = defineProps({
+defineProps({
     open: {
         type: Boolean,
         required: true,
@@ -110,16 +109,16 @@ watch(
                 <div class="p-6 space-y-6">
                     <form autocomplete="off">
                         <div>
-                            <Label for="search" value="Name" />
                             <Input
                                 id="search"
                                 v-model="search"
                                 type="text"
                                 class="mt-1 block w-full"
+                                placeholder="Filter by..."
                             />
                         </div>
                         <div class="mt-2">
-                            <ul>
+                            <ul v-if="exercises.length" class="mt-4">
                                 <li
                                     v-for="(exercise, index) in exercises"
                                     :key="index"

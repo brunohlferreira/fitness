@@ -26,8 +26,17 @@ class ExerciseController extends Controller
      */
     public function index(Request $request)
     {
-        if ($request->input('modalSearch')) {
+        if ($request->has('modalSearch')) {
+            if (!$request->input('modalSearch')) return [];
             return Exercise::where('name', 'like', '%' . $request->input('modalSearch') . '%')->select('id', 'name')->get();
+        }
+
+        if ($request->has('search')) {
+            return ExerciseResource::collection(
+                Exercise::when(!is_null($request->input('search')), function ($query, $role) use ($request) {
+                    $query->where('name', 'like', '%' . $request->input('search') . '%');
+                })->select('id', 'name')->paginate(15)
+            );
         }
 
         return Inertia::render('Exercises/Index', [
