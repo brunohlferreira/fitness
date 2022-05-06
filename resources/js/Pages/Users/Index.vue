@@ -23,6 +23,7 @@ defineProps({
                 <Link
                     :href="route('users.create')"
                     class="block hover:text-blue-500"
+                    title="Create user"
                     ><FontAwesomeIcon icon="plus"></FontAwesomeIcon
                 ></Link>
             </template>

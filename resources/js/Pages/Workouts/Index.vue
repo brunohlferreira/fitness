@@ -37,6 +37,7 @@ props.workouts.data.forEach((workout) => {
                 <Link
                     :href="route('workouts.create')"
                     class="block hover:text-blue-500"
+                    title="Create workout"
                     ><FontAwesomeIcon icon="plus"></FontAwesomeIcon
                 ></Link>
             </template>

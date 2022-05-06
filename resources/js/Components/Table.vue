@@ -60,6 +60,7 @@ defineProps({
                             v-if="canUpdate && editUrl.length"
                             :href="editUrl.replace(/%d/, row.id)"
                             class="inline-block ml-4 hover:text-blue-500"
+                            title="Edit"
                             ><FontAwesomeIcon icon="pencil"></FontAwesomeIcon
                         ></Link>
                         <button
@@ -68,6 +69,7 @@ defineProps({
                                 deleteEntry(deleteUrl.replace(/%d/, row.id))
                             "
                             class="inline-block ml-4 hover:text-blue-500"
+                            title="Remove"
                         >
                             <FontAwesomeIcon icon="trash-can"></FontAwesomeIcon>
                         </button>

@@ -24,6 +24,7 @@ defineProps({
                 <Link
                     :href="route('equipments.create')"
                     class="block hover:text-blue-500"
+                    title="Create equipment"
                     ><FontAwesomeIcon icon="plus"></FontAwesomeIcon
                 ></Link>
             </template>

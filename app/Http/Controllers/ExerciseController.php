@@ -11,11 +11,11 @@ use App\Models\BodyPart;
 use App\Models\Equipment;
 use App\Models\Exercise;
 use App\Models\Workout;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
+use Request;
 
 class ExerciseController extends Controller
 {
@@ -24,23 +24,27 @@ class ExerciseController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index()
     {
-        if ($request->has('modalSearch')) {
-            if (!$request->input('modalSearch')) return [];
-            return Exercise::where('name', 'like', '%' . $request->input('modalSearch') . '%')->select('id', 'name')->get();
-        }
+        if (Request::has('modalSearch')) {
+            if (!Request::input('modalSearch')) {
+                return [];
+            }
 
-        if ($request->has('search')) {
-            return ExerciseResource::collection(
-                Exercise::when(!is_null($request->input('search')), function ($query, $role) use ($request) {
-                    $query->where('name', 'like', '%' . $request->input('search') . '%');
-                })->select('id', 'name')->paginate(15)
-            );
+            return Exercise::where('name', 'like', '%' . Request::input('modalSearch') . '%')->select('id', 'name')->get();
         }
 
         return Inertia::render('Exercises/Index', [
-            'exercises' => ExerciseResource::collection(Exercise::select('id', 'name')->paginate(15)),
+            'exercises' => ExerciseResource::collection(
+                Exercise::query()
+                    ->when(Request::input('search'), function ($query) {
+                        $query->where('name', 'like', '%' . Request::input('search') . '%');
+                    })
+                    ->select('id', 'name')
+                    ->paginate(15)
+                    ->withQueryString()
+            ),
+            'filters' => Request::only(['search']),
             'can' => [
                 'create' => Gate::allows('Exercise'),
                 'update' => Gate::allows('Exercise'),

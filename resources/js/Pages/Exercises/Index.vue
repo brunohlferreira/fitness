@@ -1,4 +1,5 @@
 <script setup>
+import { Inertia } from "@inertiajs/inertia";
 import { ref, watch } from "vue";
 import debounce from "lodash/debounce";
 import AuthenticatedLayout from "@/Layouts/Authenticated.vue";
@@ -11,15 +12,17 @@ import Pagination from "@/Components/Pagination.vue";
 
 const props = defineProps({
     exercises: Object,
+    filters: Object,
     can: Object,
 });
 
-const isOpen = ref(false);
+const isOpen = ref(props.filters.search && props.filters.search.length);
 const collapsible = ref();
-const search = ref("");
-const exercises = ref(props.exercises);
+const search = ref(props.filters.search);
 
 watch(isOpen, (value) => {
+    collapsible.value.style.height = collapsible.value.scrollHeight + "px";
+    collapsible.value.scrollHeight; // hack to prevent browser render skipping so the first close is smooth when collapsible starts open
     collapsible.value.style.height = value
         ? collapsible.value.scrollHeight + "px"
         : 0;
@@ -27,10 +30,15 @@ watch(isOpen, (value) => {
 
 watch(
     search,
-    debounce(function (value) {
-        axios.get(`/exercises?search=${value}`).then(function (response) {
-            exercises.value = response.data;
-        });
+    debounce((value) => {
+        Inertia.get(
+            "/exercises",
+            { search: value },
+            {
+                preserveState: true,
+                replace: true,
+            }
+        );
     }, 300)
 );
 </script>
@@ -49,13 +57,17 @@ watch(
                     <button
                         @click="isOpen = !isOpen"
                         class="hover:text-blue-500"
+                        title="Filter exercises"
                     >
-                        <FontAwesomeIcon :icon="!isOpen ? 'filter' : 'filter-circle-xmark'"></FontAwesomeIcon>
+                        <FontAwesomeIcon
+                            :icon="!isOpen ? 'filter' : 'filter-circle-xmark'"
+                        ></FontAwesomeIcon>
                     </button>
                     <Link
                         v-if="can.create"
                         :href="route('exercises.create')"
                         class="ml-4 hover:text-blue-500"
+                        title="Create exercise"
                         ><FontAwesomeIcon icon="plus"></FontAwesomeIcon
                     ></Link>
                 </div>
@@ -100,9 +112,9 @@ watch(
 
 <style scoped>
 .collapsible {
+    height: 0;
     overflow: hidden;
     transition: height 0.3s ease-out;
-    height: 0;
 }
 .collapsible.open {
     height: auto;

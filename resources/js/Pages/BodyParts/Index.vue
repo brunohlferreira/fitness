@@ -24,6 +24,7 @@ defineProps({
                 <Link
                     :href="route('bodyParts.create')"
                     class="block hover:text-blue-500"
+                    title="Create body part"
                     ><FontAwesomeIcon icon="plus"></FontAwesomeIcon
                 ></Link>
             </template>

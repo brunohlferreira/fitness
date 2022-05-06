@@ -34,6 +34,7 @@ const props = defineProps({
                 <Link
                     :href="`/exercises/${exercise.data.id}/edit`"
                     class="block hover:text-blue-500"
+                    title="Edit exercise"
                     ><FontAwesomeIcon icon="pencil"></FontAwesomeIcon
                 ></Link>
             </template>

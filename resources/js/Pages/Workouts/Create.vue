@@ -193,6 +193,7 @@ const submit = () => {
                                 type="button"
                                 @click="isOpen = true"
                                 class="hover:text-blue-500"
+                                title="Add exercise"
                             >
                                 <FontAwesomeIcon icon="plus"></FontAwesomeIcon>
                             </button>

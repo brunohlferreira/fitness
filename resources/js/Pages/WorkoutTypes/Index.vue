@@ -24,6 +24,7 @@ defineProps({
                 <Link
                     :href="route('workoutTypes.create')"
                     class="block hover:text-blue-500"
+                    title="Create workout type"
                     ><FontAwesomeIcon icon="plus"></FontAwesomeIcon
                 ></Link>
             </template>

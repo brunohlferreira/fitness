@@ -115,6 +115,7 @@ let submit = () => {
                                     type="button"
                                     @click="addBodyPart"
                                     class="hover:text-blue-500"
+                                    title="Add body part"
                                 >
                                     <FontAwesomeIcon
                                         icon="plus"
@@ -124,6 +125,7 @@ let submit = () => {
                                     type="button"
                                     @click="removeBodyPart"
                                     class="ml-2 hover:text-blue-500"
+                                    title="Remove last body part"
                                 >
                                     <FontAwesomeIcon
                                         icon="minus"

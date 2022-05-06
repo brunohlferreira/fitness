@@ -6,7 +6,7 @@ defineProps({
 </script>
 
 <template>
-    <div class="flex flex-col items-center mt-4">
+    <div v-if="meta && meta.total" class="flex flex-col items-center mt-4">
         <span class="text-sm text-gray-700 dark:text-gray-400">
             <span v-if="meta.last_page == 1">
                 Showing all
