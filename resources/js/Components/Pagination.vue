@@ -1,5 +1,7 @@
 <script setup>
-defineProps({
+import PaginationItem from "@/Components/PaginationItem.vue";
+
+const props = defineProps({
     links: Object,
     meta: Object,
 });
@@ -23,36 +25,12 @@ defineProps({
             </span>
         </span>
 
-        <div v-if="meta.last_page > 1" class="inline-flex mt-2 xs:mt-0">
-            <Link
-                :href="links.prev"
-                class="
-                    py-2
-                    px-4
-                    text-sm
-                    font-medium
-                    rounded-l
-                    hover:text-blue-500
-                    dark:border-gray-700
-                "
-            >
-                Prev
-            </Link>
-            <Link
-                :href="links.next"
-                class="
-                    py-2
-                    px-4
-                    text-sm
-                    font-medium
-                    rounded-r
-                    border-0 border-l border-gray-700
-                    hover:text-blue-500
-                    dark:border-gray-700
-                "
-            >
-                Next
-            </Link>
-        </div>
+        <ul v-if="meta.last_page > 1" class="inline-flex mt-2 text-sm text-gray-700 dark:text-gray-400">
+            <li><PaginationItem title="First" :url="meta.current_page > 1 ? links.first : null" icon="angles-left" /></li>
+            <li><PaginationItem title="Previous" :url="meta.current_page > 1 ? links.prev : null" icon="angle-left" /></li>
+            <li><PaginationItem :label="props.meta.current_page" /></li>
+            <li><PaginationItem title="Next" :url="meta.current_page < meta.last_page ? links.next : null" icon="angle-right" /></li>
+            <li><PaginationItem title="Last" :url="meta.current_page < meta.last_page ? links.last : null" icon="angles-right" /></li>
+        </ul>
     </div>
 </template>

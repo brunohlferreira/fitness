@@ -997,6 +997,9 @@ select {
 .p-1 {
   padding: 0.25rem;
 }
+.p-2 {
+  padding: 0.5rem;
+}
 .px-4 {
   padding-left: 1rem;
   padding-right: 1rem;
@@ -1234,11 +1237,17 @@ select {
 .ease-in {
   transition-timing-function: cubic-bezier(0.4, 0, 1, 1);
 }
+.first\:hidden:first-child {
+  display: none;
+}
 .first\:border-0:first-child {
   border-width: 0px;
 }
 .first\:pt-0:first-child {
   padding-top: 0px;
+}
+.last\:hidden:last-child {
+  display: none;
 }
 .hover\:bg-blue-600:hover {
   --tw-bg-opacity: 1;

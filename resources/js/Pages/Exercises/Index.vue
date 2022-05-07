@@ -86,6 +86,7 @@ watch(
                             type="text"
                             class="mt-1 block w-full"
                             placeholder="Filter by..."
+                            autocomplete="off"
                         />
                     </div>
                 </div>

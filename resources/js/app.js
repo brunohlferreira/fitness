@@ -4,10 +4,46 @@ import { createApp, h, ref, provide } from "vue";
 import { createInertiaApp, Head, Link } from "@inertiajs/inertia-vue3";
 import { InertiaProgress } from "@inertiajs/progress";
 import { library } from "@fortawesome/fontawesome-svg-core";
-import { faChartLine, faDumbbell, faShoePrints, faPersonRunning, faPlus, faMinus, faPencil, faTrashCan, faPaste, faClipboard, faListCheck, faFilter, faFilterCircleXmark } from "@fortawesome/free-solid-svg-icons";
+import {
+    faChartLine,
+    faDumbbell,
+    faShoePrints,
+    faPersonRunning,
+    faPlus,
+    faMinus,
+    faPencil,
+    faTrashCan,
+    faPaste,
+    faClipboard,
+    faListCheck,
+    faFilter,
+    faFilterCircleXmark,
+    faAngleLeft,
+    faAnglesLeft,
+    faAngleRight,
+    faAnglesRight,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
-library.add(faChartLine, faDumbbell, faShoePrints, faPersonRunning, faPlus, faMinus, faPencil, faTrashCan, faPaste, faClipboard, faListCheck, faFilter, faFilterCircleXmark);
+library.add(
+    faChartLine,
+    faDumbbell,
+    faShoePrints,
+    faPersonRunning,
+    faPlus,
+    faMinus,
+    faPencil,
+    faTrashCan,
+    faPaste,
+    faClipboard,
+    faListCheck,
+    faFilter,
+    faFilterCircleXmark,
+    faAngleLeft,
+    faAnglesLeft,
+    faAngleRight,
+    faAnglesRight,
+);
 
 const appName = window.document.getElementsByTagName("title")[0]?.innerText || "Fitness App";
 
