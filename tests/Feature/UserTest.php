@@ -7,7 +7,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Spatie\Permission\Models\Role;
 use Tests\TestCase;
 
-class UsersTest extends TestCase
+class UserTest extends TestCase
 {
     use RefreshDatabase;
 
@@ -27,24 +27,10 @@ class UsersTest extends TestCase
         $response->assertStatus(403);
     }
 
-    public function test_super_admins_can_visit_users()
-    {
-        $user = User::factory()->create();
-        $role = Role::firstOrCreate(['name' => 'Super-Admin', 'guard_name' => 'web']);
-
-        $user->assignRole($role);
-
-        $response = $this->actingAs($user)->get('/users');
-
-        $response->assertStatus(200);
-    }
-
     public function test_admins_can_visit_users()
     {
-        $user = User::factory()->create();
         $role = Role::firstOrCreate(['name' => 'Admin', 'guard_name' => 'web']);
-
-        $user->assignRole($role);
+        $user = User::factory()->create()->assignRole($role);
 
         $response = $this->actingAs($user)->get('/users');
 
@@ -53,10 +39,8 @@ class UsersTest extends TestCase
 
     public function test_admins_can_create_users()
     {
-        $user = User::factory()->create();
         $role = Role::firstOrCreate(['name' => 'Admin', 'guard_name' => 'web']);
-
-        $user->assignRole($role);
+        $user = User::factory()->create()->assignRole($role);
 
         $newUser = [
             'name' => 'New User',
@@ -72,15 +56,15 @@ class UsersTest extends TestCase
 
     public function test_admins_can_edit_roles()
     {
-        $user = User::factory()->create();
         $role = Role::firstOrCreate(['name' => 'Admin', 'guard_name' => 'web']);
+        $user = User::factory()->create()->assignRole($role);
 
-        $user->assignRole($role);
+        $newUser = User::where('email', 'newuser@test.com')->get();
 
-        $newUser = User::where('email', 'newuser@test.com')->first();
+        $this->assertEquals(1, count($newUser));
 
-        $response = $this->actingAs($user)->put("/users/$newUser->id/roles", ['role' => '2']);
+        $response = $this->actingAs($user)->put("/users/{$newUser->first()->id}/roles", ['role' => 1]);
 
-        $this->assertEquals(1, count($newUser->roles));
+        $this->assertEquals(1, count($newUser->first()->roles));
     }
 }
