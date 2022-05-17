@@ -29,6 +29,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     ]);
 
     Route::resource('users', UserController::class)->only(['index', 'create', 'store']);
-    Route::get('/users/{user}/roles/edit', [UserController::class, 'editRole']);
-    Route::put('/users/{user}/roles', [UserController::class, 'updateRole']);
+    Route::controller(UserController::class)->group(function () {
+        Route::get('/users/{user}/roles/edit', 'editRole');
+        Route::put('/users/{user}/roles', 'updateRole');
+    });
 });
