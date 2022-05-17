@@ -59,7 +59,7 @@ class WorkoutTypeController extends Controller
 
         WorkoutType::create($request->validated());
 
-        return redirect()->route('workoutTypes.index');
+        return redirect()->route('workout-types.index');
     }
 
     /**
@@ -109,7 +109,7 @@ class WorkoutTypeController extends Controller
 
         $workoutType->update($request->validated());
 
-        return redirect()->route('workoutTypes.index');
+        return redirect()->route('workout-types.index');
     }
 
     /**

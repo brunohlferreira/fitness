@@ -22,7 +22,7 @@ defineProps({
 
             <template #actions v-if="can.create">
                 <Link
-                    :href="route('bodyParts.create')"
+                    :href="route('body-parts.create')"
                     class="block hover:text-blue-500"
                     title="Create body part"
                     ><FontAwesomeIcon icon="plus"></FontAwesomeIcon

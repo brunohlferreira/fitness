@@ -59,7 +59,7 @@ class BodyPartController extends Controller
 
         BodyPart::create($request->validated());
 
-        return redirect()->route('bodyParts.index');
+        return redirect()->route('body-parts.index');
     }
 
     /**
@@ -109,7 +109,7 @@ class BodyPartController extends Controller
 
         $bodyPart->update($request->validated());
 
-        return redirect()->route('bodyParts.index');
+        return redirect()->route('body-parts.index');
     }
 
     /**

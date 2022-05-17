@@ -22,7 +22,7 @@ defineProps({
 
             <template #actions v-if="can.create">
                 <Link
-                    :href="route('workoutTypes.create')"
+                    :href="route('workout-types.create')"
                     class="block hover:text-blue-500"
                     title="Create workout type"
                     ><FontAwesomeIcon icon="plus"></FontAwesomeIcon

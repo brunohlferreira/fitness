@@ -35,7 +35,7 @@ defineProps({
                     v-else
                     :rows="users.data"
                     :canUpdate="true"
-                    editUrl="/users/%d/edit-role"
+                    editUrl="/users/%d/roles/edit"
                 />
             </template>
         </ContentBox>

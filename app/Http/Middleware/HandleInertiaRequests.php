@@ -49,7 +49,7 @@ class HandleInertiaRequests extends Middleware
                     [
                         'name' => "Body Parts",
                         'component' => "BodyParts",
-                        'route' => "bodyParts.index",
+                        'route' => "body-parts.index",
                     ];
             }
             if ($request->user()->can('Equipment')) {
@@ -65,7 +65,7 @@ class HandleInertiaRequests extends Middleware
                     [
                         'name' => "Workout Types",
                         'component' => "WorkoutTypes",
-                        'route' => "workoutTypes.index",
+                        'route' => "workout-types.index",
                     ];
             }
         }

@@ -79,7 +79,7 @@ class UsersTest extends TestCase
 
         $newUser = User::where('email', 'newuser@test.com')->first();
 
-        $response = $this->actingAs($user)->put("/users/$newUser->id/role", ['role' => '2']);
+        $response = $this->actingAs($user)->put("/users/$newUser->id/roles", ['role' => '2']);
 
         $this->assertEquals(1, count($newUser->roles));
     }

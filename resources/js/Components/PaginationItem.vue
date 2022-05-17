@@ -1,8 +1,8 @@
 <script setup>
 const props = defineProps({
-    icon: Object,
-    url: Object,
-    label: Object,
+    icon: String,
+    url: String,
+    label: Number,
 });
 </script>
 

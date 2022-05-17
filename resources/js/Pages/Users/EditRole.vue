@@ -18,7 +18,7 @@ const form = useForm({
 });
 
 const submit = () => {
-    form.put(`/users/${props.role.data.userId}/role`);
+    form.put(`/users/${props.role.data.userId}/roles`);
 };
 </script>
 

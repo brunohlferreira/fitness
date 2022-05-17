@@ -103,7 +103,7 @@ class WorkoutPresetController extends Controller
             return back()->withErrors('Something went wrong. Please try again.');
         }
 
-        return redirect()->route('workoutPresets.index');
+        return redirect()->route('workout-presets.index');
     }
 
     /**
@@ -228,7 +228,7 @@ class WorkoutPresetController extends Controller
             return back()->withErrors('Something went wrong. Please try again.');
         }
 
-        return redirect()->route('workoutPresets.index');
+        return redirect()->route('workout-presets.index');
     }
 
     /**
