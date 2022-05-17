@@ -57,7 +57,9 @@ class BodyPartTest extends TestCase
 
         $this->assertEquals(1, count($bodyPart));
 
-        $response = $this->actingAs($user)->put("/body-parts/{$bodyPart->first()->id}", ['name' => 'Edited body part']);
+        $response = $this->actingAs($user)->put("/body-parts/{$bodyPart->first()->id}", [
+            'name' => 'Edited body part',
+        ]);
 
         $this->assertEquals(1, count(BodyPart::where('name', 'Edited body part')->get()));
     }

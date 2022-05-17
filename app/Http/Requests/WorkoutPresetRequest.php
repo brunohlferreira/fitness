@@ -25,10 +25,10 @@ class WorkoutPresetRequest extends FormRequest
     {
         return [
             'name' => ['required', 'min:3'],
-            'description' => ['string', 'nullable'],
-            'level' => ['integer', 'min:0', 'max:255'],
-            'time_cap' => ['integer', 'min:0', 'max:255', 'nullable'],
-            'workout_type_id' => ['integer'],
+            'description' => ['nullable', 'string'],
+            'level' => ['required', 'integer', 'min:0', 'max:255'],
+            'time_cap' => ['required', 'integer', 'min:0', 'max:255'],
+            'workout_type_id' => ['required', 'integer'],
         ];
     }
 }

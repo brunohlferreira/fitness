@@ -63,7 +63,9 @@ class UserTest extends TestCase
 
         $this->assertEquals(1, count($newUser));
 
-        $response = $this->actingAs($user)->put("/users/{$newUser->first()->id}/roles", ['role' => 1]);
+        $response = $this->actingAs($user)->put("/users/{$newUser->first()->id}/roles", [
+            'role' => 1,
+        ]);
 
         $this->assertEquals(1, count($newUser->first()->roles));
     }

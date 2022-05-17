@@ -26,7 +26,7 @@ class ExerciseRequest extends FormRequest
         return [
             'name' => ['required', 'min:3'],
             'description' => ['nullable'],
-            'bilateral' => ['integer'],
+            'bilateral' => ['required', 'integer'],
         ];
     }
 }

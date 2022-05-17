@@ -57,7 +57,9 @@ class WorkoutTypeTest extends TestCase
 
         $this->assertEquals(1, count($workoutType));
 
-        $response = $this->actingAs($user)->put("/workout-types/{$workoutType->first()->id}", ['name' => 'Edited workout type']);
+        $response = $this->actingAs($user)->put("/workout-types/{$workoutType->first()->id}", [
+            'name' => 'Edited workout type',
+        ]);
 
         $this->assertEquals(1, count(WorkoutType::where('name', 'Edited workout type')->get()));
     }

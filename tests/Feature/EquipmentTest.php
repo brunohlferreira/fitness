@@ -57,7 +57,9 @@ class EquipmentTest extends TestCase
 
         $this->assertEquals(1, count($equipment));
 
-        $response = $this->actingAs($user)->put("/equipments/{$equipment->first()->id}", ['name' => 'Edited equipment']);
+        $response = $this->actingAs($user)->put("/equipments/{$equipment->first()->id}", [
+            'name' => 'Edited equipment',
+        ]);
 
         $this->assertEquals(1, count(Equipment::where('name', 'Edited equipment')->get()));
     }

@@ -25,11 +25,11 @@ class WorkoutRequest extends FormRequest
     {
         return [
             'name' => ['required', 'min:3'],
-            'description' => ['nullable'],
+            'description' => ['nullable', 'string'],
             'date' => ['required', 'date'],
             'level' => ['required', 'integer', 'min:0', 'max:255'],
             'time_cap' => ['required', 'integer', 'min:0', 'max:255'],
-            'score' => ['nullable'],
+            'score' => ['nullable', 'string'],
             'workout_type_id' => ['required', 'integer', 'min:0'],
             'workout_preset_id' => ['nullable', 'integer', 'min:0'],
         ];
