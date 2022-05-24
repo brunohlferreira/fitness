@@ -14,18 +14,19 @@ class EquipmentTest extends TestCase
 
     public function test_guests_can_not_visit_equipments()
     {
-        $response = $this->get('/equipments');
-
-        $response->assertRedirect('/login');
+        $this
+            ->get(route('equipments.index'))
+            ->assertRedirect(route('login'));
     }
 
     public function test_users_can_not_visit_equipments()
     {
         $user = User::factory()->create();
 
-        $response = $this->actingAs($user)->get('/equipments');
-
-        $response->assertStatus(403);
+        $this
+            ->actingAs($user)
+            ->get(route('equipments.index'))
+            ->assertForbidden();
     }
 
     public function test_admins_can_visit_equipments()
@@ -33,9 +34,10 @@ class EquipmentTest extends TestCase
         $role = Role::firstOrCreate(['name' => 'Admin', 'guard_name' => 'web']);
         $user = User::factory()->create()->assignRole($role);
 
-        $response = $this->actingAs($user)->get('/equipments');
-
-        $response->assertStatus(200);
+        $this
+            ->actingAs($user)
+            ->get(route('equipments.index'))
+            ->assertOk();
     }
 
     public function test_admins_can_create_equipments()
@@ -43,9 +45,12 @@ class EquipmentTest extends TestCase
         $role = Role::firstOrCreate(['name' => 'Admin', 'guard_name' => 'web']);
         $user = User::factory()->create()->assignRole($role);
 
-        $response = $this->actingAs($user)->post('/equipments', ['name' => 'New equipment']);
-
-        $this->assertEquals(1, count(Equipment::where('name', 'New equipment')->get()));
+        $this
+            ->actingAs($user)
+            ->post(route('equipments.store'),
+                ['name' => 'New equipment']
+            )
+            ->assertRedirect(route('equipments.index'));
     }
 
     public function test_admins_can_edit_equipments()
@@ -53,15 +58,12 @@ class EquipmentTest extends TestCase
         $role = Role::firstOrCreate(['name' => 'Admin', 'guard_name' => 'web']);
         $user = User::factory()->create()->assignRole($role);
 
-        $equipment = Equipment::where('name', 'New equipment')->get();
-
-        $this->assertEquals(1, count($equipment));
-
-        $response = $this->actingAs($user)->put("/equipments/{$equipment->first()->id}", [
-            'name' => 'Edited equipment',
-        ]);
-
-        $this->assertEquals(1, count(Equipment::where('name', 'Edited equipment')->get()));
+        $this
+            ->actingAs($user)
+            ->put(route('equipments.update', Equipment::where('name', 'New equipment')->first()->id), [
+                'name' => 'Edited equipment',
+            ])
+            ->assertRedirect(route('equipments.index'));
     }
 
     public function test_admins_can_delete_equipments()
@@ -69,12 +71,9 @@ class EquipmentTest extends TestCase
         $role = Role::firstOrCreate(['name' => 'Admin', 'guard_name' => 'web']);
         $user = User::factory()->create()->assignRole($role);
 
-        $equipment = Equipment::where('name', 'Edited equipment')->get();
-
-        $this->assertEquals(1, count($equipment));
-
-        $response = $this->actingAs($user)->delete("/equipments/{$equipment->first()->id}");
-
-        $this->assertEquals(0, count(Equipment::where('name', 'Edited equipment')->get()));
+        $this
+            ->actingAs($user)
+            ->delete(route('equipments.destroy', Equipment::where('name', 'Edited equipment')->first()->id))
+            ->assertNoContent();
     }
 }

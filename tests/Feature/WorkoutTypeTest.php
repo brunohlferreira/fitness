@@ -14,18 +14,19 @@ class WorkoutTypeTest extends TestCase
 
     public function test_guests_can_not_visit_workout_types()
     {
-        $response = $this->get('/workout-types');
-
-        $response->assertRedirect('/login');
+        $this
+            ->get(route('workout-types.index'))
+            ->assertRedirect(route('login'));
     }
 
     public function test_users_can_not_visit_workout_types()
     {
         $user = User::factory()->create();
 
-        $response = $this->actingAs($user)->get('/workout-types');
-
-        $response->assertStatus(403);
+        $this
+            ->actingAs($user)
+            ->get(route('workout-types.index'))
+            ->assertForbidden();
     }
 
     public function test_admins_can_visit_workout_types()
@@ -33,9 +34,10 @@ class WorkoutTypeTest extends TestCase
         $role = Role::firstOrCreate(['name' => 'Admin', 'guard_name' => 'web']);
         $user = User::factory()->create()->assignRole($role);
 
-        $response = $this->actingAs($user)->get('/workout-types');
-
-        $response->assertStatus(200);
+        $this
+            ->actingAs($user)
+            ->get(route('workout-types.index'))
+            ->assertOk();
     }
 
     public function test_admins_can_create_workout_types()
@@ -43,9 +45,12 @@ class WorkoutTypeTest extends TestCase
         $role = Role::firstOrCreate(['name' => 'Admin', 'guard_name' => 'web']);
         $user = User::factory()->create()->assignRole($role);
 
-        $response = $this->actingAs($user)->post('/workout-types', ['name' => 'New workout type']);
-
-        $this->assertEquals(1, count(WorkoutType::where('name', 'New workout type')->get()));
+        $this
+            ->actingAs($user)
+            ->post(route('workout-types.store'),
+                ['name' => 'New workout type']
+            )
+            ->assertRedirect(route('workout-types.index'));
     }
 
     public function test_admins_can_edit_workout_types()
@@ -53,15 +58,12 @@ class WorkoutTypeTest extends TestCase
         $role = Role::firstOrCreate(['name' => 'Admin', 'guard_name' => 'web']);
         $user = User::factory()->create()->assignRole($role);
 
-        $workoutType = WorkoutType::where('name', 'New workout type')->get();
-
-        $this->assertEquals(1, count($workoutType));
-
-        $response = $this->actingAs($user)->put("/workout-types/{$workoutType->first()->id}", [
-            'name' => 'Edited workout type',
-        ]);
-
-        $this->assertEquals(1, count(WorkoutType::where('name', 'Edited workout type')->get()));
+        $this
+            ->actingAs($user)
+            ->put(route('workout-types.update', WorkoutType::where('name', 'New workout type')->first()->id), [
+                'name' => 'Edited workout type',
+            ])
+            ->assertRedirect(route('workout-types.index'));
     }
 
     public function test_admins_can_delete_workout_types()
@@ -69,12 +71,9 @@ class WorkoutTypeTest extends TestCase
         $role = Role::firstOrCreate(['name' => 'Admin', 'guard_name' => 'web']);
         $user = User::factory()->create()->assignRole($role);
 
-        $workoutType = WorkoutType::where('name', 'Edited workout type')->get();
-
-        $this->assertEquals(1, count($workoutType));
-
-        $response = $this->actingAs($user)->delete("/workout-types/{$workoutType->first()->id}");
-
-        $this->assertEquals(0, count(WorkoutType::where('name', 'Edited workout type')->get()));
+        $this
+            ->actingAs($user)
+            ->delete(route('workout-types.destroy', WorkoutType::where('name', 'Edited workout type')->first()->id))
+            ->assertNoContent();
     }
 }

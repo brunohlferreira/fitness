@@ -14,18 +14,19 @@ class ExerciseTest extends TestCase
 
     public function test_guests_can_not_visit_exercises()
     {
-        $response = $this->get('/exercises');
-
-        $response->assertRedirect('/login');
+        $this
+            ->get(route('exercises.index'))
+            ->assertRedirect(route('login'));
     }
 
     public function test_users_can_visit_exercises()
     {
         $user = User::factory()->create();
 
-        $response = $this->actingAs($user)->get('/exercises');
-
-        $response->assertStatus(200);
+        $this
+            ->actingAs($user)
+            ->get(route('exercises.index'))
+            ->assertOk();
     }
 
     public function test_admins_can_create_exercises()
@@ -33,9 +34,12 @@ class ExerciseTest extends TestCase
         $role = Role::firstOrCreate(['name' => 'Admin', 'guard_name' => 'web']);
         $user = User::factory()->create()->assignRole($role);
 
-        $response = $this->actingAs($user)->post('/exercises', ['name' => 'New exercise', 'bilateral' => 1]);
-
-        $this->assertEquals(1, count(Exercise::where('name', 'New exercise')->get()));
+        $this
+            ->actingAs($user)
+            ->post(route('exercises.store'),
+                ['name' => 'New exercise', 'bilateral' => 1]
+            )
+            ->assertRedirect(route('exercises.index'));
     }
 
     public function test_admins_can_edit_exercises()
@@ -43,16 +47,13 @@ class ExerciseTest extends TestCase
         $role = Role::firstOrCreate(['name' => 'Admin', 'guard_name' => 'web']);
         $user = User::factory()->create()->assignRole($role);
 
-        $exercise = Exercise::where('name', 'New exercise')->get();
-
-        $this->assertEquals(1, count($exercise));
-
-        $response = $this->actingAs($user)->put("/exercises/{$exercise->first()->id}", [
-            'name' => 'Edited exercise',
-            'bilateral' => 1,
-        ]);
-
-        $this->assertEquals(1, count(Exercise::where('name', 'Edited exercise')->get()));
+        $this
+            ->actingAs($user)
+            ->put(route('exercises.update', Exercise::where('name', 'New exercise')->first()->id), [
+                'name' => 'Edited exercise',
+                'bilateral' => 1,
+            ])
+            ->assertRedirect(route('exercises.index'));
     }
 
     public function test_admins_can_delete_exercises()
@@ -60,12 +61,9 @@ class ExerciseTest extends TestCase
         $role = Role::firstOrCreate(['name' => 'Admin', 'guard_name' => 'web']);
         $user = User::factory()->create()->assignRole($role);
 
-        $exercise = Exercise::where('name', 'Edited exercise')->get();
-
-        $this->assertEquals(1, count($exercise));
-
-        $response = $this->actingAs($user)->delete("/exercises/{$exercise->first()->id}");
-
-        $this->assertEquals(0, count(Exercise::where('name', 'Edited exercise')->get()));
+        $this
+            ->actingAs($user)
+            ->delete(route('exercises.destroy', Exercise::where('name', 'Edited exercise')->first()->id))
+            ->assertNoContent();
     }
 }

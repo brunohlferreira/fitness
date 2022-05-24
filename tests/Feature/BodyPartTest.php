@@ -14,18 +14,19 @@ class BodyPartTest extends TestCase
 
     public function test_guests_can_not_visit_body_parts()
     {
-        $response = $this->get('/body-parts');
-
-        $response->assertRedirect('/login');
+        $this
+            ->get(route('body-parts.index'))
+            ->assertRedirect(route('login'));
     }
 
     public function test_users_can_not_visit_body_parts()
     {
         $user = User::factory()->create();
 
-        $response = $this->actingAs($user)->get('/body-parts');
-
-        $response->assertStatus(403);
+        $this
+            ->actingAs($user)
+            ->get(route('body-parts.index'))
+            ->assertForbidden();
     }
 
     public function test_admins_can_visit_body_parts()
@@ -33,9 +34,10 @@ class BodyPartTest extends TestCase
         $role = Role::firstOrCreate(['name' => 'Admin', 'guard_name' => 'web']);
         $user = User::factory()->create()->assignRole($role);
 
-        $response = $this->actingAs($user)->get('/body-parts');
-
-        $response->assertStatus(200);
+        $this
+            ->actingAs($user)
+            ->get(route('body-parts.index'))
+            ->assertOk();
     }
 
     public function test_admins_can_create_body_parts()
@@ -43,9 +45,12 @@ class BodyPartTest extends TestCase
         $role = Role::firstOrCreate(['name' => 'Admin', 'guard_name' => 'web']);
         $user = User::factory()->create()->assignRole($role);
 
-        $response = $this->actingAs($user)->post('/body-parts', ['name' => 'New body part']);
-
-        $this->assertEquals(1, count(BodyPart::where('name', 'New body part')->get()));
+        $this
+            ->actingAs($user)
+            ->post(route('body-parts.store'),
+                ['name' => 'New body part']
+            )
+            ->assertRedirect(route('body-parts.index'));
     }
 
     public function test_admins_can_edit_body_parts()
@@ -53,15 +58,12 @@ class BodyPartTest extends TestCase
         $role = Role::firstOrCreate(['name' => 'Admin', 'guard_name' => 'web']);
         $user = User::factory()->create()->assignRole($role);
 
-        $bodyPart = BodyPart::where('name', 'New body part')->get();
-
-        $this->assertEquals(1, count($bodyPart));
-
-        $response = $this->actingAs($user)->put("/body-parts/{$bodyPart->first()->id}", [
-            'name' => 'Edited body part',
-        ]);
-
-        $this->assertEquals(1, count(BodyPart::where('name', 'Edited body part')->get()));
+        $this
+            ->actingAs($user)
+            ->put(route('body-parts.update', BodyPart::where('name', 'New body part')->first()->id), [
+                'name' => 'Edited body part',
+            ])
+            ->assertRedirect(route('body-parts.index'));
     }
 
     public function test_admins_can_delete_body_parts()
@@ -69,12 +71,9 @@ class BodyPartTest extends TestCase
         $role = Role::firstOrCreate(['name' => 'Admin', 'guard_name' => 'web']);
         $user = User::factory()->create()->assignRole($role);
 
-        $bodyPart = BodyPart::where('name', 'Edited body part')->get();
-
-        $this->assertEquals(1, count($bodyPart));
-
-        $response = $this->actingAs($user)->delete("/body-parts/{$bodyPart->first()->id}");
-
-        $this->assertEquals(0, count(BodyPart::where('name', 'Edited body part')->get()));
+        $this
+            ->actingAs($user)
+            ->delete(route('body-parts.destroy', BodyPart::where('name', 'Edited body part')->first()->id))
+            ->assertNoContent();
     }
 }

@@ -2,23 +2,23 @@
 
 namespace App\Http\Controllers;
 
-use Exception;
-use Carbon\Carbon;
-use App\Models\User;
-use Inertia\Inertia;
-use App\Models\Workout;
-use App\Models\WorkoutType;
-use Illuminate\Http\Request;
-use App\Models\WorkoutPreset;
-use App\Models\ExerciseWorkout;
-use App\Models\ExerciseWorkoutSet;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\WorkoutRequest;
-use App\Models\ExerciseWorkoutPreset;
-use App\Http\Resources\WorkoutResource;
 use App\Http\Resources\ExerciseResource;
+use App\Http\Resources\WorkoutResource;
 use App\Http\Resources\WorkoutTypeResource;
+use App\Models\ExerciseWorkout;
+use App\Models\ExerciseWorkoutPreset;
+use App\Models\ExerciseWorkoutSet;
+use App\Models\User;
+use App\Models\Workout;
+use App\Models\WorkoutPreset;
+use App\Models\WorkoutType;
+use Carbon\Carbon;
+use Exception;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Inertia\Inertia;
 
 class WorkoutController extends Controller
 {
@@ -112,29 +112,35 @@ class WorkoutController extends Controller
             $data['date'] = Carbon::parse($data['date'])->format('Y-m-d H:i:s');
             $workout = Workout::create($data);
 
-            foreach ($request->input('exercises') as $exerciseKey => $exercise) {
-                $exerciseWorkout = ExerciseWorkout::create([
-                    'exercise_id' => $exercise['id'],
-                    'workout_id' => $workout->id,
-                    'position' => $exerciseKey,
-                    'note' => $exercise['note'],
-                ]);
+            if (is_array($request->input('exercises'))) {
+                foreach ($request->input('exercises') as $exerciseKey => $exercise) {
+                    $exerciseWorkout = ExerciseWorkout::create([
+                        'exercise_id' => $exercise['id'],
+                        'workout_id' => $workout->id,
+                        'position' => $exerciseKey,
+                        'note' => $exercise['note'],
+                    ]);
 
-                foreach ($exercise['sets'] as $setKey => $set) {
-                    $newSet['repetitions'] = isset($set['repetitions']) ? intval($set['repetitions']) : 0;
-                    $newSet['weight'] = isset($set['weight']) ? intval($set['weight']) : 0;
-                    $newSet['distance'] = isset($set['distance']) ? floatval($set['distance']) : 0;
-                    $newSet['calories'] = isset($set['calories']) ? intval($set['calories']) : 0;
-                    $newSet['minutes'] = isset($set['minutes']) ? intval($set['minutes']) : 0;
-
-                    // discard empty sets
-                    if (!array_sum($newSet)) {
+                    if (!is_array($exercise['sets'])) {
                         continue;
                     }
 
-                    $newSet['exercise_workout_id'] = $exerciseWorkout->id;
-                    $newSet['position'] = $setKey;
-                    ExerciseWorkoutSet::create($newSet);
+                    foreach ($exercise['sets'] as $setKey => $set) {
+                        $newSet['repetitions'] = isset($set['repetitions']) ? intval($set['repetitions']) : 0;
+                        $newSet['weight'] = isset($set['weight']) ? intval($set['weight']) : 0;
+                        $newSet['distance'] = isset($set['distance']) ? floatval($set['distance']) : 0;
+                        $newSet['calories'] = isset($set['calories']) ? intval($set['calories']) : 0;
+                        $newSet['minutes'] = isset($set['minutes']) ? intval($set['minutes']) : 0;
+
+                        // discard empty sets
+                        if (!array_sum($newSet)) {
+                            continue;
+                        }
+
+                        $newSet['exercise_workout_id'] = $exerciseWorkout->id;
+                        $newSet['position'] = $setKey;
+                        ExerciseWorkoutSet::create($newSet);
+                    }
                 }
             }
 
@@ -220,29 +226,35 @@ class WorkoutController extends Controller
                 ExerciseWorkout::find($exercise->pivot->id)->delete();
             }
 
-            foreach ($request->input('exercises') as $exerciseKey => $exercise) {
-                $exerciseWorkout = ExerciseWorkout::create([
-                    'exercise_id' => $exercise['id'],
-                    'workout_id' => $workout->id,
-                    'position' => $exerciseKey,
-                    'note' => $exercise['note'],
-                ]);
+            if (is_array($request->input('exercises'))) {
+                foreach ($request->input('exercises') as $exerciseKey => $exercise) {
+                    $exerciseWorkout = ExerciseWorkout::create([
+                        'exercise_id' => $exercise['id'],
+                        'workout_id' => $workout->id,
+                        'position' => $exerciseKey,
+                        'note' => $exercise['note'],
+                    ]);
 
-                foreach ($exercise['sets'] as $setKey => $set) {
-                    $newSet['repetitions'] = isset($set['repetitions']) ? intval($set['repetitions']) : 0;
-                    $newSet['weight'] = isset($set['weight']) ? intval($set['weight']) : 0;
-                    $newSet['distance'] = isset($set['distance']) ? floatval($set['distance']) : 0;
-                    $newSet['calories'] = isset($set['calories']) ? intval($set['calories']) : 0;
-                    $newSet['minutes'] = isset($set['minutes']) ? intval($set['minutes']) : 0;
-
-                    // discard empty sets
-                    if (!array_sum($newSet)) {
+                    if (!is_array($exercise['sets'])) {
                         continue;
                     }
 
-                    $newSet['exercise_workout_id'] = $exerciseWorkout->id;
-                    $newSet['position'] = $setKey;
-                    ExerciseWorkoutSet::create($newSet);
+                    foreach ($exercise['sets'] as $setKey => $set) {
+                        $newSet['repetitions'] = isset($set['repetitions']) ? intval($set['repetitions']) : 0;
+                        $newSet['weight'] = isset($set['weight']) ? intval($set['weight']) : 0;
+                        $newSet['distance'] = isset($set['distance']) ? floatval($set['distance']) : 0;
+                        $newSet['calories'] = isset($set['calories']) ? intval($set['calories']) : 0;
+                        $newSet['minutes'] = isset($set['minutes']) ? intval($set['minutes']) : 0;
+
+                        // discard empty sets
+                        if (!array_sum($newSet)) {
+                            continue;
+                        }
+
+                        $newSet['exercise_workout_id'] = $exerciseWorkout->id;
+                        $newSet['position'] = $setKey;
+                        ExerciseWorkoutSet::create($newSet);
+                    }
                 }
             }
 

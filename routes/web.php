@@ -17,7 +17,7 @@ Route::get('/', function () {
 });
 
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('/dashboard', [DashboardController::class, 'index']);
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
 
     Route::resources([
         'body-parts' => BodyPartController::class,
@@ -30,7 +30,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::resource('users', UserController::class)->only(['index', 'create', 'store']);
     Route::controller(UserController::class)->group(function () {
-        Route::get('/users/{user}/roles/edit', 'editRole');
-        Route::put('/users/{user}/roles', 'updateRole');
+        Route::get('/users/{user}/roles/edit', 'editRole')->name('users.edit-role');
+        Route::put('/users/{user}/roles', 'updateRole')->name('users.update-role');
     });
 });

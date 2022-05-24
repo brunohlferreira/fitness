@@ -87,18 +87,22 @@ class ExerciseController extends Controller
             $exercise = Exercise::create($request->validated());
 
             $bodyParts = [];
-            foreach ($request->input('bodyParts') as $bodyPartKey => $bodyPart) {
-                $bodyParts[$bodyPart['id']] = [
-                    'impact' => $bodyPart['impact'],
-                ];
+            if (is_array($request->input('bodyParts'))) {
+                foreach ($request->input('bodyParts') as $bodyPartKey => $bodyPart) {
+                    $bodyParts[$bodyPart['id']] = [
+                        'impact' => $bodyPart['impact'],
+                    ];
+                }
             }
             if (count($bodyParts)) {
                 $exercise->bodyParts()->sync($bodyParts);
             }
 
             $equipments = [];
-            foreach ($request->input('equipments') as $equipmentKey => $equipment) {
-                $equipments[] = $equipment['id'];
+            if (is_array($request->input('equipments'))) {
+                foreach ($request->input('equipments') as $equipmentKey => $equipment) {
+                    $equipments[] = $equipment['id'];
+                }
             }
             if (count($equipments)) {
                 $exercise->equipments()->sync($equipments);
@@ -205,18 +209,22 @@ class ExerciseController extends Controller
             $exercise->update($request->validated());
 
             $bodyParts = [];
-            foreach ($request->input('bodyParts') as $bodyPartKey => $bodyPart) {
-                $bodyParts[$bodyPart['id']] = [
-                    'impact' => $bodyPart['impact'],
-                ];
+            if (is_array($request->input('bodyParts'))) {
+                foreach ($request->input('bodyParts') as $bodyPartKey => $bodyPart) {
+                    $bodyParts[$bodyPart['id']] = [
+                        'impact' => $bodyPart['impact'],
+                    ];
+                }
             }
             if (count($bodyParts)) {
                 $exercise->bodyParts()->sync($bodyParts);
             }
 
             $equipments = [];
-            foreach ($request->input('equipments') as $equipmentKey => $equipment) {
-                $equipments[] = $equipment['id'];
+            if (is_array($request->input('equipments'))) {
+                foreach ($request->input('equipments') as $equipmentKey => $equipment) {
+                    $equipments[] = $equipment['id'];
+                }
             }
             if (count($equipments)) {
                 $exercise->equipments()->sync($equipments);
