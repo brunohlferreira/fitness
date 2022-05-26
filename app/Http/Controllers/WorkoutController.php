@@ -284,7 +284,7 @@ class WorkoutController extends Controller
         } catch (Exception $e) {
             DB::rollback();
 
-            abort(500);
+            abort(500, 'Something went wrong. Please try again later.');
         }
 
         return response()->noContent();

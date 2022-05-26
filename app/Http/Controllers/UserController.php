@@ -22,7 +22,7 @@ class UserController extends Controller
     public function index()
     {
         if (!Gate::allows('User')) {
-            abort(403);
+            abort(403, 'You do not have access to this page or resource.');
         }
 
         return Inertia::render('Users/Index', [
@@ -52,7 +52,7 @@ class UserController extends Controller
     public function create()
     {
         if (!Gate::allows('User')) {
-            abort(403);
+            abort(403, 'You do not have access to this page or resource.');
         }
 
         return Inertia::render('Users/Create');
@@ -67,7 +67,7 @@ class UserController extends Controller
     public function store(UserRequest $request)
     {
         if (!Gate::allows('User')) {
-            abort(403);
+            abort(403, 'You do not have access to this page or resource.');
         }
 
         $request->validated();
@@ -90,11 +90,11 @@ class UserController extends Controller
     public function editRole(User $user)
     {
         if ($user->id == 1) {
-            abort(404);
+            abort(404, 'The resource requested could not be found on this server.');
         }
 
         if (!Gate::allows('User')) {
-            abort(403);
+            abort(403, 'You do not have access to this page or resource.');
         }
 
         $userRole = $user->roles->first();
@@ -120,11 +120,11 @@ class UserController extends Controller
     public function updateRole(Request $request, User $user)
     {
         if ($user->id == 1) {
-            abort(404);
+            abort(404, 'The resource requested could not be found on this server.');
         }
 
         if (!Gate::allows('User')) {
-            abort(403);
+            abort(403, 'You do not have access to this page or resource.');
         }
 
         $request->validate([

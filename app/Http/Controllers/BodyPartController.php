@@ -18,7 +18,7 @@ class BodyPartController extends Controller
     public function index()
     {
         if (!Gate::allows('BodyPart')) {
-            abort(403);
+            abort(403, 'You do not have access to this page or resource.');
         }
 
         return Inertia::render('BodyParts/Index', [
@@ -39,7 +39,7 @@ class BodyPartController extends Controller
     public function create()
     {
         if (!Gate::allows('BodyPart')) {
-            abort(403);
+            abort(403, 'You do not have access to this page or resource.');
         }
 
         return Inertia::render('BodyParts/Create');
@@ -54,7 +54,7 @@ class BodyPartController extends Controller
     public function store(BodyPartRequest $request)
     {
         if (!Gate::allows('BodyPart')) {
-            abort(403);
+            abort(403, 'You do not have access to this page or resource.');
         }
 
         BodyPart::create($request->validated());
@@ -71,7 +71,7 @@ class BodyPartController extends Controller
     public function show(BodyPart $bodyPart)
     {
         if (!Gate::allows('BodyPart')) {
-            abort(403);
+            abort(403, 'You do not have access to this page or resource.');
         }
 
         return new BodyPartResource($bodyPart);
@@ -86,7 +86,7 @@ class BodyPartController extends Controller
     public function edit(BodyPart $bodyPart)
     {
         if (!Gate::allows('BodyPart')) {
-            abort(403);
+            abort(403, 'You do not have access to this page or resource.');
         }
 
         return Inertia::render('BodyParts/Edit', [
@@ -104,7 +104,7 @@ class BodyPartController extends Controller
     public function update(BodyPartRequest $request, BodyPart $bodyPart)
     {
         if (!Gate::allows('BodyPart')) {
-            abort(403);
+            abort(403, 'You do not have access to this page or resource.');
         }
 
         $bodyPart->update($request->validated());
@@ -121,7 +121,7 @@ class BodyPartController extends Controller
     public function destroy(BodyPart $bodyPart)
     {
         if (!Gate::allows('BodyPart')) {
-            abort(403);
+            abort(403, 'You do not have access to this page or resource.');
         }
 
         $bodyPart->delete();

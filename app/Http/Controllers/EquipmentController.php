@@ -18,7 +18,7 @@ class EquipmentController extends Controller
     public function index()
     {
         if (!Gate::allows('Equipment')) {
-            abort(403);
+            abort(403, 'You do not have access to this page or resource.');
         }
 
         return Inertia::render('Equipments/Index', [
@@ -39,7 +39,7 @@ class EquipmentController extends Controller
     public function create()
     {
         if (!Gate::allows('Equipment')) {
-            abort(403);
+            abort(403, 'You do not have access to this page or resource.');
         }
 
         return Inertia::render('Equipments/Create');
@@ -54,7 +54,7 @@ class EquipmentController extends Controller
     public function store(EquipmentRequest $request)
     {
         if (!Gate::allows('Equipment')) {
-            abort(403);
+            abort(403, 'You do not have access to this page or resource.');
         }
 
         Equipment::create($request->validated());
@@ -71,7 +71,7 @@ class EquipmentController extends Controller
     public function show(Equipment $equipment)
     {
         if (!Gate::allows('Equipment')) {
-            abort(403);
+            abort(403, 'You do not have access to this page or resource.');
         }
 
         return new EquipmentResource($equipment);
@@ -86,7 +86,7 @@ class EquipmentController extends Controller
     public function edit(Equipment $equipment)
     {
         if (!Gate::allows('Equipment')) {
-            abort(403);
+            abort(403, 'You do not have access to this page or resource.');
         }
 
         return Inertia::render('Equipments/Edit', [
@@ -104,7 +104,7 @@ class EquipmentController extends Controller
     public function update(EquipmentRequest $request, Equipment $equipment)
     {
         if (!Gate::allows('Equipment')) {
-            abort(403);
+            abort(403, 'You do not have access to this page or resource.');
         }
 
         $equipment->update($request->validated());
@@ -121,7 +121,7 @@ class EquipmentController extends Controller
     public function destroy(Equipment $equipment)
     {
         if (!Gate::allows('Equipment')) {
-            abort(403);
+            abort(403, 'You do not have access to this page or resource.');
         }
 
         $equipment->delete();

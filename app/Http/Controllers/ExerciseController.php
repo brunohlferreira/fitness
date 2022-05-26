@@ -61,7 +61,7 @@ class ExerciseController extends Controller
     public function create()
     {
         if (!Gate::allows('Exercise')) {
-            abort(403);
+            abort(403, 'You do not have access to this page or resource.');
         }
 
         return Inertia::render('Exercises/Create', [
@@ -79,7 +79,7 @@ class ExerciseController extends Controller
     public function store(ExerciseRequest $request)
     {
         if (!Gate::allows('Exercise')) {
-            abort(403);
+            abort(403, 'You do not have access to this page or resource.');
         }
 
         DB::beginTransaction();
@@ -168,7 +168,7 @@ class ExerciseController extends Controller
     public function edit(Exercise $exercise)
     {
         if (!Gate::allows('Exercise')) {
-            abort(403);
+            abort(403, 'You do not have access to this page or resource.');
         }
 
         return Inertia::render('Exercises/Edit', [
@@ -201,7 +201,7 @@ class ExerciseController extends Controller
     public function update(ExerciseRequest $request, Exercise $exercise)
     {
         if (!Gate::allows('Exercise')) {
-            abort(403);
+            abort(403, 'You do not have access to this page or resource.');
         }
 
         DB::beginTransaction();
@@ -249,7 +249,7 @@ class ExerciseController extends Controller
     public function destroy(Exercise $exercise)
     {
         if (!Gate::allows('Exercise')) {
-            abort(403);
+            abort(403, 'You do not have access to this page or resource.');
         }
 
         DB::beginTransaction();
@@ -260,7 +260,7 @@ class ExerciseController extends Controller
         } catch (Exception $e) {
             DB::rollback();
 
-            abort(500);
+            abort(500, 'Something went wrong. Please try again later.');
         }
 
         return response()->noContent();

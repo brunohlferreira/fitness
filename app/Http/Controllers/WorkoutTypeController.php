@@ -18,7 +18,7 @@ class WorkoutTypeController extends Controller
     public function index()
     {
         if (!Gate::allows('WorkoutType')) {
-            abort(403);
+            abort(403, 'You do not have access to this page or resource.');
         }
 
         return Inertia::render('WorkoutTypes/Index', [
@@ -39,7 +39,7 @@ class WorkoutTypeController extends Controller
     public function create()
     {
         if (!Gate::allows('WorkoutType')) {
-            abort(403);
+            abort(403, 'You do not have access to this page or resource.');
         }
 
         return Inertia::render('WorkoutTypes/Create');
@@ -54,7 +54,7 @@ class WorkoutTypeController extends Controller
     public function store(WorkoutTypeRequest $request)
     {
         if (!Gate::allows('WorkoutType')) {
-            abort(403);
+            abort(403, 'You do not have access to this page or resource.');
         }
 
         WorkoutType::create($request->validated());
@@ -71,7 +71,7 @@ class WorkoutTypeController extends Controller
     public function show(WorkoutType $workoutType)
     {
         if (!Gate::allows('WorkoutType')) {
-            abort(403);
+            abort(403, 'You do not have access to this page or resource.');
         }
 
         return new WorkoutTypeResource($workoutType);
@@ -86,7 +86,7 @@ class WorkoutTypeController extends Controller
     public function edit(WorkoutType $workoutType)
     {
         if (!Gate::allows('WorkoutType')) {
-            abort(403);
+            abort(403, 'You do not have access to this page or resource.');
         }
 
         return Inertia::render('WorkoutTypes/Edit', [
@@ -104,7 +104,7 @@ class WorkoutTypeController extends Controller
     public function update(WorkoutTypeRequest $request, WorkoutType $workoutType)
     {
         if (!Gate::allows('WorkoutType')) {
-            abort(403);
+            abort(403, 'You do not have access to this page or resource.');
         }
 
         $workoutType->update($request->validated());
@@ -121,7 +121,7 @@ class WorkoutTypeController extends Controller
     public function destroy(WorkoutType $workoutType)
     {
         if (!Gate::allows('WorkoutType')) {
-            abort(403);
+            abort(403, 'You do not have access to this page or resource.');
         }
 
         $workoutType->delete();
