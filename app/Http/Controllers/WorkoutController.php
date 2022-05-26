@@ -77,7 +77,7 @@ class WorkoutController extends Controller
                     );
                 });
 
-                $workout = new WorkoutTypeResource(
+                $workout = new WorkoutResource(
                     $workout->only('id', 'name', 'description', 'level', 'time_cap', 'score', 'workout_type_id', 'workout_preset_id', 'exercises')
                 );
             }
@@ -95,7 +95,7 @@ class WorkoutController extends Controller
                     );
                 });
 
-                $workout = new WorkoutTypeResource(
+                $workout = new WorkoutResource(
                     $workout->only('id', 'name', 'description', 'level', 'time_cap', 'score', 'workout_type_id', 'workout_preset_id', 'exercises')
                 );
             }

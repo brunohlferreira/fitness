@@ -74,9 +74,9 @@ class UserController extends Controller
         $request->validated();
 
         User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
+            'name' => $request->input('name'),
+            'email' => $request->input('email'),
+            'password' => Hash::make($request->input('password')),
         ]);
 
         return redirect()->route('users.index');
@@ -132,8 +132,7 @@ class UserController extends Controller
             'role' => 'required|integer',
         ]);
 
-        $roles = $request->role ? [$request->role] : [];
-        $user->syncRoles($roles);
+        $user->syncRoles([$request->input('role')]);
 
         return redirect()->route('users.index');
     }

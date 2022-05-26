@@ -19,11 +19,12 @@ Route::get('/', function () {
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
 
+    Route::resource('body-parts', BodyPartController::class)->except('show');
+    Route::resource('equipments', EquipmentController::class)->except('show');
+    Route::resource('workout-types', WorkoutTypeController::class)->except('show');
+
     Route::resources([
-        'body-parts' => BodyPartController::class,
-        'equipments' => EquipmentController::class,
         'exercises' => ExerciseController::class,
-        'workout-types' => WorkoutTypeController::class,
         'workouts' => WorkoutController::class,
         'workout-presets' => WorkoutPresetController::class,
     ]);
@@ -33,4 +34,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/users/{user}/roles/edit', 'editRole')->name('users.edit-role');
         Route::put('/users/{user}/roles', 'updateRole')->name('users.update-role');
     });
+});
+
+Route::fallback(function () {
+    abort(404, 'Not found');
 });
