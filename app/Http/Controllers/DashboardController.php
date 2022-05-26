@@ -12,7 +12,7 @@ class DashboardController extends Controller
     {
         return Inertia::render('Dashboard', [
             'workouts' => [
-                'lifetime' => Workout::selectRaw('COUNT(*) AS total')->where('created_by', Auth::user()->id)->get()->first(),
+                'total' => Workout::query()->where('created_by', Auth::user()->id)->count(),
             ],
         ]);
     }

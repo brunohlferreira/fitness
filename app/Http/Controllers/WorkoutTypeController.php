@@ -22,7 +22,9 @@ class WorkoutTypeController extends Controller
         }
 
         return Inertia::render('WorkoutTypes/Index', [
-            'workoutTypes' => WorkoutTypeResource::collection(WorkoutType::select('id', 'name', 'description')->paginate(15)),
+            'workoutTypes' => WorkoutTypeResource::collection(
+                WorkoutType::query()->select('id', 'name', 'description')->paginate(15)
+            ),
             'can' => [
                 'create' => Gate::allows('WorkoutType'),
                 'update' => Gate::allows('WorkoutType'),

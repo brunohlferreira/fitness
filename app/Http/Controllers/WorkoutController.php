@@ -41,7 +41,11 @@ class WorkoutController extends Controller
     {
         return Inertia::render('Workouts/Index', [
             'workouts' => WorkoutResource::collection(
-                Workout::where('created_by', Auth::user()->id)->select('id', 'name', 'date')->orderBy('date', 'desc')->paginate(15)
+                Workout::query()
+                    ->select('id', 'name', 'date')
+                    ->where('created_by', Auth::user()->id)
+                    ->orderBy('date', 'desc')
+                    ->paginate(15)
             ),
         ]);
     }
@@ -56,8 +60,13 @@ class WorkoutController extends Controller
     {
         $workout = null;
 
-        if ($request->query('workout')) {
-            $workout = Workout::where('id', intval($request->query('workout')))->where('created_by', Auth::user()->id)->get()->first();
+        if ($request->input('workout')) {
+            $workout = Workout::query()
+                ->where([
+                    ['id', intval($request->input('workout'))],
+                    ['created_by', Auth::user()->id],
+                ])
+                ->first();
 
             if ($workout) {
                 $workout->exercises = ExerciseResource::collection($workout->exercises)->map(function ($exercise) {
@@ -72,8 +81,8 @@ class WorkoutController extends Controller
                     $workout->only('id', 'name', 'description', 'level', 'time_cap', 'score', 'workout_type_id', 'workout_preset_id', 'exercises')
                 );
             }
-        } elseif ($request->query('workoutPreset')) {
-            $workout = WorkoutPreset::where('id', intval($request->query('workoutPreset')))->get()->first();
+        } elseif ($request->input('workoutPreset')) {
+            $workout = WorkoutPreset::query()->where('id', intval($request->input('workoutPreset')))->first();
 
             if ($workout) {
                 $workout->score = '';
@@ -94,7 +103,9 @@ class WorkoutController extends Controller
 
         return Inertia::render('Workouts/Create', [
             'workout' => $workout,
-            'workoutTypes' => WorkoutTypeResource::collection(WorkoutType::select('id', 'name', 'description')->get()),
+            'workoutTypes' => WorkoutTypeResource::collection(
+                WorkoutType::query()->select('id', 'name', 'description')->get()
+            ),
         ]);
     }
 
@@ -201,8 +212,10 @@ class WorkoutController extends Controller
         return Inertia::render(
             'Workouts/Edit',
             [
-                'workout' => new WorkoutResource($workout->only('id', 'name', 'description', 'date', 'level', 'time_cap', 'score', 'workout_type_id', 'exercises')),
-                'workoutTypes' => WorkoutTypeResource::collection(WorkoutType::select('id', 'name', 'description')->get()),
+                'workout' => new WorkoutResource(
+                    $workout->only('id', 'name', 'description', 'date', 'level', 'time_cap', 'score', 'workout_type_id', 'exercises')
+                ),
+                'workoutTypes' => WorkoutTypeResource::collection(WorkoutType::query()->select('id', 'name', 'description')->get()),
             ]
         );
     }

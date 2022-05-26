@@ -20,11 +20,11 @@ defineProps({
             </template>
 
             <template #content>
-                <span v-if="!workouts.lifetime.total"
+                <span v-if="!workouts.total"
                     >You didn't register any workouts yet.</span
                 >
                 <span v-else
-                    >You have registered {{ workouts.lifetime.total }} workouts
+                    >You have registered {{ workouts.total }} workouts
                     so far. Keep going!</span
                 >
             </template>

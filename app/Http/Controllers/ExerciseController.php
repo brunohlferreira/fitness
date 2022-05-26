@@ -31,16 +31,16 @@ class ExerciseController extends Controller
                 return [];
             }
 
-            return Exercise::where('name', 'like', '%' . Request::input('modalSearch') . '%')->select('id', 'name')->get();
+            return Exercise::query()->where('name', 'like', '%' . Request::input('modalSearch') . '%')->select('id', 'name')->get();
         }
 
         return Inertia::render('Exercises/Index', [
             'exercises' => ExerciseResource::collection(
                 Exercise::query()
+                    ->select('id', 'name')
                     ->when(Request::input('search'), function ($query) {
                         $query->where('name', 'like', '%' . Request::input('search') . '%');
                     })
-                    ->select('id', 'name')
                     ->paginate(15)
                     ->withQueryString()
             ),
@@ -65,8 +65,8 @@ class ExerciseController extends Controller
         }
 
         return Inertia::render('Exercises/Create', [
-            'bodyParts' => BodyPartResource::collection(BodyPart::select('id', 'name')->get()),
-            'equipments' => EquipmentResource::collection(Equipment::select('id', 'name')->selectRaw('0 AS selected')->get()),
+            'bodyParts' => BodyPartResource::collection(BodyPart::query()->select('id', 'name')->get()),
+            'equipments' => EquipmentResource::collection(Equipment::query()->select('id', 'name')->selectRaw('0 AS selected')->get()),
         ]);
     }
 
@@ -138,7 +138,8 @@ class ExerciseController extends Controller
             [
                 'exercise' => new ExerciseResource($exercise->only('id', 'name', 'description', 'bilateral', 'bodyParts', 'equipments')),
                 'attempts' => WorkoutResource::collection(
-                    Workout::select('workouts.id', 'workouts.name', 'workouts.date')
+                    Workout::query()
+                        ->select('workouts.id', 'workouts.name', 'workouts.date')
                         ->join('exercise_workout', function ($join) use ($exercise) {
                             $join->on('workouts.id', 'exercise_workout.workout_id')
                                 ->where('exercise_workout.exercise_id', $exercise->id);
@@ -174,14 +175,16 @@ class ExerciseController extends Controller
         return Inertia::render('Exercises/Edit', [
             'exercise' => new ExerciseResource($exercise->only('id', 'name', 'description', 'bilateral')),
             'bodyParts' => BodyPartResource::collection(
-                BodyPart::select('body_parts.id', 'body_parts.name', 'body_part_exercise.impact')
+                BodyPart::query()
+                    ->select('body_parts.id', 'body_parts.name', 'body_part_exercise.impact')
                     ->leftJoin('body_part_exercise', function ($join) use ($exercise) {
                         $join->on('body_parts.id', 'body_part_exercise.body_part_id')->where('body_part_exercise.exercise_id', $exercise->id);
                     })
                     ->get()
             ),
             'equipments' => EquipmentResource::collection(
-                Equipment::select('equipments.id', 'equipments.name')
+                Equipment::query()
+                    ->select('equipments.id', 'equipments.name')
                     ->selectRaw('equipment_exercise.id IS NOT NULL AS selected')
                     ->leftJoin('equipment_exercise', function ($join) use ($exercise) {
                         $join->on('equipments.id', 'equipment_exercise.equipment_id')->where('equipment_exercise.exercise_id', $exercise->id);

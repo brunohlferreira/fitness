@@ -22,7 +22,7 @@ class EquipmentController extends Controller
         }
 
         return Inertia::render('Equipments/Index', [
-            'equipments' => EquipmentResource::collection(Equipment::select('id', 'name')->paginate(15)),
+            'equipments' => EquipmentResource::collection(Equipment::query()->select('id', 'name')->paginate(15)),
             'can' => [
                 'create' => Gate::allows('Equipment'),
                 'update' => Gate::allows('Equipment'),

@@ -28,7 +28,7 @@ class WorkoutPresetController extends Controller
     {
         return Inertia::render('WorkoutPresets/Index', [
             'workoutPresets' => WorkoutPresetResource::collection(
-                WorkoutPreset::select('id', 'name')->paginate(15)
+                WorkoutPreset::query()->select('id', 'name')->paginate(15)
             ),
             'can' => [
                 'create' => Gate::allows('WorkoutPreset'),
@@ -50,7 +50,9 @@ class WorkoutPresetController extends Controller
         }
 
         return Inertia::render('WorkoutPresets/Create', [
-            'workoutTypes' => WorkoutTypeResource::collection(WorkoutType::select('id', 'name', 'description')->get()),
+            'workoutTypes' => WorkoutTypeResource::collection(
+                WorkoutType::query()->select('id', 'name', 'description')->get()
+            ),
         ]);
     }
 
@@ -137,9 +139,12 @@ class WorkoutPresetController extends Controller
                     $workoutPreset->only('id', 'name', 'description', 'level', 'time_cap', 'workout_type_name', 'workout_type_description', 'exercises')
                 ),
                 'attempts' => WorkoutResource::collection(
-                    Workout::select('id', 'date', 'score')
-                        ->where('workout_preset_id', $workoutPreset->id)
-                        ->where('created_by', Auth::user()->id)
+                    Workout::query()
+                        ->select('id', 'date', 'score')
+                        ->where([
+                            ['workout_preset_id', $workoutPreset->id],
+                            ['created_by', Auth::user()->id],
+                        ])
                         ->orderBy('date', 'desc')
                         ->limit(5)
                         ->get()
@@ -174,8 +179,12 @@ class WorkoutPresetController extends Controller
         return Inertia::render(
             'WorkoutPresets/Edit',
             [
-                'workoutPreset' => new WorkoutPresetResource($workoutPreset->only('id', 'name', 'description', 'level', 'time_cap', 'workout_type_id', 'exercises')),
-                'workoutTypes' => WorkoutTypeResource::collection(WorkoutType::select('id', 'name', 'description')->get()),
+                'workoutPreset' => new WorkoutPresetResource(
+                    $workoutPreset->only('id', 'name', 'description', 'level', 'time_cap', 'workout_type_id', 'exercises')
+                ),
+                'workoutTypes' => WorkoutTypeResource::collection(
+                    WorkoutType::query()->select('id', 'name', 'description')->get()
+                ),
             ]
         );
     }
