@@ -9,16 +9,16 @@ import Button from "@/Components/Button.vue";
 import ValidationErrors from "@/Components/ValidationErrors.vue";
 
 const props = defineProps({
-    role: Object,
+    user: Object,
     roles: Object,
 });
 
 const form = useForm({
-    role: props.role.data.id ? props.role.data.id : 0,
+    role: props.user.data.roleId,
 });
 
 const submit = () => {
-    form.put(`/users/${props.role.data.userId}/roles`);
+    form.put(`/users/${props.user.data.id}/roles`);
 };
 </script>
 
@@ -42,7 +42,7 @@ const submit = () => {
                             class="mt-1 block w-full"
                             v-model="form.role"
                         >
-                            <option value="0">None</option>
+                            <option value="">None</option>
                             <option
                                 v-for="role in roles.data"
                                 :key="role.id"

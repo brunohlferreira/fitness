@@ -5,6 +5,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EquipmentController;
 use App\Http\Controllers\ExerciseController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\UserRoleController;
 use App\Http\Controllers\WorkoutController;
 use App\Http\Controllers\WorkoutPresetController;
 use App\Http\Controllers\WorkoutTypeController;
@@ -30,9 +31,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     ]);
 
     Route::resource('users', UserController::class)->only(['index', 'create', 'store']);
-    Route::controller(UserController::class)->group(function () {
-        Route::get('/users/{user}/roles/edit', 'editRole')->name('users.edit-role');
-        Route::put('/users/{user}/roles', 'updateRole')->name('users.update-role');
+    Route::controller(UserRoleController::class)->group(function () {
+        Route::get('/users/{user}/roles/edit', 'edit')->name('user-roles.edit');
+        Route::put('/users/{user}/roles', 'update')->name('user-roles.update');
     });
 });
 

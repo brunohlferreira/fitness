@@ -3,9 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\UserRequest;
-use App\Http\Resources\RoleResource;
 use App\Http\Resources\UserResource;
-use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
@@ -78,61 +76,6 @@ class UserController extends Controller
             'email' => $request->input('email'),
             'password' => Hash::make($request->input('password')),
         ]);
-
-        return redirect()->route('users.index');
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\User  $user
-     * @return \Illuminate\Http\Response
-     */
-    public function editRole(User $user)
-    {
-        if ($user->id == 1) {
-            abort(404, 'The resource requested could not be found on this server.');
-        }
-
-        if (!Gate::allows('User')) {
-            abort(403, 'You do not have access to this page or resource.');
-        }
-
-        $userRole = $user->roles->first();
-        if (!$userRole) {
-            $userRole = ['userId' => $user->id];
-        } else {
-            $userRole = array_merge(['userId' => $userRole->pivot->model_id], $userRole->only('id', 'name'));
-        }
-
-        return Inertia::render('Users/EditRole', [
-            'role' => new RoleResource($userRole),
-            'roles' => RoleResource::collection(Role::query()->select('id', 'name')->where('id', '>', 1)->get()),
-        ]);
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\User  $user
-     * @return \Illuminate\Http\Response
-     */
-    public function updateRole(Request $request, User $user)
-    {
-        if ($user->id == 1) {
-            abort(404, 'The resource requested could not be found on this server.');
-        }
-
-        if (!Gate::allows('User')) {
-            abort(403, 'You do not have access to this page or resource.');
-        }
-
-        $request->validate([
-            'role' => 'required|integer',
-        ]);
-
-        $user->syncRoles([$request->input('role')]);
 
         return redirect()->route('users.index');
     }
