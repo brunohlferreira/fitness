@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\ExerciseWorkout;
 use App\Models\WorkoutType;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
@@ -31,6 +32,13 @@ class Workout extends Model
                 ExerciseWorkout::find($exercise->pivot->id)->delete();
             }
         });
+    }
+
+    protected function date(): Attribute
+    {
+        return Attribute::make(
+            set:fn($value) => date('Y-m-d H:i:s', strtotime($value)),
+        );
     }
 
     public function type()

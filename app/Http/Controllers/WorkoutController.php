@@ -119,9 +119,7 @@ class WorkoutController extends Controller
     {
         DB::beginTransaction();
         try {
-            $data = $request->validated();
-            $data['date'] = Carbon::parse($data['date'])->format('Y-m-d H:i:s');
-            $workout = Workout::create($data);
+            $workout = Workout::create($request->validated());
 
             if (is_array($request->input('exercises'))) {
                 foreach ($request->input('exercises') as $exerciseKey => $exercise) {
@@ -231,9 +229,7 @@ class WorkoutController extends Controller
     {
         DB::beginTransaction();
         try {
-            $data = $request->validated();
-            $data['date'] = Carbon::parse($data['date'])->format('Y-m-d H:i:s');
-            $workout->update($data);
+            $workout->update($request->validated());
 
             foreach ($workout->exercises as $exercise) {
                 ExerciseWorkout::find($exercise->pivot->id)->delete();
