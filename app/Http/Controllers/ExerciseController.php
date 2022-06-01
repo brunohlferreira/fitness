@@ -11,11 +11,11 @@ use App\Models\BodyPart;
 use App\Models\Equipment;
 use App\Models\Exercise;
 use App\Models\Workout;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
-use Request;
 
 class ExerciseController extends Controller
 {
@@ -24,27 +24,19 @@ class ExerciseController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        if (Request::has('modalSearch')) {
-            if (!Request::input('modalSearch')) {
-                return [];
-            }
-
-            return Exercise::query()->where('name', 'like', '%' . Request::input('modalSearch') . '%')->select('id', 'name')->get();
-        }
-
         return Inertia::render('Exercises/Index', [
             'exercises' => ExerciseResource::collection(
                 Exercise::query()
                     ->select('id', 'name')
-                    ->when(Request::input('search'), function ($query) {
-                        $query->where('name', 'like', '%' . Request::input('search') . '%');
+                    ->when($request->input('search'), function ($query) {
+                        $query->where('name', 'like', '%' . $request->input('search') . '%');
                     })
                     ->paginate(15)
                     ->withQueryString()
             ),
-            'filters' => Request::only(['search']),
+            'filters' => $request->only(['search']),
             'can' => [
                 'create' => Gate::allows('Exercise'),
                 'update' => Gate::allows('Exercise'),
@@ -122,7 +114,7 @@ class ExerciseController extends Controller
      */
     public function show(Exercise $exercise)
     {
-        $exercise->bodyParts = EquipmentResource::collection($exercise->bodyParts)->map(function ($bodyPart) {
+        $exercise->bodyParts = BodyPartResource::collection($exercise->bodyParts)->map(function ($bodyPart) {
             return array_merge($bodyPart->only('id', 'name'), ['impact' => $bodyPart->pivot->impact]);
         });
         $exercise->equipments = EquipmentResource::collection($exercise->equipments)->map(function ($equipment) {

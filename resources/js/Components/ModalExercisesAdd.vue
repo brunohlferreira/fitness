@@ -29,7 +29,7 @@ const addExercise = function (event, id, name) {
 watch(
     search,
     debounce(function (value) {
-        axios.get(`/exercises?modalSearch=${value}`).then(function (response) {
+        axios.get(`/exercises/modal?search=${value}`).then(function (response) {
             exercises.value = response.data;
         });
     }, 300)
