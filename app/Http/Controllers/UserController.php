@@ -6,7 +6,6 @@ use App\Http\Requests\UserRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Hash;
 use Inertia\Inertia;
 
@@ -19,9 +18,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        if (!Gate::allows('User')) {
-            abort(403, 'You do not have access to this page or resource.');
-        }
+        $this->authorize('User');
 
         return Inertia::render('Users/Index', [
             'users' => UserResource::collection(
@@ -50,9 +47,7 @@ class UserController extends Controller
      */
     public function create()
     {
-        if (!Gate::allows('User')) {
-            abort(403, 'You do not have access to this page or resource.');
-        }
+        $this->authorize('User');
 
         return Inertia::render('Users/Create');
     }
@@ -65,9 +60,7 @@ class UserController extends Controller
      */
     public function store(UserRequest $request)
     {
-        if (!Gate::allows('User')) {
-            abort(403, 'You do not have access to this page or resource.');
-        }
+        $this->authorize('User');
 
         $request->validated();
 

@@ -17,9 +17,7 @@ class EquipmentController extends Controller
      */
     public function index()
     {
-        if (!Gate::allows('Equipment')) {
-            abort(403, 'You do not have access to this page or resource.');
-        }
+        $this->authorize('Equipment');
 
         return Inertia::render('Equipments/Index', [
             'equipments' => EquipmentResource::collection(Equipment::query()->select('id', 'name')->paginate(15)),
@@ -38,9 +36,7 @@ class EquipmentController extends Controller
      */
     public function create()
     {
-        if (!Gate::allows('Equipment')) {
-            abort(403, 'You do not have access to this page or resource.');
-        }
+        $this->authorize('Equipment');
 
         return Inertia::render('Equipments/Create');
     }
@@ -53,9 +49,7 @@ class EquipmentController extends Controller
      */
     public function store(EquipmentRequest $request)
     {
-        if (!Gate::allows('Equipment')) {
-            abort(403, 'You do not have access to this page or resource.');
-        }
+        $this->authorize('Equipment');
 
         Equipment::create($request->validated());
 
@@ -70,9 +64,7 @@ class EquipmentController extends Controller
      */
     public function show(Equipment $equipment)
     {
-        if (!Gate::allows('Equipment')) {
-            abort(403, 'You do not have access to this page or resource.');
-        }
+        $this->authorize('Equipment');
 
         return new EquipmentResource($equipment);
     }
@@ -85,9 +77,7 @@ class EquipmentController extends Controller
      */
     public function edit(Equipment $equipment)
     {
-        if (!Gate::allows('Equipment')) {
-            abort(403, 'You do not have access to this page or resource.');
-        }
+        $this->authorize('Equipment');
 
         return Inertia::render('Equipments/Edit', [
             'equipment' => new EquipmentResource($equipment->only('id', 'name')),
@@ -103,9 +93,7 @@ class EquipmentController extends Controller
      */
     public function update(EquipmentRequest $request, Equipment $equipment)
     {
-        if (!Gate::allows('Equipment')) {
-            abort(403, 'You do not have access to this page or resource.');
-        }
+        $this->authorize('Equipment');
 
         $equipment->update($request->validated());
 
@@ -120,9 +108,7 @@ class EquipmentController extends Controller
      */
     public function destroy(Equipment $equipment)
     {
-        if (!Gate::allows('Equipment')) {
-            abort(403, 'You do not have access to this page or resource.');
-        }
+        $this->authorize('Equipment');
 
         $equipment->delete();
 

@@ -45,9 +45,7 @@ class WorkoutPresetController extends Controller
      */
     public function create()
     {
-        if (!Gate::allows('WorkoutPreset')) {
-            abort(403, 'You do not have access to this page or resource.');
-        }
+        $this->authorize('WorkoutPreset');
 
         return Inertia::render('WorkoutPresets/Create', [
             'workoutTypes' => WorkoutTypeResource::collection(
@@ -64,9 +62,7 @@ class WorkoutPresetController extends Controller
      */
     public function store(WorkoutPresetRequest $request)
     {
-        if (!Gate::allows('WorkoutPreset')) {
-            abort(403, 'You do not have access to this page or resource.');
-        }
+        $this->authorize('WorkoutPreset');
 
         DB::beginTransaction();
         try {
@@ -164,9 +160,7 @@ class WorkoutPresetController extends Controller
      */
     public function edit(WorkoutPreset $workoutPreset)
     {
-        if (!Gate::allows('WorkoutPreset')) {
-            abort(403, 'You do not have access to this page or resource.');
-        }
+        $this->authorize('WorkoutPreset');
 
         $workoutPreset->exercises = ExerciseResource::collection($workoutPreset->exercises)->map(function ($exercise) {
             return array_merge(
@@ -198,9 +192,7 @@ class WorkoutPresetController extends Controller
      */
     public function update(WorkoutPresetRequest $request, WorkoutPreset $workoutPreset)
     {
-        if (!Gate::allows('WorkoutPreset')) {
-            abort(403, 'You do not have access to this page or resource.');
-        }
+        $this->authorize('WorkoutPreset');
 
         DB::beginTransaction();
         try {
@@ -260,9 +252,7 @@ class WorkoutPresetController extends Controller
      */
     public function destroy(WorkoutPreset $workoutPreset)
     {
-        if (!Gate::allows('WorkoutPreset')) {
-            abort(403, 'You do not have access to this page or resource.');
-        }
+        $this->authorize('WorkoutPreset');
 
         DB::beginTransaction();
         try {

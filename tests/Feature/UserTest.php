@@ -13,6 +13,11 @@ class UserTest extends TestCase
 
     public function test_guests_can_not_visit_users()
     {
+        Role::Create(
+            ['name' => 'Super-Admin', 'guard_name' => 'web'],
+            ['name' => 'Admin', 'guard_name' => 'web'],
+        );
+
         $this
             ->get(route('users.index'))
             ->assertRedirect(route('login'));
@@ -60,12 +65,10 @@ class UserTest extends TestCase
         $role = Role::firstOrCreate(['name' => 'Admin', 'guard_name' => 'web']);
         $user = User::factory()->create()->assignRole($role);
 
-        $newUser = User::where('email', 'newuser@test.com')->get();
-
         $this
             ->actingAs($user)
-            ->put(route('users.update-role', $newUser->first()->id), [
-                'role' => 1,
+            ->put(route('user-roles.update', User::where('email', 'newuser@test.com')->first()->id), [
+                'role' => '2',
             ])
             ->assertRedirect(route('users.index'));
     }

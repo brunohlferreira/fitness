@@ -17,9 +17,7 @@ class BodyPartController extends Controller
      */
     public function index()
     {
-        if (!Gate::allows('BodyPart')) {
-            abort(403, 'You do not have access to this page or resource.');
-        }
+        $this->authorize('BodyPart');
 
         return Inertia::render('BodyParts/Index', [
             'bodyParts' => BodyPartResource::collection(BodyPart::query()->select('id', 'name')->paginate(15)),
@@ -38,9 +36,7 @@ class BodyPartController extends Controller
      */
     public function create()
     {
-        if (!Gate::allows('BodyPart')) {
-            abort(403, 'You do not have access to this page or resource.');
-        }
+        $this->authorize('BodyPart');
 
         return Inertia::render('BodyParts/Create');
     }
@@ -53,9 +49,7 @@ class BodyPartController extends Controller
      */
     public function store(BodyPartRequest $request)
     {
-        if (!Gate::allows('BodyPart')) {
-            abort(403, 'You do not have access to this page or resource.');
-        }
+        $this->authorize('BodyPart');
 
         BodyPart::create($request->validated());
 
@@ -70,9 +64,7 @@ class BodyPartController extends Controller
      */
     public function show(BodyPart $bodyPart)
     {
-        if (!Gate::allows('BodyPart')) {
-            abort(403, 'You do not have access to this page or resource.');
-        }
+        $this->authorize('BodyPart');
 
         return new BodyPartResource($bodyPart);
     }
@@ -85,9 +77,7 @@ class BodyPartController extends Controller
      */
     public function edit(BodyPart $bodyPart)
     {
-        if (!Gate::allows('BodyPart')) {
-            abort(403, 'You do not have access to this page or resource.');
-        }
+        $this->authorize('BodyPart');
 
         return Inertia::render('BodyParts/Edit', [
             'bodyPart' => new BodyPartResource($bodyPart->only('id', 'name')),
@@ -103,9 +93,7 @@ class BodyPartController extends Controller
      */
     public function update(BodyPartRequest $request, BodyPart $bodyPart)
     {
-        if (!Gate::allows('BodyPart')) {
-            abort(403, 'You do not have access to this page or resource.');
-        }
+        $this->authorize('BodyPart');
 
         $bodyPart->update($request->validated());
 
@@ -120,9 +108,7 @@ class BodyPartController extends Controller
      */
     public function destroy(BodyPart $bodyPart)
     {
-        if (!Gate::allows('BodyPart')) {
-            abort(403, 'You do not have access to this page or resource.');
-        }
+        $this->authorize('BodyPart');
 
         $bodyPart->delete();
 

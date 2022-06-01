@@ -17,9 +17,7 @@ class WorkoutTypeController extends Controller
      */
     public function index()
     {
-        if (!Gate::allows('WorkoutType')) {
-            abort(403, 'You do not have access to this page or resource.');
-        }
+        $this->authorize('WorkoutType');
 
         return Inertia::render('WorkoutTypes/Index', [
             'workoutTypes' => WorkoutTypeResource::collection(
@@ -40,9 +38,7 @@ class WorkoutTypeController extends Controller
      */
     public function create()
     {
-        if (!Gate::allows('WorkoutType')) {
-            abort(403, 'You do not have access to this page or resource.');
-        }
+        $this->authorize('WorkoutType');
 
         return Inertia::render('WorkoutTypes/Create');
     }
@@ -55,9 +51,7 @@ class WorkoutTypeController extends Controller
      */
     public function store(WorkoutTypeRequest $request)
     {
-        if (!Gate::allows('WorkoutType')) {
-            abort(403, 'You do not have access to this page or resource.');
-        }
+        $this->authorize('WorkoutType');
 
         WorkoutType::create($request->validated());
 
@@ -72,9 +66,7 @@ class WorkoutTypeController extends Controller
      */
     public function show(WorkoutType $workoutType)
     {
-        if (!Gate::allows('WorkoutType')) {
-            abort(403, 'You do not have access to this page or resource.');
-        }
+        $this->authorize('WorkoutType');
 
         return new WorkoutTypeResource($workoutType);
     }
@@ -87,9 +79,7 @@ class WorkoutTypeController extends Controller
      */
     public function edit(WorkoutType $workoutType)
     {
-        if (!Gate::allows('WorkoutType')) {
-            abort(403, 'You do not have access to this page or resource.');
-        }
+        $this->authorize('WorkoutType');
 
         return Inertia::render('WorkoutTypes/Edit', [
             'workoutType' => new WorkoutTypeResource($workoutType->only('id', 'name', 'description')),
@@ -105,9 +95,7 @@ class WorkoutTypeController extends Controller
      */
     public function update(WorkoutTypeRequest $request, WorkoutType $workoutType)
     {
-        if (!Gate::allows('WorkoutType')) {
-            abort(403, 'You do not have access to this page or resource.');
-        }
+        $this->authorize('WorkoutType');
 
         $workoutType->update($request->validated());
 
@@ -122,9 +110,7 @@ class WorkoutTypeController extends Controller
      */
     public function destroy(WorkoutType $workoutType)
     {
-        if (!Gate::allows('WorkoutType')) {
-            abort(403, 'You do not have access to this page or resource.');
-        }
+        $this->authorize('WorkoutType');
 
         $workoutType->delete();
 

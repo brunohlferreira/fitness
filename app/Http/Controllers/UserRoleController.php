@@ -8,7 +8,6 @@ use App\Http\Resources\UserResource;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
 
 class UserRoleController extends Controller
@@ -21,12 +20,10 @@ class UserRoleController extends Controller
      */
     public function edit(User $user)
     {
+        $this->authorize('User');
+
         if ($user->id == 1) {
             abort(404, 'The resource requested could not be found on this server.');
-        }
-
-        if (!Gate::allows('User')) {
-            abort(403, 'You do not have access to this page or resource.');
         }
 
         $user->roleId = $user->roles->first()->id ?? null;
@@ -46,12 +43,10 @@ class UserRoleController extends Controller
      */
     public function update(UserRoleRequest $request, User $user)
     {
+        $this->authorize('User');
+
         if ($user->id == 1) {
             abort(404, 'The resource requested could not be found on this server.');
-        }
-
-        if (!Gate::allows('User')) {
-            abort(403, 'You do not have access to this page or resource.');
         }
 
         $user->syncRoles([$request->validated()]);
