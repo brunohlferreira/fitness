@@ -11,6 +11,7 @@ use App\Models\BodyPart;
 use App\Models\Equipment;
 use App\Models\Exercise;
 use App\Models\Workout;
+use App\Services\ExerciseService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -19,6 +20,13 @@ use Inertia\Inertia;
 
 class ExerciseController extends Controller
 {
+    private $exerciseService;
+
+    public function __construct(ExerciseService $exerciseService)
+    {
+        $this->exerciseService = $exerciseService;
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -72,29 +80,7 @@ class ExerciseController extends Controller
 
         DB::beginTransaction();
         try {
-            $exercise = Exercise::create($request->validated());
-
-            $bodyParts = [];
-            if (is_array($request->input('bodyParts'))) {
-                foreach ($request->input('bodyParts') as $bodyPartKey => $bodyPart) {
-                    $bodyParts[$bodyPart['id']] = [
-                        'impact' => $bodyPart['impact'],
-                    ];
-                }
-            }
-            if (count($bodyParts)) {
-                $exercise->bodyParts()->sync($bodyParts);
-            }
-
-            $equipments = [];
-            if (is_array($request->input('equipments'))) {
-                foreach ($request->input('equipments') as $equipmentKey => $equipment) {
-                    $equipments[] = $equipment['id'];
-                }
-            }
-            if (count($equipments)) {
-                $exercise->equipments()->sync($equipments);
-            }
+            $this->exerciseService->store($request->validated());
 
             DB::commit();
         } catch (Exception $e) {
@@ -193,29 +179,7 @@ class ExerciseController extends Controller
 
         DB::beginTransaction();
         try {
-            $exercise->update($request->validated());
-
-            $bodyParts = [];
-            if (is_array($request->input('bodyParts'))) {
-                foreach ($request->input('bodyParts') as $bodyPartKey => $bodyPart) {
-                    $bodyParts[$bodyPart['id']] = [
-                        'impact' => $bodyPart['impact'],
-                    ];
-                }
-            }
-            if (count($bodyParts)) {
-                $exercise->bodyParts()->sync($bodyParts);
-            }
-
-            $equipments = [];
-            if (is_array($request->input('equipments'))) {
-                foreach ($request->input('equipments') as $equipmentKey => $equipment) {
-                    $equipments[] = $equipment['id'];
-                }
-            }
-            if (count($equipments)) {
-                $exercise->equipments()->sync($equipments);
-            }
+            $this->exerciseService->update($exercise, $request->validated());
 
             DB::commit();
         } catch (Exception $e) {

@@ -27,6 +27,13 @@ class ExerciseRequest extends FormRequest
             'name' => ['required', 'min:3'],
             'description' => ['nullable'],
             'bilateral' => ['required', 'integer'],
+            'bodyParts' => ['nullable', 'array'],
+            'bodyParts.*.id' => ['required', 'numeric', 'distinct'],
+            'bodyParts.*.impact' => ['required', 'numeric'],
+            'equipments' => ['nullable', 'array'],
+            'equipments.*.id' => ['required', 'numeric', 'distinct'],
+            'equipments.*.name' => ['required', 'string'],
+            'equipments.*.selected' => ['required', 'numeric'],
         ];
     }
 }
