@@ -56,12 +56,12 @@ class WorkoutController extends Controller
      */
     public function create(Request $request, WorkoutTypeService $workoutType)
     {
-        $workout = null;
-
         if ($request->input('workout')) {
             $workout = $this->workoutService->createFromWorkout(intval($request->input('workout')));
         } elseif ($request->input('workoutPreset')) {
             $workout = $this->workoutService->createFromWorkoutPreset(intval($request->input('workoutPreset')));
+        } else {
+            $workout = null;
         }
 
         return Inertia::render('Workouts/Create', [

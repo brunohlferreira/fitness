@@ -82,7 +82,9 @@ class WorkoutTypeController extends Controller
         $this->authorize('WorkoutType');
 
         return Inertia::render('WorkoutTypes/Edit', [
-            'workoutType' => new WorkoutTypeResource($workoutType->only('id', 'name', 'description')),
+            'workoutType' => new WorkoutTypeResource(
+                $workoutType->only('id', 'name', 'description')
+            ),
         ]);
     }
 
