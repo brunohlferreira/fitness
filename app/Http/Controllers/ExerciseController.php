@@ -10,10 +10,8 @@ use App\Http\Resources\WorkoutResource;
 use App\Models\BodyPart;
 use App\Models\Equipment;
 use App\Models\Exercise;
-use App\Models\Workout;
 use App\Services\ExerciseService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
@@ -39,7 +37,7 @@ class ExerciseController extends Controller
                 Exercise::query()
                     ->select('id', 'name')
                     ->when($request->input('search'), function ($query) {
-                        $query->where('name', 'like', '%' . $request->input('search') . '%');
+                        $query->where('name', 'like', "%{$request->input('search')}%");
                     })
                     ->paginate(15)
                     ->withQueryString()
@@ -63,8 +61,12 @@ class ExerciseController extends Controller
         $this->authorize('Exercise');
 
         return Inertia::render('Exercises/Create', [
-            'bodyParts' => BodyPartResource::collection(BodyPart::query()->select('id', 'name')->get()),
-            'equipments' => EquipmentResource::collection(Equipment::query()->select('id', 'name')->selectRaw('0 AS selected')->get()),
+            'bodyParts' => BodyPartResource::collection(
+                BodyPart::query()->select('id', 'name')->get()
+            ),
+            'equipments' => EquipmentResource::collection(
+                Equipment::query()->select('id', 'name')->selectRaw('0 AS selected')->get()
+            ),
         ]);
     }
 
@@ -100,38 +102,17 @@ class ExerciseController extends Controller
      */
     public function show(Exercise $exercise)
     {
-        $exercise->bodyParts = BodyPartResource::collection($exercise->bodyParts)->map(function ($bodyPart) {
-            return array_merge($bodyPart->only('id', 'name'), ['impact' => $bodyPart->pivot->impact]);
-        });
-        $exercise->equipments = EquipmentResource::collection($exercise->equipments)->map(function ($equipment) {
-            return $equipment->only('id', 'name');
-        });
-
-        return Inertia::render(
-            'Exercises/Show',
-            [
-                'exercise' => new ExerciseResource($exercise->only('id', 'name', 'description', 'bilateral', 'bodyParts', 'equipments')),
-                'attempts' => WorkoutResource::collection(
-                    Workout::query()
-                        ->select('workouts.id', 'workouts.name', 'workouts.date')
-                        ->join('exercise_workout', function ($join) use ($exercise) {
-                            $join->on('workouts.id', 'exercise_workout.workout_id')
-                                ->where('exercise_workout.exercise_id', $exercise->id);
-                        })
-                        ->where('workouts.created_by', Auth::user()->id)
-                        ->groupBy('workouts.id')
-                        ->groupBy('workouts.name')
-                        ->groupBy('workouts.date')
-                        ->groupByRaw('DATE(workouts.date)')
-                        ->orderBy('date', 'desc')
-                        ->limit(5)
-                        ->get()
-                ),
-                'can' => [
-                    'update' => Gate::allows('Exercise'),
-                ],
-            ]
-        );
+        return Inertia::render('Exercises/Show', [
+            'exercise' => new ExerciseResource(
+                $this->exerciseService->show($exercise)
+            ),
+            'attempts' => WorkoutResource::collection(
+                $this->exerciseService->getLastAttempts($exercise)
+            ),
+            'can' => [
+                'update' => Gate::allows('Exercise'),
+            ],
+        ]);
     }
 
     /**
@@ -145,7 +126,9 @@ class ExerciseController extends Controller
         $this->authorize('Exercise');
 
         return Inertia::render('Exercises/Edit', [
-            'exercise' => new ExerciseResource($exercise->only('id', 'name', 'description', 'bilateral')),
+            'exercise' => new ExerciseResource(
+                $exercise->only('id', 'name', 'description', 'bilateral')
+            ),
             'bodyParts' => BodyPartResource::collection(
                 BodyPart::query()
                     ->select('body_parts.id', 'body_parts.name', 'body_part_exercise.impact')

@@ -32,6 +32,15 @@ class WorkoutRequest extends FormRequest
             'score' => ['nullable', 'string'],
             'workout_type_id' => ['required', 'integer', 'min:0'],
             'workout_preset_id' => ['nullable', 'integer', 'min:0'],
+            'exercises' => ['nullable', 'array'],
+            'exercises.*.id' => ['required', 'numeric', 'exists:exercises'],
+            'exercises.*.note' => ['nullable', 'string'],
+            'exercises.*.sets' => ['nullable', 'array'],
+            'exercises.*.sets.*.repetitions' => ['required', 'numeric'],
+            'exercises.*.sets.*.weight' => ['required', 'numeric'],
+            'exercises.*.sets.*.distance' => ['required', 'numeric'],
+            'exercises.*.sets.*.calories' => ['required', 'numeric'],
+            'exercises.*.sets.*.minutes' => ['required', 'numeric'],
         ];
     }
 }

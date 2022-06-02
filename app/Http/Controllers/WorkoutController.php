@@ -3,17 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\WorkoutRequest;
-use App\Http\Resources\ExerciseResource;
 use App\Http\Resources\WorkoutResource;
 use App\Http\Resources\WorkoutTypeResource;
-use App\Models\ExerciseWorkout;
-use App\Models\ExerciseWorkoutPreset;
-use App\Models\ExerciseWorkoutSet;
 use App\Models\User;
 use App\Models\Workout;
-use App\Models\WorkoutPreset;
-use App\Models\WorkoutType;
-use Carbon\Carbon;
+use App\Services\WorkoutService;
+use App\Services\WorkoutTypeService;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -22,13 +17,16 @@ use Inertia\Inertia;
 
 class WorkoutController extends Controller
 {
+    private $workoutService;
+
     /**
      * Create the controller instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(WorkoutService $workoutService)
     {
+        $this->workoutService = $workoutService;
         $this->authorizeResource(Workout::class, 'workout');
     }
 
@@ -56,55 +54,22 @@ class WorkoutController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function create(Request $request)
+    public function create(Request $request, WorkoutTypeService $workoutType)
     {
         $workout = null;
 
         if ($request->input('workout')) {
-            $workout = Workout::query()
-                ->where([
-                    ['id', intval($request->input('workout'))],
-                    ['created_by', Auth::user()->id],
-                ])
-                ->first();
-
-            if ($workout) {
-                $workout->exercises = ExerciseResource::collection($workout->exercises)->map(function ($exercise) {
-                    return array_merge(
-                        $exercise->only('id', 'name'),
-                        ['note' => $exercise->pivot->note],
-                        ['sets' => ExerciseWorkout::find($exercise->pivot->id)->sets->toArray()],
-                    );
-                });
-
-                $workout = new WorkoutResource(
-                    $workout->only('id', 'name', 'description', 'level', 'time_cap', 'score', 'workout_type_id', 'workout_preset_id', 'exercises')
-                );
-            }
+            $workout = $this->workoutService->createFromWorkout(intval($request->input('workout')));
         } elseif ($request->input('workoutPreset')) {
-            $workout = WorkoutPreset::query()->where('id', intval($request->input('workoutPreset')))->first();
-
-            if ($workout) {
-                $workout->score = '';
-                $workout->workout_preset_id = $workout->id;
-                $workout->exercises = ExerciseResource::collection($workout->exercises)->map(function ($exercise) {
-                    return array_merge(
-                        $exercise->only('id', 'name'),
-                        ['note' => $exercise->pivot->note],
-                        ['sets' => ExerciseWorkoutPreset::find($exercise->pivot->id)->sets->toArray()],
-                    );
-                });
-
-                $workout = new WorkoutResource(
-                    $workout->only('id', 'name', 'description', 'level', 'time_cap', 'score', 'workout_type_id', 'workout_preset_id', 'exercises')
-                );
-            }
+            $workout = $this->workoutService->createFromWorkoutPreset(intval($request->input('workoutPreset')));
         }
 
         return Inertia::render('Workouts/Create', [
-            'workout' => $workout,
+            'workout' => new WorkoutResource(
+                $workout
+            ),
             'workoutTypes' => WorkoutTypeResource::collection(
-                WorkoutType::query()->select('id', 'name', 'description')->get()
+                $workoutType->getAll()
             ),
         ]);
     }
@@ -119,39 +84,7 @@ class WorkoutController extends Controller
     {
         DB::beginTransaction();
         try {
-            $workout = Workout::create($request->validated());
-
-            if (is_array($request->input('exercises'))) {
-                foreach ($request->input('exercises') as $exerciseKey => $exercise) {
-                    $exerciseWorkout = ExerciseWorkout::create([
-                        'exercise_id' => $exercise['id'],
-                        'workout_id' => $workout->id,
-                        'position' => $exerciseKey,
-                        'note' => $exercise['note'],
-                    ]);
-
-                    if (!is_array($exercise['sets'])) {
-                        continue;
-                    }
-
-                    foreach ($exercise['sets'] as $setKey => $set) {
-                        $newSet['repetitions'] = isset($set['repetitions']) ? intval($set['repetitions']) : 0;
-                        $newSet['weight'] = isset($set['weight']) ? intval($set['weight']) : 0;
-                        $newSet['distance'] = isset($set['distance']) ? floatval($set['distance']) : 0;
-                        $newSet['calories'] = isset($set['calories']) ? intval($set['calories']) : 0;
-                        $newSet['minutes'] = isset($set['minutes']) ? intval($set['minutes']) : 0;
-
-                        // discard empty sets
-                        if (!array_sum($newSet)) {
-                            continue;
-                        }
-
-                        $newSet['exercise_workout_id'] = $exerciseWorkout->id;
-                        $newSet['position'] = $setKey;
-                        ExerciseWorkoutSet::create($newSet);
-                    }
-                }
-            }
+            $this->workoutService->store($request->validated());
 
             DB::commit();
         } catch (Exception $e) {
@@ -171,24 +104,11 @@ class WorkoutController extends Controller
      */
     public function show(Workout $workout)
     {
-        $workout->workout_type_name = $workout->type->name;
-        $workout->workout_type_description = $workout->type->description;
-        $workout->exercises = ExerciseResource::collection($workout->exercises)->map(function ($exercise) {
-            return array_merge(
-                $exercise->only('id', 'name'),
-                ['note' => $exercise->pivot->note],
-                ['sets' => ExerciseWorkout::find($exercise->pivot->id)->sets->toArray()],
-            );
-        });
-
-        return Inertia::render(
-            'Workouts/Show',
-            [
-                'workout' => new WorkoutResource(
-                    $workout->only('id', 'name', 'description', 'date', 'level', 'time_cap', 'score', 'workout_type_name', 'workout_type_description', 'exercises')
-                ),
-            ]
-        );
+        return Inertia::render('Workouts/Show', [
+            'workout' => new WorkoutResource(
+                $this->workoutService->show($workout)
+            ),
+        ]);
     }
 
     /**
@@ -197,25 +117,16 @@ class WorkoutController extends Controller
      * @param  \App\Models\Workout  $workout
      * @return \Illuminate\Http\Response
      */
-    public function edit(Workout $workout)
+    public function edit(Workout $workout, WorkoutTypeService $workoutType)
     {
-        $workout->exercises = ExerciseResource::collection($workout->exercises)->map(function ($exercise) {
-            return array_merge(
-                $exercise->only('id', 'name'),
-                ['note' => $exercise->pivot->note],
-                ['sets' => ExerciseWorkout::find($exercise->pivot->id)->sets->toArray()],
-            );
-        });
-
-        return Inertia::render(
-            'Workouts/Edit',
-            [
-                'workout' => new WorkoutResource(
-                    $workout->only('id', 'name', 'description', 'date', 'level', 'time_cap', 'score', 'workout_type_id', 'exercises')
-                ),
-                'workoutTypes' => WorkoutTypeResource::collection(WorkoutType::query()->select('id', 'name', 'description')->get()),
-            ]
-        );
+        return Inertia::render('Workouts/Edit', [
+            'workout' => new WorkoutResource(
+                $this->workoutService->edit($workout)
+            ),
+            'workoutTypes' => WorkoutTypeResource::collection(
+                $workoutType->getAll()
+            ),
+        ]);
     }
 
     /**
@@ -229,43 +140,7 @@ class WorkoutController extends Controller
     {
         DB::beginTransaction();
         try {
-            $workout->update($request->validated());
-
-            foreach ($workout->exercises as $exercise) {
-                ExerciseWorkout::find($exercise->pivot->id)->delete();
-            }
-
-            if (is_array($request->input('exercises'))) {
-                foreach ($request->input('exercises') as $exerciseKey => $exercise) {
-                    $exerciseWorkout = ExerciseWorkout::create([
-                        'exercise_id' => $exercise['id'],
-                        'workout_id' => $workout->id,
-                        'position' => $exerciseKey,
-                        'note' => $exercise['note'],
-                    ]);
-
-                    if (!is_array($exercise['sets'])) {
-                        continue;
-                    }
-
-                    foreach ($exercise['sets'] as $setKey => $set) {
-                        $newSet['repetitions'] = isset($set['repetitions']) ? intval($set['repetitions']) : 0;
-                        $newSet['weight'] = isset($set['weight']) ? intval($set['weight']) : 0;
-                        $newSet['distance'] = isset($set['distance']) ? floatval($set['distance']) : 0;
-                        $newSet['calories'] = isset($set['calories']) ? intval($set['calories']) : 0;
-                        $newSet['minutes'] = isset($set['minutes']) ? intval($set['minutes']) : 0;
-
-                        // discard empty sets
-                        if (!array_sum($newSet)) {
-                            continue;
-                        }
-
-                        $newSet['exercise_workout_id'] = $exerciseWorkout->id;
-                        $newSet['position'] = $setKey;
-                        ExerciseWorkoutSet::create($newSet);
-                    }
-                }
-            }
+            $this->workoutService->update($workout, $request->validated());
 
             DB::commit();
         } catch (Exception $e) {
